@@ -128,7 +128,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: benchmark_results
-        path: examples/run_results.json
+        path: run_results.json
 
 
   compare:
