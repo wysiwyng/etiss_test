@@ -94,13 +94,17 @@ jobs:
         cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf -DRISCV_ARCH=rv64gc -DRISCV_ABI=lp64d
         cmake --build . --config $BUILD_TYPE
         cd -
+        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_dhry/build
+        cd SW/riscv_dhry/build
+        cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf
+        cmake --build . --config $BUILD_TYPE
+        cd -
         cd bare_etiss_processor
         cmake -E make_directory ${{runner.workspace}}/install/examples/bare_etiss_processor/build
         cd build
         cmake ..
         cmake --build . --config $BUILD_TYPE
-        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_dhry/build
-        cd SW/riscv_dhry/build
+
 
     - name: Test (Linux/Mac)
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
