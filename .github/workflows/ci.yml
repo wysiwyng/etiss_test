@@ -105,6 +105,8 @@ jobs:
         cd build
         cmake ..
         cmake --build . --config $BUILD_TYPE
+        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_dhry/build
+        cd SW/riscv_dhry/build
 
     - name: Test (Linux/Mac)
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
@@ -120,3 +122,146 @@ jobs:
         ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm
         ./run_helper.sh ../SW/riscv/build64/riscv_example
         ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example
+        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example
+
+    - name: upload benchmark result
+      uses: actions/upload-artifact@v2
+      with:
+        name: benchmark_results
+        path: examples/run_results.json
+
+
+  compare:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: get old benchmark results
+        uses: actions/checkout@v2
+        with:
+          ref: benchmark_results
+          path: benchmark_results_old
+
+      - name: install dependencies
+        run: pip install -r script/compare_mips/requirements.txt
+
+      - name: Get new benchmark results
+        uses: actions/download-artifact@v2
+        with:
+          name: benchmark_results
+
+      - name: Save benchmark results
+        run: |
+          rm -rf benchmark_results_new
+          mkdir benchmark_results_new
+          cp run_results.json benchmark_results_new/
+      - name: Run comparison (Push)
+        if: ${{github.event_name == 'push'}}
+        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.sha }}
+
+      - name: Run comparison (PR)
+        if: ${{github.event_name == 'pull_request'}}
+        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.event.pull_request.head.sha }}
+
+      - name: Deploy results to git
+        if: ${{github.event_name == 'push'}}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./benchmark_results_new
+          publish_branch: benchmark_results
+          enable_jekyll: true
+
+      - name: Upload comment text
+        uses: actions/upload-artifact@v2
+        with:
+          name: mips_issue_text.md
+          path: mips_issue_text.md
+
+  display-push:
+    needs: compare
+    runs-on: ubuntu-latest
+    if: ${{github.event_name == 'push'}}
+
+    steps:
+      - name: Get comment text
+        uses: actions/download-artifact@v2
+        with:
+          name: mips_issue_text.md
+
+      - name: Load comment body
+        id: get-comment-body
+        run: |
+          body=$(cat mips_issue_text.md)
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo ::set-output name=body::$body
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: 3
+          body-includes: This comment was created automatically, please do not change!
+
+      - name: Create comment
+        if: ${{ steps.fc.outputs.comment-id == 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: 3
+          edit-mode: replace
+          body: ${{ steps.get-comment-body.outputs.body }}
+
+      - name: Update comment
+        if: ${{ steps.fc.outputs.comment-id != 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: ${{ steps.get-comment-body.outputs.body }}
+
+  display-pr:
+    needs: compare
+    runs-on: ubuntu-latest
+    if: ${{github.event_name == 'pull_request'}}
+
+    steps:
+      - name: Get comment text
+        uses: actions/download-artifact@v2
+        with:
+          name: mips_issue_text.md
+
+      - name: Load comment body
+        id: get-comment-body
+        run: |
+          body=$(cat mips_issue_text.md)
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo ::set-output name=body::$body
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{github.event.number}}
+          body-includes: This comment was created automatically, please do not change!
+
+      - name: Create comment
+        if: ${{ steps.fc.outputs.comment-id == 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{github.event.number}}
+          edit-mode: replace
+          body: ${{ steps.get-comment-body.outputs.body }}
+
+      - name: Update comment
+        if: ${{ steps.fc.outputs.comment-id != 0 }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: ${{ steps.get-comment-body.outputs.body }}
+
+

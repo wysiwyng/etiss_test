@@ -43,6 +43,7 @@
 #include "TracePrinter.h"
 #include "etiss/SimpleMemSystem.h"
 #include "etiss/ETISS.h"
+void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips );// Save the information in JSON format
 
 int main(int argc, const char *argv[])
 {
@@ -67,7 +68,7 @@ int main(int argc, const char *argv[])
     if (dsys.load_elf(etiss::cfg().get<std::string>("vp.elf_file", "").c_str() ) < 0 ){
       etiss::log(etiss::FATALERROR, "ELF file not loaded properly\n");
     }
-    
+
     if (false)
     {
         std::list<etiss::uint32> instructions;
@@ -91,8 +92,9 @@ int main(int argc, const char *argv[])
     std::cout << "  Setting up CPUCore" << std::endl;
     // create a cpu core named core0 with the or1k architecture
     std::string CPUArchName = etiss::cfg().get<std::string>("arch.cpu", "");
+    bool output_json =   etiss::cfg().get<bool>("output_json_stat", false);
 	etiss::uint64 startAddress = dsys.get_startaddr();
-	std::cout << "ELF start address: 0x" << std::hex << startAddress << std::dec << std::endl;   
+	std::cout << "ELF start address: 0x" << std::hex << startAddress << std::dec << std::endl;
     std::shared_ptr<etiss::CPUCore> cpu = etiss::CPUCore::create(CPUArchName, "core0");
     if (!cpu)
     {
@@ -127,16 +129,36 @@ int main(int argc, const char *argv[])
 
     // Simulation start
     std::cout << std::endl << "=== Simulation start ===" << std::endl;
+    float startTime = (float)clock() / CLOCKS_PER_SEC; // TESTING
     // run cpu with the SimpleMemSystem (in other cases that "system" is most likely a
     // bus that connects the cpu to memory,periphery,etc)
     etiss_int32 exception = cpu->execute(dsys);
+    float endTime = (float)clock() / CLOCKS_PER_SEC;
     std::cout << "=== Simulation end ===" << std::endl << std::endl;
+
+     //calculations for json file output
+
+    ETISS_CPU *cpu_state = cpu->getState();
+
+    float cpu_time = cpu_state->cpuTime_ps / 1.0E12;
+    float simulation_time = endTime-startTime ;
+    float cpu_cycle = cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps;
+    float mips = (cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps / (endTime - startTime) / 1.0E6);
+
+   //print out the simulation calculations via json file
+
+    if(output_json == true)
+    {
+        writeFileJson(cpu_time, simulation_time, cpu_cycle, mips );
+    }
+
+
 
     // print the exception code returned by the cpu core
     std::cout << "CPU0 exited with exception: 0x" << std::hex << exception << std::dec << ": "
               << etiss::RETURNCODE::getErrorMessages()[exception] << std::endl;
-              
-              
+
+
     switch(exception){
         case etiss::RETURNCODE::CPUFINISHED:
         case etiss::RETURNCODE::NOERROR:
@@ -176,4 +198,11 @@ int main(int argc, const char *argv[])
         return -1;
         break;
     }
+}
+void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips )// Save the information in JSON format
+{
+     std::ofstream json_output("run_results.json");
+     json_output << "{\"MIPS\": " << mips << ", \"Simulation_Time\": " << simulation_time << ", \"CPU_Time\": " << cpu_time << ", \"CPU_cycle\": " << cpu_cycle << "}" << std::endl;
+     json_output.close();
+
 }
