@@ -101,6 +101,8 @@ jobs:
         cmake --build . --config $BUILD_TYPE
         cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_dhry/build
         cd SW/riscv_dhry/build
+        cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf
+        cmake --build . --config $BUILD_TYPE
     - name: Test (Linux/Mac)
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
       #if: matrix.config.name == 'Linux' || matrix.config.name == 'Mac'
