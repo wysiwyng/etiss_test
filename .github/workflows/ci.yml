@@ -57,57 +57,57 @@ jobs:
 
     - name: Configure CMake
       shell: bash
-      working-directory: ${{runner.workspace}}/etiss/build
+      working-directory: ${{runner.workspace}}/build
       run: |
-        export LLVM_DIR=${{runner.workspace}}/etiss/llvm-lib
+        export LLVM_DIR=${{runner.workspace}}/llvm-lib
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=../install
     - name: Build
-      working-directory: ${{runner.workspace}}/etiss/build
+      working-directory: ${{runner.workspace}}/build
       shell: bash
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Install
-      working-directory: ${{runner.workspace}}/etiss/build
+      working-directory: ${{runner.workspace}}/build
       shell: bash
       run: cmake --build . --config $BUILD_TYPE --target install
 
     - name: Setup tests
-      working-directory: ${{runner.workspace}}/etiss/install/examples
+      working-directory: ${{runner.workspace}}/install/examples
       run: |
-        cmake -E make_directory ${{runner.workspace}}/etiss/install/examples/SW/riscv/build
+        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv/build
         cd SW/riscv/build
         cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf
         cmake --build . --config $BUILD_TYPE
         cd -
-        cmake -E make_directory ${{runner.workspace}}/etiss/install/examples/SW/riscv/build64
+        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv/build64
         cd SW/riscv/build64
         cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf -DRISCV_ARCH=rv64gc -DRISCV_ABI=lp64d
         cmake --build . --config $BUILD_TYPE
         cd -
-        cmake -E make_directory ${{runner.workspace}}/etiss/install/examples/SW/riscv_cpp/build
+        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_cpp/build
         cd SW/riscv_cpp/build
         cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf
         cmake --build . --config $BUILD_TYPE
         cd -
-        cmake -E make_directory ${{runner.workspace}}/etiss/install/examples/SW/riscv_cpp/build64
+        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_cpp/build64
         cd SW/riscv_cpp/build64
         cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf -DRISCV_ARCH=rv64gc -DRISCV_ABI=lp64d
         cmake --build . --config $BUILD_TYPE
         cd -
-        cmake -E make_directory ${{runner.workspace}}/etiss/install/examples/SW/riscv_dhry/build
+        cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_dhry/build
         cd SW/riscv_dhry/build
         cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf
         cmake --build . --config $BUILD_TYPE
         cd -
         cd bare_etiss_processor
-        cmake -E make_directory ${{runner.workspace}}/etiss/install/examples/bare_etiss_processor/build
+        cmake -E make_directory ${{runner.workspace}}/install/examples/bare_etiss_processor/build
         cd build
         cmake ..
         cmake --build . --config $BUILD_TYPE
 
 
     - name: Test (Linux/Mac)
-      working-directory: ${{runner.workspace}}/etiss/install/examples/bare_etiss_processor
+      working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
       #if: matrix.config.name == 'Linux' || matrix.config.name == 'Mac'
       if: matrix.config.name == 'Linux'
       shell: bash
