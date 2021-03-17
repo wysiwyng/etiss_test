@@ -57,22 +57,22 @@ jobs:
 
     - name: Configure CMake
       shell: bash
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{runner.workspace}}/etiss/build
       run: |
-        export LLVM_DIR=${{runner.workspace}}/llvm-lib
+        export LLVM_DIR=${{runner.workspace}}/etiss/llvm-lib
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=../install
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{runner.workspace}}/etiss/build
       shell: bash
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Install
-      working-directory: ${{runner.workspace}}/build
+      working-directory: ${{runner.workspace}}/etiss/build
       shell: bash
       run: cmake --build . --config $BUILD_TYPE --target install
 
     - name: Setup tests
-      working-directory: ${{runner.workspace}}/install/examples
+      working-directory: ${{runner.workspace}}/etiss/install/examples
       run: |
         cmake -E make_directory ${{runner.workspace}}/etiss/install/examples/SW/riscv/build
         cd SW/riscv/build
