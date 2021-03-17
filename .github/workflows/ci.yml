@@ -131,7 +131,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: benchmark_results
-        path: ${{runner.workspace}}/etiss/install/examples/bare_etiss_processor/run_results.json
+        path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results.json
 
 
   compare:
