@@ -202,7 +202,7 @@ int main(int argc, const char *argv[])
 void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips )// Save the information in JSON format
 {
      std::ofstream json_output("run_results.json");
-     json_output << "{\"MIPS\": " << mips << ", \"Simulation_Time\": " << simulation_time << ", \"CPU_Time\": " << cpu_time << ", \"CPU_cycle\": " << cpu_cycle << "}" << std::endl;
+     json_output << "{\"mips\": " << mips << ", \"Simulation_Time\": " << simulation_time << ", \"CPU_Time\": " << cpu_time << ", \"CPU_cycle\": " << cpu_cycle << "}" << std::endl;
      json_output.close();
 
 }
