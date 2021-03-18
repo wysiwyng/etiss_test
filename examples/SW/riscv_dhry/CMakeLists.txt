@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 SET(CMAKE_TOOLCHAIN_FILE
-    "cmake/pulpino_tumeda/toolchain.cmake"
+    "../riscv/cmake/pulpino_tumeda/toolchain.cmake"
 )
 project(etiss_examples)
-include(cmake/PulpinoTarget.cmake)
+include(../riscv/cmake/PulpinoTarget.cmake)
 
 ADD_DEFINITIONS(-DPULPINO_NO_GPIO)
+
 ADD_DEFINITIONS(-DTIME)
 ADD_DEFINITIONS(-DNO_INIT)
 
