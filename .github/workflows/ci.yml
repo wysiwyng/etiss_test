@@ -128,7 +128,7 @@ jobs:
     - name: upload benchmark result
       uses: actions/upload-artifact@v2
       with:
-        name: benchmark_results_
+        name: benchmark_results
         path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results.json
 
 
@@ -142,7 +142,7 @@ jobs:
       - name: get old benchmark results
         uses: actions/checkout@v2
         with:
-          ref: benchmark_results_
+          ref: benchmark_results
           path: benchmark_results_old
 
       - name: install dependencies
@@ -151,7 +151,7 @@ jobs:
       - name: Get new benchmark results
         uses: actions/download-artifact@v2
         with:
-          name: benchmark_results_
+          name: benchmark_results
 
       - name: Save benchmark results
         run: |
@@ -172,7 +172,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./benchmark_results_new
-          publish_branch: benchmark_results_
+          publish_branch: benchmark_results
           enable_jekyll: true
 
       - name: Upload comment text
