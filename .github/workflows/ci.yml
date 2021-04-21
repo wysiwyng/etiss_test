@@ -182,6 +182,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: mips_issue_text.md
+
           path: mips_issue_text.md
 
   display-push:
@@ -207,14 +208,15 @@ jobs:
         uses: peter-evans/find-comment@v1
         id: fc
         with:
-          issue-number: 2
+          issue-number: 3
+
           body-includes: This comment was created automatically, please do not change!
 
       - name: Create comment
         if: ${{ steps.fc.outputs.comment-id == 0 }}
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: 2
+          issue-number: 3
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
