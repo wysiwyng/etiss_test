@@ -129,11 +129,11 @@ int main(int argc, const char *argv[])
 
     // Simulation start
     std::cout << std::endl << "=== Simulation start ===" << std::endl;
-    float startTime = (float)clock() / CLOCKS_PER_SEC; // TESTING
+    //float startTime = (float)clock() / CLOCKS_PER_SEC; // TESTING
     // run cpu with the SimpleMemSystem (in other cases that "system" is most likely a
     // bus that connects the cpu to memory,periphery,etc)
     etiss_int32 exception = cpu->execute(dsys);
-    float endTime = (float)clock() / CLOCKS_PER_SEC;
+    //float endTime = (float)clock() / CLOCKS_PER_SEC;
     std::cout << "=== Simulation end ===" << std::endl << std::endl;
 
      //calculations for json file output
@@ -141,9 +141,9 @@ int main(int argc, const char *argv[])
     ETISS_CPU *cpu_state = cpu->getState();
 
     float cpu_time = cpu_state->cpuTime_ps / 1.0E12;
-    float simulation_time = endTime-startTime ;
+    float simulation_time = cpu->endTime - cpu->startTime;
     float cpu_cycle = cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps;
-    float mips = (cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps / (endTime - startTime) / 1.0E6);
+    float mips = (cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps / simulation_time / 1.0E6);
 
    //print out the simulation calculations via json file
 
