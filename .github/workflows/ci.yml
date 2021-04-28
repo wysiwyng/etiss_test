@@ -220,7 +220,7 @@ jobs:
 
 
 
- compare:
+  compare:
     needs: build
     runs-on: ubuntu-latest
 
