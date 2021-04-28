@@ -160,11 +160,11 @@ jobs:
   avergae_tcc:
 
 
-     needs: build
-     runs on: ubuntu-latest
+    needs: build
+    runs on: ubuntu-latest
 
 
-     steps:
+    steps:
       -uses: actions/checkout@v2
 
       -name: get file_one
