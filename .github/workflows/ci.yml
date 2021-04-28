@@ -105,10 +105,42 @@ jobs:
         cmake ..
         cmake --build . --config $BUILD_TYPE
 
+    - name: Compress Compiled System
+      run: tar -C ${{runner.workspace}} -cvf ${{runner.workspace}}/etiss.tar install
+
+    - name: Upload Compiled System
+      uses: actions/upload-artifact@v2
+      with:
+        name: etiss-${{matrix.config.name}}.tar
+        path: ${{runner.workspace}}/etiss.tar
+
+
+
+  test:
+    strategy:
+      matrix:
+        config:
+          - {name: "Linux", os: ubuntu-20.04, cmakegen: "", llvm: "linux-gnu-ubuntu-20.04", llvm-ext: ".tar.xz", tc: "linux-ubuntu14", tc-ext: ".tar.gz", unpack: "tar xf"}
+          #- {name: "Windows", os: windows-latest, cmakegen: "-G \"MinGW Makefiles\"", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
+          - {name: "Mac", os: macOS-latest, cmakegen: "", llvm: "apple-darwin", llvm-ext: ".tar.xz", tc: "apple-darwin", tc-ext: ".tar.gz", unpack: "tar xf"}
+
+    needs: build
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.name }}
+
+    steps:
+    - name: Fetch Compiled System
+      uses: actions/download-artifact@v2
+      with:
+        name: etiss-${{matrix.config.name}}.tar
+        path: ${{runner.workspace}}
+
+    - name: Unpack Compiled System
+      working-directory: ${{runner.workspace}}
+      run: tar -xf etiss.tar
 
     - name: Test (Linux/Mac)
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
-      #if: matrix.config.name == 'Linux' || matrix.config.name == 'Mac'
       if: matrix.config.name == 'Linux'
       shell: bash
       run: |
@@ -119,20 +151,7 @@ jobs:
         ./run_helper.sh ../SW/riscv_cpp/build/riscv_example gcc
         ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm
         ./run_helper.sh ../SW/riscv/build64/riscv_example
-        ./run_helper.sh ../SW/riscv/build64/riscv_example gcc
-        ./run_helper.sh ../SW/riscv/build64/riscv_example llvm
         ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example
-        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example gcc
-        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example llvm
-        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example
-        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example gcc
-        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example llvm
-
-
-
-
-
-
 
   benchmark:
     strategy:
@@ -144,6 +163,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: Fetch Compiled System
+      uses: actions/download-artifact@v2
+      with:
+        name: etiss-Linux.tar
+        path: ${{runner.workspace}}
+
+    - name: Unpack Compiled System
+      working-directory: ${{runner.workspace}}
+      run: tar -xf etiss.tar
 
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
@@ -157,60 +186,66 @@ jobs:
         name: run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
         path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
-  avergae_tcc:
 
 
-    needs: build
-    runs on: ubuntu-latest
+  average:
+    strategy:
+      matrix:
+        jit-engine: ["tcc", "gcc", "llvm"]
+
+
+    needs: benchmark
+    runs-on: ubuntu-latest
 
 
     steps:
       - uses: actions/checkout@v2
 
       - name: get file_one
-        uses: actions/checkout@v2
+        uses: actions/download-artifact@v2
         with:
-          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_1.json
+          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_1.json
 
       - name: get file_two
-        uses: actions/checkout@v2
+        uses: actions/download-artifact@v2
         with:
-          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_2.json
+          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_2.json
 
       - name: get file_three
-        uses: actions/checkout@v2
+        uses: actions/download-artifact@v2
         with:
-          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_3.json
+          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_3.json
 
       - name: get file_four
-        uses: actions/checkout@v2
+        uses: actions/download-artifact@v2
         with:
-          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_4.json
+          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_4.json
 
       - name: get file_five
-        uses: actions/checkout@v2
+        uses: actions/download-artifact@v2
         with:
-          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_5.json
+          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_5.json
 
       - name: store files
         run: |
-            rm -rf json_file_one
-            mkdir json_file_one
-            cp run_results_tcc_1.json json_file_one
-            rm -rf json_file_two
-            mkdir json_file_two
-            cp run_results_tcc_2.json json_file_two
-            rm -rf json_file_three
-            mkdir json_file_three
-            cp run_results_tcc_3.json json_file_three
-            rm -rf json_file_four
-            mkdir json_file_four
-            cp run_results_tcc_4.json json_file_four
-            rm -rf json_file_five
-            mkdir json_file_five
-            cp run_results_tcc_5.json json_file_five
+            rm -rf json_file_${{matrix.jit-engine}}_one
+            mkdir json_file_${{matrix.jit-engine}}_one
+            cp run_results_${{matrix.jit-engine}}_1.json json_file_${{matrix.jit-engine}}_one
+            rm -rf json_file_${{matrix.jit-engine}}_two
+            mkdir json_file_${{matrix.jit-engine}}_two
+            cp run_results_${{matrix.jit-engine}}_2.json json_file_${{matrix.jit-engine}}_two
+            rm -rf json_file_${{matrix.jit-engine}}_three
+            mkdir json_file_${{matrix.jit-engine}}_three
+            cp run_results_${{matrix.jit-engine}}_3.json json_file_${{matrix.jit-engine}}_three
+            rm -rf json_file_${{matrix.jit-engine}}_four
+            mkdir json_file_${{matrix.jit-engine}}_four
+            cp run_results_${{matrix.jit-engine}}_4.json json_file_${{matrix.jit-engine}}_four
+            rm -rf json_file_${{matrix.jit-engine}}_five
+            mkdir json_file_${{matrix.jit-engine}}_five
+            cp run_results_${{matrix.jit-engine}}_5.json json_file_${{matrix.jit-engine}}_five
 
       - name: averaging out
+        uses: actions/upload-artifact@v2
         run: |
              python3 script/average.py json_file_one/run_results_tcc_1.json json_file_two/run_results_tcc_2.json json_file_three/run_results_tcc_3.json json_file_four/run_results_tcc_4.json json_file_five/run_results_tcc_5.json
              rm ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_5.json
@@ -220,8 +255,9 @@ jobs:
 
 
 
+
   compare:
-    needs: build
+    needs: average
     runs-on: ubuntu-latest
 
     steps:
@@ -270,7 +306,7 @@ jobs:
 
           path: mips_issue_text.md
 
-  display-push:
+display-push:
     needs: compare
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
