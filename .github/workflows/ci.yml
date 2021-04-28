@@ -306,7 +306,7 @@ jobs:
 
           path: mips_issue_text.md
 
-display-push:
+  display-push:
     needs: compare
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
