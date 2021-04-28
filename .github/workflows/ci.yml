@@ -235,19 +235,19 @@ jobs:
         run: |
             rm -rf json_file_${{matrix.jit-engine}}_one
             mkdir json_file_${{matrix.jit-engine}}_one
-            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_1.json json_file_${{matrix.jit-engine}}_one
+            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_1.json json_file_${{matrix.jit-engine}}_one/run_results_${{matrix.jit-engine}}_1.json
             rm -rf json_file_${{matrix.jit-engine}}_two
             mkdir json_file_${{matrix.jit-engine}}_two
-            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_2.json json_file_${{matrix.jit-engine}}_two
+            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_2.json json_file_${{matrix.jit-engine}}_two/run_results_${{matrix.jit-engine}}_2.json
             rm -rf json_file_${{matrix.jit-engine}}_three
             mkdir json_file_${{matrix.jit-engine}}_three
-            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_3.json json_file_${{matrix.jit-engine}}_three
+            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_3.json json_file_${{matrix.jit-engine}}_three/run_results_${{matrix.jit-engine}}_3.json
             rm -rf json_file_${{matrix.jit-engine}}_four
             mkdir json_file_${{matrix.jit-engine}}_four
-            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_4.json json_file_${{matrix.jit-engine}}_four
+            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_4.json json_file_${{matrix.jit-engine}}_four/run_results_${{matrix.jit-engine}}_4.json
             rm -rf json_file_${{matrix.jit-engine}}_five
             mkdir json_file_${{matrix.jit-engine}}_five
-            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_5.json json_file_${{matrix.jit-engine}}_five
+            cp -r ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_5.json json_file_${{matrix.jit-engine}}_five/run_results_${{matrix.jit-engine}}_5.json
 
       - name: averaging out
         run: |
