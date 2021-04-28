@@ -168,32 +168,32 @@ jobs:
       -uses: actions/checkout@v2
 
       -name: get file_one
-       uses: actions/checkout@v2
-       with:
+        uses: actions/checkout@v2
+        with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_1.json
 
       -name: get file_two
-       uses: actions/checkout@v2
-       with:
+        uses: actions/checkout@v2
+        with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_2.json
 
       -name: get file_three
-       uses: actions/checkout@v2
-       with:
+        uses: actions/checkout@v2
+        with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_3.json
 
       -name: get file_four
-       uses: actions/checkout@v2
-       with:
+        uses: actions/checkout@v2
+        with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_4.json
 
       -name: get file_five
-       uses: actions/checkout@v2
-       with:
+        uses: actions/checkout@v2
+        with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_5.json
 
       -name: store files
-       run: rm -rf json_file_one
+        run: rm -rf json_file_one
             mkdir json_file_one
             cp run_results_tcc_1.json json_file_one
             rm -rf json_file_two
@@ -210,7 +210,7 @@ jobs:
             cp run_results_tcc_5.json json_file_five
 
       -name: averaging out
-       run: python3 script/average.py json_file_one/run_results_tcc_1.json json_file_two/run_results_tcc_2.json json_file_three/run_results_tcc_3.json json_file_four/run_results_tcc_4.json json_file_five/run_results_tcc_5.json
+        run: python3 script/average.py json_file_one/run_results_tcc_1.json json_file_two/run_results_tcc_2.json json_file_three/run_results_tcc_3.json json_file_four/run_results_tcc_4.json json_file_five/run_results_tcc_5.json
             rm ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_5.json
             cp json_file_five/run_results_tcc_5.json ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_5.json
             mv run_results_tcc_5.json run_results.json
