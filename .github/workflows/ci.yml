@@ -204,26 +204,31 @@ jobs:
       - name: get file_one
         uses: actions/download-artifact@v2
         with:
-          path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_1.json
+          name: run_results_${{matrix.jit-engine}}_1.json
+          path: ${{runner.workspace}}/install/examples/bare_etiss_processor
 
       - name: get file_two
         uses: actions/download-artifact@v2
         with:
+          name: run_results_${{matrix.jit-engine}}_2.json
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_2.json
 
       - name: get file_three
         uses: actions/download-artifact@v2
         with:
+          name: run_results_${{matrix.jit-engine}}_3.json
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_3.json
 
       - name: get file_four
         uses: actions/download-artifact@v2
         with:
+          name: run_results_${{matrix.jit-engine}}_4.json
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_4.json
 
       - name: get file_five
         uses: actions/download-artifact@v2
         with:
+          name: run_results_${{matrix.jit-engine}}_5.json
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_5.json
 
       - name: store files
