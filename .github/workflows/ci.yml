@@ -165,34 +165,34 @@ jobs:
 
 
     steps:
-      -uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      -name: get file_one
+      - name: get file_one
         uses: actions/checkout@v2
         with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_1.json
 
-      -name: get file_two
+      - name: get file_two
         uses: actions/checkout@v2
         with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_2.json
 
-      -name: get file_three
+      - name: get file_three
         uses: actions/checkout@v2
         with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_3.json
 
-      -name: get file_four
+      - name: get file_four
         uses: actions/checkout@v2
         with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_4.json
 
-      -name: get file_five
+      - name: get file_five
         uses: actions/checkout@v2
         with:
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_5.json
 
-      -name: store files
+      - name: store files
         run: |
             rm -rf json_file_one
             mkdir json_file_one
@@ -210,7 +210,7 @@ jobs:
             mkdir json_file_five
             cp run_results_tcc_5.json json_file_five
 
-      -name: averaging out
+      - name: averaging out
         run: |
              python3 script/average.py json_file_one/run_results_tcc_1.json json_file_two/run_results_tcc_2.json json_file_three/run_results_tcc_3.json json_file_four/run_results_tcc_4.json json_file_five/run_results_tcc_5.json
              rm ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc_5.json
