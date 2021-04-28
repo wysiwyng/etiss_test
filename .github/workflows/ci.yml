@@ -188,7 +188,7 @@ jobs:
 
 
 
-  average_tcc:
+  average:
     strategy:
       matrix:
         jit-engine: ["tcc", "gcc", "llvm"]
