@@ -243,15 +243,15 @@ jobs:
       - name: averaging out
         working-directory: ${{runner.workspace}}/etiss_new
         run: |
-             python3 script/average.py script/run_results_${{matrix.jit-engine}}_1.json script/run_results_${{matrix.jit-engine}}_2 script/run_results_${{matrix.jit-engine}}_3.json script/run_results_${{matrix.jit-engine}}_4.json script/run_results_${{matrix.jit-engine}}_5.json
-             mv run_results_${{matrix.jit-engine}}_5.json run_results_${{matrix.jit-engine}}.json
+             python3 script/average.py ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}_1.json ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}_2 ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}_3.json ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}_4.json ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}_5.json
+             mv ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}_5.json ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}.json
 
       - name: uploading average results
         uses: actions/upload-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}.json
 
-          path: ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}.json
+          path: ${{runner.workspace}}/etiss_new/script/run_results_${{matrix.jit-engine}}.json
 
       - name: downloading average results
         uses: actions/download-artifact@v2
