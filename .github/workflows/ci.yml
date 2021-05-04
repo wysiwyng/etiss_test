@@ -236,7 +236,7 @@ jobs:
           path: ${{runner.workspace}}/script
 
       - name: checking whetehr files were downloaded in correct location
-        working-directory: ${{runner.workspace}}/script
+        working-directory: ${{runner.workspace}}/etiss_new/script
         run: ls
 
 
