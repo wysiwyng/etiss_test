@@ -241,7 +241,7 @@ jobs:
 
 
       - name: averaging out
-        working-directory: ${{runner.workspace}}
+        working-directory: ${{runner.workspace}}/etiss_new
         run: |
              python3 script/average.py ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_1.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_2 ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_3.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_4.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_5.json
              mv ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_5.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}.json
