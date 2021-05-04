@@ -205,53 +205,68 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: create directory for storing json files
+        run: |
+            rm -rf json_files
+            mkdir json_files
+
       - name: get file_one
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_1.json
-          path: ${{runner.workspace}}/etiss_new/script
+
+      - name: save file_one
+        run:
+            cp run_results_${{matrix.jit-engine}}_1.json json_files/
+
 
       - name: get file_two
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_2.json
-          path: ${{runner.workspace}}/etiss_new/script
+
+      - name: save file_two
+        run:
+            cp run_results_${{matrix.jit-engine}}_2.json json_files/
 
       - name: get file_three
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_3.json
-          path: ${{runner.workspace}}/etiss_new/script
+
+      - name: save file_three
+        run:
+            cp run_results_${{matrix.jit-engine}}_3.json json_files/
 
       - name: get file_four
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_4.json
-          path: ${{runner.workspace}}/etiss_new/script
+
+      - name: save file_four
+        run:
+            cp run_results_${{matrix.jit-engine}}_4.json json_files/
 
       - name: get file_five
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_5.json
-          path: ${{runner.workspace}}/etiss_new/script
 
-      - name: checking whetehr files were downloaded in correct location
-        working-directory: ${{runner.workspace}}/etiss_new/script
-        run: ls
-
+      - name: save file_five
+        run:
+            cp run_results_${{matrix.jit-engine}}_5.json json_files/
 
       - name: averaging out
-        working-directory: ${{runner.workspace}}/etiss_new
         run: |
-             python3 script/average.py ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_1.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_2 ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_3.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_4.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_5.json
-             mv ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}_5.json ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}.json
+             python3 script/average.py json_files/run_results_${{matrix.jit-engine}}_1.json json_files/run_results_${{matrix.jit-engine}}_2 json_files/run_results_${{matrix.jit-engine}}_3.json json_files/run_results_${{matrix.jit-engine}}_4.json json_files/run_results_${{matrix.jit-engine}}_5.json
+             mv run_results_${{matrix.jit-engine}}_5.json run_results_${{matrix.jit-engine}}.json
 
       - name: uploading average results
         uses: actions/upload-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}.json
 
-          path: ${{runner.workspace}}/script/run_results_${{matrix.jit-engine}}.json
+          path: json_files/run_results_${{matrix.jit-engine}}.json
 
       - name: downloading average results
         uses: actions/download-artifact@v2
