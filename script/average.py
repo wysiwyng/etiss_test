@@ -17,10 +17,10 @@ def main(file_one, file_two, file_three, file_four, file_five):
         dict_five = json.load(f5)
 
         new_mips_sum = dict_one['mips'] + dict_two['mips'] + dict_three['mips'] + dict_four['mips'] + dict_five['mips']
-        new_mips = new_mips_sum/2
-        dict_two['mips']= new_mips
-        with open(path_two, 'w') as f2:
-            json.dump(dict_two, f2)
+        new_mips = new_mips_sum/5
+        dict_five['mips']= new_mips
+        with open(path_five, 'w') as f5:
+            json.dump(dict_five, f5)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

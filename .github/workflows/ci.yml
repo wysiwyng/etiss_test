@@ -188,10 +188,7 @@ jobs:
         name: run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
         path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
-    - name: remove the old run_results.json
-      working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
-      run: |
-        rm run_results.json
+
 
 
 
@@ -240,7 +237,7 @@ jobs:
 
 
       - name: averaging out
-        working-directory: ${{runner.workspace}}/script
+        working-directory: ${{runner.workspace}}
         run: |
              python3 script/average.py ${{runner.workspace}}/script/run_results_tcc_1.json ${{runner.workspace}}/script/run_results_tcc_2 ${{runner.workspace}}/script/run_results_tcc_3.json ${{runner.workspace}}/script/run_results_tcc_4.json ${{runner.workspace}}/script/run_results_tcc_5.json
              mv ${{runner.workspace}}/script/run_results_tcc_5.json ${{runner.workspace}}/script/run_results.json
