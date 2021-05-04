@@ -235,6 +235,10 @@ jobs:
           name: run_results_${{matrix.jit-engine}}_5.json
           path: ${{runner.workspace}}/script
 
+      - name: checking whetehr files were downloaded in correct location
+        working-directory: ${{runner.workspace}}/script
+        run: ls
+
 
       - name: averaging out
         run: |
