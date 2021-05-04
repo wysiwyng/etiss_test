@@ -209,31 +209,31 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_1.json
-          path: ${{runner.workspace}}/script
+          path: ${{runner.workspace}}/etiss_new/script
 
       - name: get file_two
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_2.json
-          path: ${{runner.workspace}}/script
+          path: ${{runner.workspace}}/etiss_new/script
 
       - name: get file_three
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_3.json
-          path: ${{runner.workspace}}/script
+          path: ${{runner.workspace}}/etiss_new/script
 
       - name: get file_four
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_4.json
-          path: ${{runner.workspace}}/script
+          path: ${{runner.workspace}}/etiss_new/script
 
       - name: get file_five
         uses: actions/download-artifact@v2
         with:
           name: run_results_${{matrix.jit-engine}}_5.json
-          path: ${{runner.workspace}}/script
+          path: ${{runner.workspace}}/etiss_new/script
 
       - name: checking whetehr files were downloaded in correct location
         working-directory: ${{runner.workspace}}/etiss_new/script
@@ -241,6 +241,7 @@ jobs:
 
 
       - name: averaging out
+        working-directory:${{runner.workspace}}/etiss_new
         run: |
              python3 script/average.py script/run_results_${{matrix.jit-engine}}_1.json script/run_results_${{matrix.jit-engine}}_2 script/run_results_${{matrix.jit-engine}}_3.json script/run_results_${{matrix.jit-engine}}_4.json script/run_results_${{matrix.jit-engine}}_5.json
              mv run_results_${{matrix.jit-engine}}_5.json run_results_${{matrix.jit-engine}}.json
