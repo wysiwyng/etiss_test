@@ -258,7 +258,7 @@ jobs:
 
       - name: averaging out
         run: |
-             python3 script/average.py json_files/run_results_${{matrix.jit-engine}}_1.json json_files/run_results_${{matrix.jit-engine}}_2 json_files/run_results_${{matrix.jit-engine}}_3.json json_files/run_results_${{matrix.jit-engine}}_4.json json_files/run_results_${{matrix.jit-engine}}_5.json
+             python3 script/average.py json_files/run_results_${{matrix.jit-engine}}_1.json json_files/run_results_${{matrix.jit-engine}}_2.json json_files/run_results_${{matrix.jit-engine}}_3.json json_files/run_results_${{matrix.jit-engine}}_4.json json_files/run_results_${{matrix.jit-engine}}_5.json
              mv run_results_${{matrix.jit-engine}}_5.json run_results_${{matrix.jit-engine}}.json
 
       - name: uploading average results
