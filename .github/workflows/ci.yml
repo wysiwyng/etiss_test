@@ -262,7 +262,7 @@ jobs:
              mv json_files/run_results_${{matrix.jit-engine}}_5.json json_files/run_results_${{matrix.jit-engine}}.json
 
       - name: checking folder contents
-        working-directory: ${{runner.workspace}}/json_files
+        working-directory: json_files
         run: ls
 
       - name: uploading average results
