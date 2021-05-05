@@ -279,11 +279,6 @@ jobs:
 
           path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}.json
 
-
-
-
-
-
   compare_tcc:
     needs: average
     runs-on: ubuntu-latest
@@ -300,16 +295,12 @@ jobs:
       - name: install dependencies
         run: pip install -r script/compare_mips/requirements.txt
 
-      - name: Get new benchmark results
-        uses: actions/download-artifact@v2
-        with:
-          name: benchmark_results
 
       - name: Save benchmark results
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-          cp run_results_tcc.json benchmark_results_new/
+          cp ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_tcc.json benchmark_results_new/
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
         run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json ${{ github.sha }}
