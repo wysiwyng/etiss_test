@@ -272,7 +272,7 @@ jobs:
 
           path: json_files/run_results_${{matrix.jit-engine}}.json
 
-  compare_tcc:
+  compare:
     needs: average
     runs-on: ubuntu-latest
 
@@ -293,19 +293,31 @@ jobs:
         with:
           name: run_results_tcc.json
 
+      - name: Get new benchmark results
+        uses: actions/download-artifact@v2
+        with:
+          name: run_results_gcc.json
+
+      - name: Get new benchmark results
+        uses: actions/download-artifact@v2
+        with:
+          name: run_results_llvm.json
+
       - name: Save benchmark results
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
           cp run_results_tcc.json benchmark_results_new/
+          cp run_results_gcc.json benchmark_results_new/
+          cp run_results_llvm.json benchmark_results_new/
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json ${{ github.sha }}
+        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_old/run_results_gcc.json v benchmark_results_new/run_results_llvm.json benchmark_results_old/run_results_llvm.json ${{ github.sha }}
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json ${{ github.event.pull_request.head.sha }}
+        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_old/run_results_gcc.json v benchmark_results_new/run_results_llvm.json benchmark_results_old/run_results_llvm.json ${{ github.event.pull_request.head.sha }}
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -323,8 +335,11 @@ jobs:
 
           path: mips_issue_text.md
 
+
+
+
   display-push:
-    needs: compare_tcc
+    needs: compare
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
 
@@ -346,7 +361,7 @@ jobs:
         uses: peter-evans/find-comment@v1
         id: fc
         with:
-          issue-number: 4
+          issue-number: 5
 
           body-includes: This comment was created automatically, please do not change!
 
@@ -354,7 +369,7 @@ jobs:
         if: ${{ steps.fc.outputs.comment-id == 0 }}
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: 4
+          issue-number: 5
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
