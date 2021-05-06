@@ -313,7 +313,7 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_old/run_results_gcc.json v benchmark_results_new/run_results_llvm.json benchmark_results_old/run_results_llvm.json ${{ github.sha }}
+        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_old/run_results_gcc.json benchmark_results_new/run_results_llvm.json benchmark_results_old/run_results_llvm.json ${{ github.sha }}
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
