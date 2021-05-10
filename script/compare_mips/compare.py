@@ -10,12 +10,12 @@ ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:** ${message_tcc}
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}
 **Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}
 
-**Status** (for commit ${current_hash})**:** ${message_tcc}
+**Status** (for commit ${current_hash})**:** ${message_gcc}
 
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}
 **Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}
 
-**Status** (for commit ${current_hash})**:** ${message_tcc}
+**Status** (for commit ${current_hash})**:** ${message_llvm}
 
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}
 **Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
@@ -100,8 +100,8 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
     new_dict_tcc['regressed_hash'] = regressed_hash_tcc
 
     if not no_update:
-        with open(new_path_tcc, 'w') as f_tcc_1:
-            json.dump(new_dict_tcc, f_tcc_1)
+        with open(new_path_tcc, 'w') as f1:
+            json.dump(new_dict_tcc, f1)
 
 
     #GCCJIT
@@ -144,8 +144,8 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
     new_dict_gcc['regressed_hash'] = regressed_hash_gcc
 
     if not no_update:
-        with open(new_path_gcc, 'w') as f_gcc_1:
-            json.dump(new_dict_gcc, f_gcc_1)
+        with open(new_path_gcc, 'w') as f1:
+            json.dump(new_dict_gcc, f1)
 
     #LLVMJIT
     new_mips_llvm = new_dict_llvm['mips']
@@ -185,13 +185,13 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
     new_dict_llvm['regressed_hash'] = regressed_hash_llvm
 
     if not no_update:
-        with open(new_path_llvm, 'w') as f_llvm_1:
-            json.dump(new_dict_llvm, f_llvm_1)
+        with open(new_path_llvm, 'w') as f1:
+            json.dump(new_dict_llvm, f1)
 
 
 
-    with open('mips_issue_text.md', 'w') as f_tcc_1:
-        f_tcc_1.write(issue_template.render(
+    with open('mips_issue_text.md', 'w') as f1:
+        f1.write(issue_template.render(
             current_hash=current_hash,
 
             new_mips_tcc=new_mips_tcc,
