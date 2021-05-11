@@ -64,9 +64,9 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
 
     new_mips_tcc = new_dict_tcc['mips']
 
-    old_best_mips_tcc = best_mips_tcc = old_dict_tcc.get('best_mips', 0.00000001)
-    old_best_hash_tcc = best_hash_tcc = old_dict_tcc.get('best_hash', None)
-    regressed_hash_tcc = old_dict_tcc.get('regressed_hash', None)
+    old_best_mips_tcc = best_mips_tcc = old_dict_tcc.get('best_mips_tcc', 0.00000001)
+    old_best_hash_tcc = best_hash_tcc = old_dict_tcc.get('best_hash_tcc', None)
+    regressed_hash_tcc = old_dict_tcc.get('regressed_hash_tcc', None)
     best_diff_tcc = new_mips_tcc / best_mips_tcc - 1
 
     regressed_tcc = False
@@ -95,9 +95,9 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
             print('no significant change for TCCJIT since last commit')
         regressed_hash_tcc = None
 
-    new_dict_tcc['best_mips'] = best_mips_tcc
-    new_dict_tcc['best_hash'] = best_hash_tcc
-    new_dict_tcc['regressed_hash'] = regressed_hash_tcc
+    new_dict_tcc['best_mips_tcc'] = best_mips_tcc
+    new_dict_tcc['best_hash_tcc'] = best_hash_tcc
+    new_dict_tcc['regressed_hash_tcc'] = regressed_hash_tcc
 
     if not no_update:
         with open(new_path_tcc, 'w') as f_tcc_1:
@@ -108,9 +108,9 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
 
     new_mips_gcc = new_dict_gcc['mips']
 
-    old_best_mips_gcc = best_mips_gcc = old_dict_gcc.get('best_mips', 0.00000001)
-    old_best_hash_gcc = best_hash_gcc = old_dict_gcc.get('best_hash', None)
-    regressed_hash_gcc = old_dict_gcc.get('regressed_hash', None)
+    old_best_mips_gcc = best_mips_gcc = old_dict_gcc.get('best_mips_gcc', 0.00000001)
+    old_best_hash_gcc = best_hash_gcc = old_dict_gcc.get('best_hash_gcc', None)
+    regressed_hash_gcc = old_dict_gcc.get('regressed_hash_gcc', None)
     best_diff_gcc = new_mips_gcc / best_mips_gcc - 1
 
     regressed_gcc = False
@@ -139,19 +139,21 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
             print('no significant change for GCCJIT since last commit')
         regressed_hash_gcc = None
 
-    new_dict_gcc['best_mips'] = best_mips_gcc
-    new_dict_gcc['best_hash'] = best_hash_gcc
-    new_dict_gcc['regressed_hash'] = regressed_hash_gcc
+    new_dict_gcc['best_mips_gcc'] = best_mips_gcc
+    new_dict_gcc['best_has_gcch'] = best_hash_gcc
+    new_dict_gcc['regressed_hash_gcc'] = regressed_hash_gcc
 
     if not no_update:
         with open(new_path_gcc, 'w') as f_gcc_1:
             json.dump(new_dict_gcc, f_gcc_1)
 
+
+
     #LLVMJIT
     new_mips_llvm = new_dict_llvm['mips']
-    old_best_mips_llvm = best_mips_llvm = old_dict_llvm.get('best_mips', 0.00000001)
-    old_best_hash_llvm = best_hash_llvm = old_dict_llvm.get('best_hash', None)
-    regressed_hash_llvm = old_dict_llvm.get('regressed_hash', None)
+    old_best_mips_llvm = best_mips_llvm = old_dict_llvm.get('best_mips_llvm', 0.00000001)
+    old_best_hash_llvm = best_hash_llvm = old_dict_llvm.get('best_hash_llvm', None)
+    regressed_hash_llvm = old_dict_llvm.get('regressed_hash_llvm', None)
     best_diff_llvm = new_mips_llvm / best_mips_llvm - 1
 
     regressed_llvm = False
@@ -180,13 +182,14 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
             print('no significant change for LLVMJIT since last commit')
         regressed_hash_llvm = None
 
-    new_dict_llvm['best_mips'] = best_mips_llvm
-    new_dict_llvm['best_hash'] = best_hash_llvm
-    new_dict_llvm['regressed_hash'] = regressed_hash_llvm
+    new_dict_llvm['best_mips_llvm'] = best_mips_llvm
+    new_dict_llvm['best_hash_llvm'] = best_hash_llvm
+    new_dict_llvm['regressed_hash_llvm'] = regressed_hash_llvm
 
     if not no_update:
         with open(new_path_llvm, 'w') as f_llvm_1:
             json.dump(new_dict_llvm, f_llvm_1)
+
 
 
 
