@@ -272,8 +272,52 @@ jobs:
 
           path: json_files/run_results_${{matrix.jit-engine}}.json
 
-  compare:
+  combine:
     needs: average
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get benchmark results
+        uses: actions/download-artifact@v2
+        with:
+          name: run_results_tcc.json
+
+      - name: Get benchmark results
+        uses: actions/download-artifact@v2
+        with:
+          name: run_results_gcc.json
+
+      - name: Get benchmark results
+        uses: actions/download-artifact@v2
+        with:
+          name: run_results_llvm.json
+
+      - name: Save benchmark results
+        run: |
+          rm -rf results
+          mkdir results
+          cp run_results_tcc.json results/
+          cp run_results_gcc.json results/
+          cp run_results_llvm.json results/
+
+      - name: combining info from three jit into a single json file
+        run: |
+          python3 script/combine.py results/run_results_tcc.json results/run_results_gcc.json results/run_results_llvm.json
+          mv results/run_results_tcc.json results/run_results.json
+
+      - name: uploading the json file
+        uses: actions/upload-artifact@v2
+        with:
+          name: run_results.json
+
+          path: results/run_results.json
+
+
+
+  compare:
+    needs: combine
     runs-on: ubuntu-latest
 
     steps:
@@ -291,33 +335,21 @@ jobs:
       - name: Get new benchmark results
         uses: actions/download-artifact@v2
         with:
-          name: run_results_tcc.json
-
-      - name: Get new benchmark results
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_gcc.json
-
-      - name: Get new benchmark results
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_llvm.json
+          name: run_results.json
 
       - name: Save benchmark results
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-          cp run_results_tcc.json benchmark_results_new/
-          cp run_results_gcc.json benchmark_results_new/
-          cp run_results_llvm.json benchmark_results_new/
+          cp run_results.json benchmark_results_new/
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_old/run_results_gcc.json benchmark_results_new/run_results_llvm.json benchmark_results_old/run_results_llvm.json ${{ github.sha }}
+        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.sha }}
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results_tcc.json benchmark_results_old/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_old/run_results_gcc.json v benchmark_results_new/run_results_llvm.json benchmark_results_old/run_results_llvm.json ${{ github.event.pull_request.head.sha }}
+        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.event.pull_request.head.sha }}
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
