@@ -100,8 +100,8 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
     new_dict_tcc['regressed_hash'] = regressed_hash_tcc
 
     if not no_update:
-        with open(new_path_tcc, 'w') as f1:
-            json.dump(new_dict_tcc, f1)
+        with open(new_path_tcc, 'w') as f_tcc_1:
+            json.dump(new_dict_tcc, f_tcc_1)
 
 
     #GCCJIT
@@ -144,8 +144,8 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
     new_dict_gcc['regressed_hash'] = regressed_hash_gcc
 
     if not no_update:
-        with open(new_path_gcc, 'w') as f1:
-            json.dump(new_dict_gcc, f1)
+        with open(new_path_gcc, 'w') as f_gcc_1:
+            json.dump(new_dict_gcc, f_gcc_1)
 
     #LLVMJIT
     new_mips_llvm = new_dict_llvm['mips']
@@ -185,8 +185,8 @@ def main(new_file_tcc, old_file_tcc, new_file_gcc, old_file_gcc, new_file_llvm, 
     new_dict_llvm['regressed_hash'] = regressed_hash_llvm
 
     if not no_update:
-        with open(new_path_llvm, 'w') as f1:
-            json.dump(new_dict_llvm, f1)
+        with open(new_path_llvm, 'w') as f_llvm_1:
+            json.dump(new_dict_llvm, f_llvm_1)
 
 
 
