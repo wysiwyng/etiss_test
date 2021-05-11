@@ -19,13 +19,19 @@ def main(file_one, file_two, file_three):
         del dict_one['CPU_Time']
         del dict_one['CPU_cycle']
 
+        print(dict_one)
+
         del dict_two['Simulation_Time']
         del dict_two['CPU_Time']
         del dict_two['CPU_cycle']
 
+        print(dict_two)
+
         del dict_three['Simulation_Time']
         del dict_three['CPU_Time']
         del dict_three['CPU_cycle']
+
+        print(dict_three)
 
         #replacing keys with jit engine attribute
 
@@ -33,23 +39,31 @@ def main(file_one, file_two, file_three):
         old_key_tcc= 'mips'
         dict_one[new_key_tcc] = dict_one.pop(old_key_tcc)
 
+        print(dict_one)
+
         new_key_gcc= 'mips_gcc'
         old_key_gcc= 'mips'
         dict_two[new_key_gcc] = dict_two.pop(old_key_gcc)
+
+        print(dict_two)
 
         new_key_llvm= 'mips_llvm'
         old_key_llvm= 'mips'
         dict_three[new_key_llvm] = dict_three.pop(old_key_llvm)
 
+        print(dict_three)
 
 
-        mips_dict = dict(dict_one.items() + dict_two.items() + dict_three.items())
+
+        mips_dict =dict(list(dict_one.items()) + list(dict_two.items()) + list(dict_three.items()))
+
+        print(mips_dict)
 
         with open(path_one, 'w') as f1:
             json.dump(mips_dict, f1)
 
 
-    if __name__ == '__main__':
+if __name__ == '__main__':
        parser = argparse.ArgumentParser()
 
        parser.add_argument('file_one')
