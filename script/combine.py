@@ -65,12 +65,24 @@ def main(file_one, file_two, file_three):
 
 
 
-        mips_dict =dict(list(dict_one.items()) + list(dict_two.items()) + list(dict_three.items()))
+        temp_dict = dict(list(dict_one.items()) + list(dict_two.items()) + list(dict_three.items()))
 
-        print(mips_dict)
+    def roundingVals_toTwoDeci(temp_dict):
 
-        with open(path_one, 'w') as f1:
-            json.dump(mips_dict, f1)
+     for d in temp_dict:
+        for k, v in d.items():
+            v = round(v,2) # <--- round() does exact that.
+            d[k] = v # <--- You need to put the rounded v back in d
+     return
+
+    roundingVals_toTwoDeci(temp_dict)
+    final_dict = json.dumps(temp_dict)
+    print(final_dict)
+
+
+
+    with open(path_one, 'w') as f1:
+            json.dump(final_dict, f1)
 
 
 if __name__ == '__main__':

@@ -354,12 +354,9 @@ jobs:
 
           path: mips_issue_text.md
 
-  delete_-artifacts:
 
-    needs: combine_and_compare
-    runs-on: ubuntu-latest
-    steps:
-       - uses: geekyeggo/delete-artifact@v1
+      - name: delete unnecessary artifacts
+        uses: geekyeggo/delete-artifact@v1
          with:
            name: |
                 run_results_tcc.json
@@ -409,7 +406,7 @@ jobs:
         uses: peter-evans/find-comment@v1
         id: fc
         with:
-          issue-number: 7
+          issue-number: 8
 
           body-includes: This comment was created automatically, please do not change!
 
@@ -417,7 +414,7 @@ jobs:
         if: ${{ steps.fc.outputs.comment-id == 0 }}
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: 7
+          issue-number: 8
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
