@@ -67,16 +67,7 @@ def main(file_one, file_two, file_three):
 
         temp_dict = dict(list(dict_one.items()) + list(dict_two.items()) + list(dict_three.items()))
 
-    def roundingVals_toTwoDeci(temp_dict):
-
-     for d in temp_dict:
-        for k, v in d.items():
-            v = round(v,2) # <--- round() does exact that.
-            d[k] = v # <--- You need to put the rounded v back in d
-     return
-
-    roundingVals_toTwoDeci(temp_dict)
-    final_dict = json.dumps(temp_dict)
+    final_dict = {k: round(v, 2) for k, v in temp_dict.items()}
     print(final_dict)
 
 
