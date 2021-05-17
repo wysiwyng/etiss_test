@@ -23,7 +23,7 @@ def main(file_one, file_two, file_three):
         new_key_CPU_Time_tcc= 'CPU_Time_tcc'
         old_key_CPU_Time_tcc= 'CPU_Time'
         new_key_CPU_Cycle_tcc= 'CPU_Cycle_tcc'
-        old_key_CPU_Cycle_tcc= 'CPU_Cycle'
+        old_key_CPU_Cycle_tcc= 'CPU_cycle'
         dict_one[new_key_mips_tcc] = dict_one.pop(old_key_mips_tcc)
         dict_one[new_key_Simulation_Time_tcc] = dict_one.pop(old_key_Simulation_Time_tcc)
         dict_one[new_key_CPU_Time_tcc] = dict_one.pop(old_key_CPU_Time_tcc)
@@ -38,7 +38,7 @@ def main(file_one, file_two, file_three):
         new_key_CPU_Time_gcc= 'CPU_Time_gcc'
         old_key_CPU_Time_gcc= 'CPU_Time'
         new_key_CPU_Cycle_gcc= 'CPU_Cycle_gcc'
-        old_key_CPU_Cycle_gcc= 'CPU_Cycle'
+        old_key_CPU_Cycle_gcc= 'CPU_cycle'
         dict_one[new_key_mips_gcc] = dict_one.pop(old_key_mips_gcc)
         dict_one[new_key_Simulation_Time_gcc] = dict_one.pop(old_key_Simulation_Time_gcc)
         dict_one[new_key_CPU_Time_gcc] = dict_one.pop(old_key_CPU_Time_gcc)
@@ -55,7 +55,7 @@ def main(file_one, file_two, file_three):
         new_key_CPU_Time_llvm= 'CPU_Time_llvm'
         old_key_CPU_Time_llvm= 'CPU_Time'
         new_key_CPU_Cycle_llvm= 'CPU_Cycle_llvm'
-        old_key_CPU_Cycle_llvm= 'CPU_Cycle'
+        old_key_CPU_Cycle_llvm= 'CPU_cycle'
         dict_one[new_key_mips_llvm] = dict_one.pop(old_key_mips_llvm)
         dict_one[new_key_Simulation_Time_llvm] = dict_one.pop(old_key_Simulation_Time_llvm)
         dict_one[new_key_CPU_Time_llvm] = dict_one.pop(old_key_CPU_Time_llvm)
