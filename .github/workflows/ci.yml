@@ -357,6 +357,7 @@ jobs:
   delete_-artifacts:
 
     needs: combine_and_compare
+    runs-on: ubuntu-latest
     steps:
        - uses: geekyeggo/delete-artifact@v1
          with:
