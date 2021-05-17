@@ -13,43 +13,53 @@ def main(file_one, file_two, file_three):
         dict_two = json.load(f2)
         dict_three = json.load(f3)
 
-        #deleting everything except mips
-
-        del dict_one['Simulation_Time']
-        del dict_one['CPU_Time']
-        del dict_one['CPU_cycle']
-
-        print(dict_one)
-
-        del dict_two['Simulation_Time']
-        del dict_two['CPU_Time']
-        del dict_two['CPU_cycle']
-
-        print(dict_two)
-
-        del dict_three['Simulation_Time']
-        del dict_three['CPU_Time']
-        del dict_three['CPU_cycle']
-
-        print(dict_three)
 
         #replacing keys with jit engine attribute
 
-        new_key_tcc= 'mips_tcc'
-        old_key_tcc= 'mips'
-        dict_one[new_key_tcc] = dict_one.pop(old_key_tcc)
+        new_key_mips_tcc= 'mips_tcc'
+        old_key_mips_tcc= 'mips'
+        new_key_Simulation_Time_tcc= 'Simulation_Time_tcc'
+        old_key_Simulation_Time_tcc= 'Simulation_Time'
+        new_key_CPU_Time_tcc= 'CPU_Time_tcc'
+        old_key_CPU_Time_tcc= 'CPU_Time'
+        new_key_CPU_Cycle_tcc= 'CPU_Cycle_tcc'
+        old_key_CPU_Cycle_tcc= 'CPU_Cycle'
+        dict_one[new_key_mips_tcc] = dict_one.pop(old_key_mips_tcc)
+        dict_one[new_key_Simulation_Time_tcc] = dict_one.pop(old_key_Simulation_Time_tcc)
+        dict_one[new_key_CPU_Time_tcc] = dict_one.pop(old_key_CPU_Time_tcc)
+        dict_one[new_key_CPU_Cycle_tcc] = dict_one.pop(old_key_CPU_Cycle_tcc)
 
         print(dict_one)
 
-        new_key_gcc= 'mips_gcc'
-        old_key_gcc= 'mips'
-        dict_two[new_key_gcc] = dict_two.pop(old_key_gcc)
+        new_key_mips_gcc= 'mips_gcc'
+        old_key_mips_gcc= 'mips'
+        new_key_Simulation_Time_gcc= 'Simulation_Time_gcc'
+        old_key_Simulation_Time_gcc= 'Simulation_Time'
+        new_key_CPU_Time_gcc= 'CPU_Time_gcc'
+        old_key_CPU_Time_gcc= 'CPU_Time'
+        new_key_CPU_Cycle_gcc= 'CPU_Cycle_gcc'
+        old_key_CPU_Cycle_gcc= 'CPU_Cycle'
+        dict_one[new_key_mips_gcc] = dict_one.pop(old_key_mips_gcc)
+        dict_one[new_key_Simulation_Time_gcc] = dict_one.pop(old_key_Simulation_Time_gcc)
+        dict_one[new_key_CPU_Time_gcc] = dict_one.pop(old_key_CPU_Time_gcc)
+        dict_one[new_key_CPU_Cycle_gcc] = dict_one.pop(old_key_CPU_Cycle_gcc)
+
 
         print(dict_two)
 
-        new_key_llvm= 'mips_llvm'
-        old_key_llvm= 'mips'
-        dict_three[new_key_llvm] = dict_three.pop(old_key_llvm)
+
+        new_key_mips_llvm= 'mips_llvm'
+        old_key_mips_llvm= 'mips'
+        new_key_Simulation_Time_llvm= 'Simulation_Time_llvm'
+        old_key_Simulation_Time_llvm= 'Simulation_Time'
+        new_key_CPU_Time_llvm= 'CPU_Time_llvm'
+        old_key_CPU_Time_llvm= 'CPU_Time'
+        new_key_CPU_Cycle_llvm= 'CPU_Cycle_llvm'
+        old_key_CPU_Cycle_llvm= 'CPU_Cycle'
+        dict_one[new_key_mips_llvm] = dict_one.pop(old_key_mips_llvm)
+        dict_one[new_key_Simulation_Time_llvm] = dict_one.pop(old_key_Simulation_Time_llvm)
+        dict_one[new_key_CPU_Time_llvm] = dict_one.pop(old_key_CPU_Time_llvm)
+        dict_one[new_key_CPU_Cycle_llvm] = dict_one.pop(old_key_CPU_Cycle_llvm)
 
         print(dict_three)
 

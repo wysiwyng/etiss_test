@@ -272,7 +272,7 @@ jobs:
 
           path: json_files/run_results_${{matrix.jit-engine}}.json
 
-  combine:
+  combine and compare:
     needs: average
     runs-on: ubuntu-latest
 
@@ -307,21 +307,6 @@ jobs:
           python3 script/combine.py results/run_results_tcc.json results/run_results_gcc.json results/run_results_llvm.json
           mv results/run_results_tcc.json results/run_results.json
 
-      - name: uploading the json file
-        uses: actions/upload-artifact@v2
-        with:
-          name: run_results.json
-
-          path: results/run_results.json
-
-
-
-  compare:
-    needs: combine
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
 
       - name: get old benchmark results
         uses: actions/checkout@v2
@@ -332,16 +317,11 @@ jobs:
       - name: install dependencies
         run: pip install -r script/compare_mips/requirements.txt
 
-      - name: Get new benchmark results
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results.json
-
       - name: Save benchmark results
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-          cp run_results.json benchmark_results_new/
+          cp results/run_results.json benchmark_results_new/
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
