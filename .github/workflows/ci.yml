@@ -337,12 +337,50 @@ jobs:
           publish_branch: benchmark_results
           enable_jekyll: true
 
+
+      - name: uploading benchmark_results
+        uses: actions/upload-artifact@v2
+        with:
+          name: run_results.json
+
+          path: benchmark_results_new/run_results.json
+
+
+
       - name: Upload comment text
         uses: actions/upload-artifact@v2
         with:
           name: mips_issue_text.md
 
           path: mips_issue_text.md
+
+  delete_-artifacts:
+
+    needs: combine_and_compare
+    steps:
+       - uses: geekyeggo/delete-artifact@v1
+         with:
+         name: |
+               run_results_tcc.json
+               run_results_gcc.json
+               run_results_llvm.json
+               run_results_tcc_1.json
+               run_results_tcc_2.json
+               run_results_tcc_3.json
+               run_results_tcc_4.json
+               run_results_tcc_5.json
+               run_results_gcc_1.json
+               run_results_gcc_2.json
+               run_results_gcc_3.json
+               run_results_gcc_4.json
+               run_results_gcc_5.json
+               run_results_llvm_1.json
+               run_results_llvm_2.json
+               run_results_llvm_3.json
+               run_results_llvm_4.json
+               run_results_llvm_5.json
+
+
 
 
 
@@ -431,5 +469,8 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
+
+
+
 
 
