@@ -300,9 +300,9 @@ jobs:
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-          cp run_results_tcc.json results/
-          cp run_results_gcc.json results/
-          cp run_results_llvm.json results/
+          cp run_results_tcc.json benchmark_results_new/
+          cp run_results_gcc.json benchmark_results_new/
+          cp run_results_llvm.json benchmark_results_new/
 
       - name: combining info from three jit into a single json file
         run: |
