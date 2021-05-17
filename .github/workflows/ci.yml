@@ -272,7 +272,9 @@ jobs:
 
           path: json_files/run_results_${{matrix.jit-engine}}.json
 
-  combine and compare:
+
+
+  combine_and_compare:
     needs: average
     runs-on: ubuntu-latest
 
@@ -296,16 +298,16 @@ jobs:
 
       - name: Save benchmark results
         run: |
-          rm -rf results
-          mkdir results
+          rm -rf benchmark_results_new
+          mkdir benchmark_results_new
           cp run_results_tcc.json results/
           cp run_results_gcc.json results/
           cp run_results_llvm.json results/
 
       - name: combining info from three jit into a single json file
         run: |
-          python3 script/combine.py results/run_results_tcc.json results/run_results_gcc.json results/run_results_llvm.json
-          mv results/run_results_tcc.json results/run_results.json
+          python3 script/combine.py benchmark_results_new/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_new/run_results_llvm.json
+          mv benchmark_results_new/run_results_tcc.json benchmark_results_new/run_results.json
 
 
       - name: get old benchmark results
@@ -317,11 +319,6 @@ jobs:
       - name: install dependencies
         run: pip install -r script/compare_mips/requirements.txt
 
-      - name: Save benchmark results
-        run: |
-          rm -rf benchmark_results_new
-          mkdir benchmark_results_new
-          cp results/run_results.json benchmark_results_new/
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
@@ -351,7 +348,7 @@ jobs:
 
 
   display-push:
-    needs: compare
+    needs: combine_and_compare
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
 
@@ -394,7 +391,7 @@ jobs:
           body: ${{ steps.get-comment-body.outputs.body }}
 
   display-pr:
-    needs: compare
+    needs: combine_and_compare
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'pull_request'}}
 
