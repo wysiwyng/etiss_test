@@ -12,6 +12,9 @@ def main(file_one, file_two, file_three):
         dict_one = json.load(f1)
         dict_two = json.load(f2)
         dict_three = json.load(f3)
+        dict_one = {k: round(v, 2) for k, v in dict_one.items()}
+        dict_two = {k: round(v, 2) for k, v in dict_two.items()}
+        dict_three = {k: round(v, 2) for k, v in dict_three.items()}
 
 
         #replacing keys with jit engine attribute
@@ -65,9 +68,9 @@ def main(file_one, file_two, file_three):
 
 
 
-        temp_dict = dict(list(dict_one.items()) + list(dict_two.items()) + list(dict_three.items()))
+        final_dict = dict(list(dict_one.items()) + list(dict_two.items()) + list(dict_three.items()))
 
-    final_dict = {k: round(v, 2) for k, v in temp_dict.items()}
+
     print(final_dict)
 
 
