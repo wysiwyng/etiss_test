@@ -488,3 +488,12 @@ jobs:
           name: mips_issue_text.md
         env:
           GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Create Issue From File
+        uses: peter-evans/create-issue-from-file@v3
+        with:
+          title: Performance Metrics
+          content-filepath: mips_issue_text.md
+          labels: |
+            report
+            automated issue
