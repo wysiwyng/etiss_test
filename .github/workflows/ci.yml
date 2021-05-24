@@ -468,9 +468,18 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
-          
+  Documentation:
 
+    needs: combine_and_compare
+    runs-on: ubuntu-latest
+    if: ${{github.event_name == 'push' }} || ${{github.event_name == 'pull_request'}}
 
-
-
-
+    steps:
+      - uses: actions/checkout@v1
+      # Additional steps to generate documentation in "Documentation" directory
+      - name: Upload Documentation to Wiki
+        uses: SwiftDocOrg/github-wiki-publish-action@v1
+        with:
+          name: mips_issue_text.md
+        env:
+          GH_PERSONAL_ACCESS_TOKEN_WIKI: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN_WIKI }}
