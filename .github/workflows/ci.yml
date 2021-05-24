@@ -505,6 +505,6 @@ jobs:
         # WIKI_DIR's default is wiki/
         WIKI_DIR: wiki/
         GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN}}
-        GH_MAIL: ${{ secrets.samantituna96@gmail.com }}
-        GH_NAME: ${{ github.Samanti-Das }}
+        GH_MAIL: ${{ secrets.MAIL }}
+        GH_NAME: ${{ github.NAME }}
 
