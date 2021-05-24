@@ -506,5 +506,5 @@ jobs:
         WIKI_DIR: wiki/
         GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN}}
         GH_MAIL: ${{ secrets.MAIL }}
-        GH_NAME: ${{ github.NAME }}
+        GH_NAME: ${{ github.Samanti-Das }}
 
