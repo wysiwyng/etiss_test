@@ -379,7 +379,7 @@ jobs:
                 run_results_llvm_5.json
                 etiss-Linux.tar
                 etiss-Mac.tar
-                mips_issue_text.md
+
                 run_results.json
 
 
