@@ -411,7 +411,7 @@ jobs:
         uses: peter-evans/find-comment@v1
         id: fc
         with:
-          issue-number: 5
+          issue-number: 12
 
           body-includes: This comment was created automatically, please do not change!
 
@@ -419,7 +419,7 @@ jobs:
         if: ${{ steps.fc.outputs.comment-id == 0 }}
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: 5
+          issue-number: 12
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
