@@ -368,7 +368,7 @@ jobs:
                 run_results_tcc_4.json
                 run_results_tcc_5.json
                 run_results_gcc_1.json
-                run_results_gcc_2.json
+
                 run_results_gcc_3.json
                 run_results_gcc_4.json
                 run_results_gcc_5.json
@@ -377,6 +377,11 @@ jobs:
                 run_results_llvm_3.json
                 run_results_llvm_4.json
                 run_results_llvm_5.json
+                etiss-Linux.tar
+                etiss-Mac.tar
+                mips_issue_text.md
+                run_results.json
+
 
 
 
