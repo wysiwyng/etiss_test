@@ -473,6 +473,8 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
+
+
   Documentation:
 
     needs: combine_and_compare
@@ -480,15 +482,6 @@ jobs:
     if: ${{github.event_name == 'push' }} || ${{github.event_name == 'pull_request'}}
 
     steps:
-      - uses: actions/checkout@v1
-      # Additional steps to generate documentation in "Documentation" directory
-      - name: Upload Documentation to Wiki
-        uses: SwiftDocOrg/github-wiki-publish-action@v1
-        with:
-          name: mips_issue_text.md
-        env:
-          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-
       - name: Create Issue From File
         uses: peter-evans/create-issue-from-file@v3
         with:
@@ -497,3 +490,21 @@ jobs:
           labels: |
             report
             automated issue
+
+
+  deploy-wiki:
+    needs: combine_and_compare
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Push Wiki Changes
+      uses: Andrew-Chen-Wang/github-wiki-action@v2
+      env:
+        # Make sure you have that / at the end. We use rsync
+        # WIKI_DIR's default is wiki/
+        WIKI_DIR: wiki/
+        GH_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN}}
+        GH_MAIL: ${{ secrets.samantituna96@gmail.com }}
+        GH_NAME: ${{ github.Samanti-Das }}
+
