@@ -5,20 +5,25 @@ import shutil
 import markdown
 from mako.template import Template
 
-ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:** ${message_tcc}
+ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:** ${message_tcc}\
 
-**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}
-**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}
 
-**Status** (for commit ${current_hash})**:** ${message_gcc}
+**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}\
+**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}\
 
-**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}
-**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}
 
-**Status** (for commit ${current_hash})**:** ${message_llvm}
+**Status** (for commit ${current_hash})**:** ${message_gcc}\
 
-**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}
-**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
+
+**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}\
+**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}\
+
+
+**Status** (for commit ${current_hash})**:** ${message_llvm}\
+
+
+**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}\
+**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}\
 
 
 <sub>This comment was created automatically, please do not change!</sub>
@@ -50,14 +55,18 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
     old_best_mips_gcc = best_mips_gcc = old_dict.get('best_mips_gcc', 0.00000001)
     old_best_mips_llvm = best_mips_llvm = old_dict.get('best_mips_llvm', 0.00000001)
 
-    old_best_hash = best_hash = old_dict.get('best_hash', None)
-    regressed_hash = old_dict.get('regressed_hash', None)
+    temp_best_hash=old_dict.get('best_hash', None)
+    old_best_hash = best_hash = round(temp_best_hash, 8)
+    temp_regressed_hash = old_dict.get('regressed_hash', None)
+    regressed_hash = round(temp_regressed_hash, 8)
 
     best_diff_tcc = new_mips_tcc / best_mips_tcc - 1
     best_diff_gcc = new_mips_gcc / best_mips_gcc - 1
     best_diff_llvm = new_mips_llvm / best_mips_llvm - 1
 
     regressed = False
+
+    final_current_hash = round(current_hash, 8)
 
     if best_diff_tcc < -tolerance and best_diff_gcc < -tolerance and best_diff_llvm < -tolerance:
         message_tcc = f'⚠ Major regression since commit {regressed_hash} ⚠'
@@ -70,7 +79,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
             message_tcc = f'⚠ Major regression introduced! ⚠'
             message_gcc = f'⚠ Major regression introduced! ⚠'
             message_llvm = f'⚠ Major regression introduced! ⚠'
-            regressed_hash = current_hash
+            regressed_hash = final_current_hash
         regressed = True
 
     elif new_mips_tcc > best_mips_tcc and new_mips_gcc > best_mips_gcc and new_mips_llvm > best_mips_llvm:
@@ -83,7 +92,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
         best_mips_tcc = new_mips_tcc
         best_mips_gcc = new_mips_gcc
         best_mips_llvm = new_mips_llvm
-        best_hash = current_hash
+        best_hash = final_current_hash
         regressed_hash = None
 
     else:
@@ -115,7 +124,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
 
     with open('mips_issue_text.md', 'w') as f1:
         f1.write(issue_template.render(
-            current_hash=current_hash,
+            current_hash=final_current_hash,
             best_hash=old_best_hash,
 
             new_mips_tcc=new_mips_tcc,
