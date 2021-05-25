@@ -507,9 +507,10 @@ jobs:
       - name: Save file
 
         run: |
-              rm -rf markdown
-              mkdir markdown
-              cp mips_issue_text.html markdown/
+              rm -rf html
+              mkdir html
+              cp mips_issue_text.html html/
+              mv html/mips_issue_text.html html/index.html
 
       - name: Deploy 🚀
         if: ${{github.event_name == 'push'}} || ${{github.event_name == 'pull_request'}}
@@ -517,7 +518,32 @@ jobs:
 
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: markdown # The folder the action should deploy.
+          folder: html # The folder the action should deploy.
+
+  deploy-wiki:
+    needs: combine_and_compare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get markdown file
+        uses: actions/download-artifact@v2
+        with:
+          name: mips_issue_text.md
+
+      - name: Save file
+
+        run: |
+              rm -rf markdown
+              mkdir markdown
+              cp mips_issue_text.md markdown/
+
+      - uses: actions/checkout@v1
+      # Additional steps to generate documentation in "Documentation" directory
+      - name: Upload Documentation to Wiki
+        uses: SwiftDocOrg/github-wiki-publish-action@v1
+        with:
+          path: markdown/mips_issue_text.md
+        env:
+          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
 
 
 
