@@ -5,24 +5,30 @@ import shutil
 import markdown
 from mako.template import Template
 
-ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:** ${message_tcc}\
+ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:**
 
+${message_tcc}\
 
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}\
+
 **Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}\
 
 
-**Status** (for commit ${current_hash})**:** ${message_gcc}\
+**Status** (for commit ${current_hash})**:**
 
+${message_gcc}\
 
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}\
+
 **Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}\
 
 
-**Status** (for commit ${current_hash})**:** ${message_llvm}\
+**Status** (for commit ${current_hash})**:**
 
+${message_llvm}\
 
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}\
+
 **Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}\
 
 
