@@ -354,7 +354,9 @@ jobs:
 
           path: mips_issue_text.md
 
-     - name: Upload html file
+
+
+      - name: Upload html file
         uses: actions/upload-artifact@v2
         with:
           name: mips_issue_text.html
