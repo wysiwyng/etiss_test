@@ -60,8 +60,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
 
     temp_best_hash=old_dict.get('best_hash', None)
     old_best_hash = best_hash = temp_best_hash[:8]
-    temp_regressed_hash = old_dict.get('regressed_hash', None)
-    regressed_hash = temp_regressed_hash[:8]
+    regressed_hash = old_dict.get('regressed_hash', None)
+
     best_diff_tcc = new_mips_tcc / best_mips_tcc - 1
     best_diff_gcc = new_mips_gcc / best_mips_gcc - 1
     best_diff_llvm = new_mips_llvm / best_mips_llvm - 1
