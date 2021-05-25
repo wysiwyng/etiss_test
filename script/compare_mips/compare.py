@@ -29,6 +29,9 @@ ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:** ${message_tcc}
 <sub>This comment was created automatically, please do not change!</sub>
 '''
 
+
+
+
 def main(new_file, old_file, current_hash, tolerance, no_update):
     issue_template = Template(text=ISSUE_TEMPLATE)
 
@@ -56,17 +59,16 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
     old_best_mips_llvm = best_mips_llvm = old_dict.get('best_mips_llvm', 0.00000001)
 
     temp_best_hash=old_dict.get('best_hash', None)
-    old_best_hash = best_hash = round(temp_best_hash, 8)
+    old_best_hash = best_hash = temp_best_hash[:8]
     temp_regressed_hash = old_dict.get('regressed_hash', None)
-    regressed_hash = round(temp_regressed_hash, 8)
-
+    regressed_hash = temp_regressed_hash[:8]
     best_diff_tcc = new_mips_tcc / best_mips_tcc - 1
     best_diff_gcc = new_mips_gcc / best_mips_gcc - 1
     best_diff_llvm = new_mips_llvm / best_mips_llvm - 1
 
     regressed = False
 
-    final_current_hash = round(current_hash, 8)
+    final_current_hash = current_hash[:8]
 
     if best_diff_tcc < -tolerance and best_diff_gcc < -tolerance and best_diff_llvm < -tolerance:
         message_tcc = f'⚠ Major regression since commit {regressed_hash} ⚠'
