@@ -354,6 +354,16 @@ jobs:
 
           path: mips_issue_text.md
 
+     - name: Upload html file
+        uses: actions/upload-artifact@v2
+        with:
+          name: mips_issue_text.html
+
+          path: mips_issue_text.html
+
+
+
+
 
       - name: delete unnecessary artifacts
         uses: geekyeggo/delete-artifact@v1
@@ -478,7 +488,7 @@ jobs:
 
 
 
-  deploy-wiki:
+  deploy-gh_pages:
     needs: combine_and_compare
     runs-on: ubuntu-latest
 
