@@ -2,8 +2,7 @@ import argparse
 import json
 import pathlib
 import shutil
-import markdown
-from flask import Flask
+
 from mako.template import Template
 
 ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:**
@@ -39,9 +38,40 @@ ${message_llvm}\
 
 '''
 
+WIKI_TEMPLATE = r'''**Status** (for commit ${current_hash})**:**
 
-def main(new_file, old_file, current_hash, tolerance, no_update):
+${message_tcc}<br/>
+
+**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}<br/>
+
+**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+
+
+**Status** (for commit ${current_hash})**:**
+
+${message_gcc}<br/>
+
+**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}<br/>
+
+**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+
+
+**Status** (for commit ${current_hash})**:**
+
+${message_llvm}<br/>
+
+**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}<br/>
+
+**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
+
+
+
+
+'''
+
+def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     issue_template = Template(text=ISSUE_TEMPLATE)
+    wiki_template = Template(text=WIKI_TEMPLATE)
 
     new_path = pathlib.Path(new_file)
     old_path = pathlib.Path(old_file)
@@ -176,6 +206,32 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
         ))
 
 
+    if repo_url:
+            current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
+            old_best_hash = f"[{old_best_hash[:8]}](https://github.com/{repo_url}/commit/{old_best_hash})"
+
+    with open('wiki_text.md', 'w') as f1:
+            f1.write(wiki_template.render(
+                current_hash=final_current_hash,
+            best_hash=old_best_hash,
+
+            new_mips_tcc=new_mips_tcc,
+            message_tcc=message_tcc,
+            best_mips_tcc=old_best_mips_tcc,
+            best_diff_tcc=best_diff_tcc,
+
+            new_mips_gcc=new_mips_gcc,
+            message_gcc=message_gcc,
+            best_mips_gcc=old_best_mips_gcc,
+            best_diff_gcc=best_diff_gcc,
+
+            new_mips_llvm=new_mips_llvm,
+            message_llvm=message_llvm,
+            best_mips_llvm=old_best_mips_llvm,
+            best_diff_llvm=best_diff_llvm
+        ))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
@@ -184,8 +240,10 @@ if __name__ == '__main__':
     parser.add_argument('git_commit_hash')
     parser.add_argument('-t', '--tolerance', default=0.2)
     parser.add_argument('-n', '--no_update', action='store_true')
+    parser.add_argument('-r', '--repo_url')
+
 
     args = parser.parse_args()
 
-    main(args.new_file, args.old_file, args.git_commit_hash, args.tolerance, args.no_update)
+    main(args.new_file, args.old_file, args.git_commit_hash, args.tolerance, args.no_update, args.repo_url)
 

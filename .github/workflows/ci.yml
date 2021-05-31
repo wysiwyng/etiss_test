@@ -520,31 +520,28 @@ jobs:
           branch: gh-pages # The branch the action should deploy to.
           folder: html # The folder the action should deploy.
 
-  deploy-wiki:
+  display-wiki:
     needs: combine_and_compare
     runs-on: ubuntu-latest
+    if: ${{github.event_name == 'push'}} || ${{github.event_name == 'pull_request'}}
+
     steps:
-      - name: Get markdown file
+      - name: Get comment text
         uses: actions/download-artifact@v2
         with:
-          name: mips_issue_text.md
+          name: wiki_text.md
 
-      - name: Save file
-
+      - name: Update wiki
         run: |
-              rm -rf markdown
-              mkdir markdown
-              cp mips_issue_text.md markdown/
-
-      - uses: actions/checkout@v1
-      # Additional steps to generate documentation in "Documentation" directory
-      - name: Upload Documentation to Wiki
-        uses: SwiftDocOrg/github-wiki-publish-action@v1
-        with:
-          path: markdown/mips_issue_text.md
-        env:
-          GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-
+          echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
+          git clone "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.wiki.git" "wiki"
+          cd wiki
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          cp ../wiki_text.md ./perf.md
+          git add perf.md
+          git commit -m "update perf"
+          git push
 
 
 
