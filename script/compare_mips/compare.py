@@ -133,7 +133,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
     regressed = False
 
-    final_current_hash = current_hash[:8]
+
 
     if best_diff_tcc < -tolerance and best_diff_gcc < -tolerance and best_diff_llvm < -tolerance:
         message_tcc = f'⚠ Major regression since commit {regressed_hash} ⚠'
@@ -146,7 +146,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
             message_tcc = f'⚠ Major regression introduced! ⚠'
             message_gcc = f'⚠ Major regression introduced! ⚠'
             message_llvm = f'⚠ Major regression introduced! ⚠'
-            regressed_hash = final_current_hash
+            regressed_hash = current_hash
         regressed = True
 
     elif new_mips_tcc > best_mips_tcc and new_mips_gcc > best_mips_gcc and new_mips_llvm > best_mips_llvm:
@@ -159,7 +159,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         best_mips_tcc = new_mips_tcc
         best_mips_gcc = new_mips_gcc
         best_mips_llvm = new_mips_llvm
-        best_hash = final_current_hash
+        best_hash = current_hash
         regressed_hash = None
 
     else:
@@ -184,6 +184,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     new_dict['best_mips_llvm'] = best_mips_llvm
     new_dict['best_hash'] = best_hash
     new_dict['regressed_hash'] = regressed_hash
+
+    final_current_hash=current_hash[:8]
 
     if not no_update:
         with open(new_path, 'w') as f1:
@@ -211,13 +213,13 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         ))
 
     if repo_url:
-            final_current_hash = f"[{final_current_hash[:8]}](https://github.com/{repo_url}/commit/{final_current_hash})"
+            current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
             old_best_hash = f"[{old_best_hash[:8]}](https://github.com/{repo_url}/commit/{old_best_hash})"
 
 
     with open('mips_issue_text.html', 'w') as f2:
         f2.write(html_template.render(
-            current_hash=final_current_hash,
+            current_hash=current_hash,
             best_hash=old_best_hash,
 
             new_mips_tcc=new_mips_tcc,
@@ -238,12 +240,12 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
     if repo_url:
-            current_hash = f"[{final_current_hash[:8]}](https://github.com/{repo_url}/commit/{final_current_hash})"
+            current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
             old_best_hash = f"[{old_best_hash[:8]}](https://github.com/{repo_url}/commit/{old_best_hash})"
 
     with open('wiki_text.md', 'w') as f1:
             f1.write(wiki_template.render(
-            current_hash=final_current_hash,
+            current_hash=current_hash,
             best_hash=old_best_hash,
 
             new_mips_tcc=new_mips_tcc,
