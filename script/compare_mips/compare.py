@@ -77,18 +77,18 @@ HTML_TEMPLATE= r'''
 </head>
 <body>
 <h1>Performance Metrics for the three JIT engines from the last commit</h1>
-<p><b>Status</b> (for commit <a href="https://github.com/{repo_url}/commit/{final_current_hash}">${current_hash}</a>)<b>:</b>
+<p><b>Status</b> (for commit <a href="https://github.com/${repo_url}/commit/${final_current_hash}">${current_hash}</a>)<b>:</b>
 ${message_tcc}<br/>
 <b>Current dhrystone MIPS for TCCJIT</b> <b>:</b> ${new_mips_tcc}<br/>
-<b>Previous best for TCCJIT</b> (recorded in commit <a href="https://github.com/{repo_url}/commit/{old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
-<b>Status</b> (for commit <a href="https://github.com/{repo_url}/commit/{final_current_hash}">${current_hash}</a>)<b>:</b>
+<b>Previous best for TCCJIT</b> (recorded in commit <a href="https://github.com/${repo_url}/commit/${old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+<b>Status</b> (for commit <a href="https://github.com/${repo_url}/commit/${final_current_hash}">${current_hash}</a>)<b>:</b>
 ${message_gcc}<br/>
 <b>Current dhrystone MIPS for GCCJIT</b> <b>:</b> ${new_mips_gcc}<br/>
-<b>Previous best for GCCJIT</b> (recorded in commit <a href="https://github.com/{repo_url}/commit/{old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
-<b>Status</b> (for commit <a href="https://github.com/{repo_url}/commit/{final_current_hash}">${current_hash}</a>)<b>:</b>
+<b>Previous best for GCCJIT</b> (recorded in commit <a href="https://github.com/${repo_url}/commit/${old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+<b>Status</b> (for commit <a href="https://github.com/${repo_url}/commit/${final_current_hash}">${current_hash}</a>)<b>:</b>
 ${message_llvm}<br/>
 <b>Current dhrystone MIPS for LLVMJIT</b> <b>:</b> ${new_mips_llvm}<br/>
-<b>Previous best for LLVMJIT</b> (recorded in commit <a href="https://github.com/{repo_url}/commit/{old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
+<b>Previous best for LLVMJIT</b> (recorded in commit <a href="https://github.com/${repo_url}/commit/${old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
 </body>
 </html>
 
