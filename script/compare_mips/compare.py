@@ -80,15 +80,15 @@ HTML_TEMPLATE= r'''
 <p><b>Status</b> (for commit <a href=${final_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_tcc}<br/>
 <b>Current dhrystone MIPS for TCCJIT</b> <b>:</b> ${new_mips_tcc}<br/>
-<b>Previous best for TCCJIT</b> (recorded in commit <a href="https://github.com/${repo_url}/commit/${old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
-<b>Status</b> (for commit <a href="https://github.com/${repo_url}/commit/${final_current_hash}">${current_hash}</a>)<b>:</b>
+<b>Previous best for TCCJIT</b> (recorded in commit <a href=${old_best_hash}>${best_hash}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+<b>Status</b> (for commit <a href=${final_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_gcc}<br/>
 <b>Current dhrystone MIPS for GCCJIT</b> <b>:</b> ${new_mips_gcc}<br/>
-<b>Previous best for GCCJIT</b> (recorded in commit <a href="https://github.com/${repo_url}/commit/${old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
-<b>Status</b> (for commit <a href="https://github.com/${repo_url}/commit/${final_current_hash}">${current_hash}</a>)<b>:</b>
+<b>Previous best for GCCJIT</b> (recorded in commit <a href=${old_best_hash}>${best_hash}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+<b>Status</b> (for commit <a href=${final_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_llvm}<br/>
 <b>Current dhrystone MIPS for LLVMJIT</b> <b>:</b> ${new_mips_llvm}<br/>
-<b>Previous best for LLVMJIT</b> (recorded in commit <a href="https://github.com/${repo_url}/commit/${old_best_hash}">${best_hash}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
+<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${old_best_hash}>${best_hash}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
 </body>
 </html>
 
@@ -133,7 +133,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     best_diff_llvm = new_mips_llvm / best_mips_llvm - 1
 
     regressed = False
-
+    final_current_hash = current_hash[:8]
 
 
     if best_diff_tcc < -tolerance and best_diff_gcc < -tolerance and best_diff_llvm < -tolerance:
@@ -147,7 +147,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
             message_tcc = f'⚠ Major regression introduced! ⚠'
             message_gcc = f'⚠ Major regression introduced! ⚠'
             message_llvm = f'⚠ Major regression introduced! ⚠'
-            regressed_hash = current_hash
+            regressed_hash = final_current_hash
         regressed = True
 
     elif new_mips_tcc > best_mips_tcc and new_mips_gcc > best_mips_gcc and new_mips_llvm > best_mips_llvm:
@@ -160,7 +160,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         best_mips_tcc = new_mips_tcc
         best_mips_gcc = new_mips_gcc
         best_mips_llvm = new_mips_llvm
-        best_hash = current_hash
+        best_hash = final_current_hash
         regressed_hash = None
 
     else:
@@ -186,7 +186,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     new_dict['best_hash'] = best_hash
     new_dict['regressed_hash'] = regressed_hash
 
-    final_current_hash=current_hash[:8]
+
 
     if not no_update:
         with open(new_path, 'w') as f1:
@@ -215,7 +215,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
     if repo_url:
 
-
+     final_current_hash = f"(https://github.com/{repo_url}/commit/{final_current_hash})"
+     old_best_hash = f"(https://github.com/{repo_url}/commit/{old_best_hash})"
 
      with open('mips_issue_text.html', 'w') as f2:
         f2.write(html_template.render(
