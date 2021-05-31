@@ -3,6 +3,7 @@ import json
 import pathlib
 import shutil
 import markdown
+from flask import Flask
 from mako.template import Template
 
 ISSUE_TEMPLATE = r'''**Status** (for commit ${current_hash})**:**
@@ -33,9 +34,10 @@ ${message_llvm}\
 
 
 <sub>This comment was created automatically, please do not change!</sub>
+
+
+
 '''
-
-
 
 
 def main(new_file, old_file, current_hash, tolerance, no_update):
@@ -151,12 +153,28 @@ def main(new_file, old_file, current_hash, tolerance, no_update):
             best_diff_llvm=best_diff_llvm
         ))
 
-    with open('mips_issue_text.md', 'r') as f1:
-     text = f1.read()
-     html = markdown.markdown(text)
 
     with open('mips_issue_text.html', 'w') as f2:
-     f2.write(html)
+        f2.write(issue_template.render(
+            current_hash=final_current_hash,
+            best_hash=old_best_hash,
+
+            new_mips_tcc=new_mips_tcc,
+            message_tcc=message_tcc,
+            best_mips_tcc=old_best_mips_tcc,
+            best_diff_tcc=best_diff_tcc,
+
+            new_mips_gcc=new_mips_gcc,
+            message_gcc=message_gcc,
+            best_mips_gcc=old_best_mips_gcc,
+            best_diff_gcc=best_diff_gcc,
+
+            new_mips_llvm=new_mips_llvm,
+            message_llvm=message_llvm,
+            best_mips_llvm=old_best_mips_llvm,
+            best_diff_llvm=best_diff_llvm
+        ))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
