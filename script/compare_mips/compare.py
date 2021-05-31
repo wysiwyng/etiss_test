@@ -239,12 +239,12 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
     if repo_url:
-            current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
+            final_current_hash = f"[{final_current_hash[:8]}](https://github.com/{repo_url}/commit/{final_current_hash})"
             old_best_hash = f"[{old_best_hash[:8]}](https://github.com/{repo_url}/commit/{old_best_hash})"
 
     with open('wiki_text.md', 'w') as f1:
             f1.write(wiki_template.render(
-            current_hash=current_hash,
+            current_hash=final_current_hash,
             best_hash=old_best_hash,
 
             new_mips_tcc=new_mips_tcc,
