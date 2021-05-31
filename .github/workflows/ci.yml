@@ -364,6 +364,13 @@ jobs:
           path: mips_issue_text.html
 
 
+      - name: Upload wiki text
+        uses: actions/upload-artifact@v2
+        with:
+          name: wiki_text.md
+          path: wiki_text.md
+
+
 
 
 
