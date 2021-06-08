@@ -507,7 +507,7 @@ jobs:
                 run_results_tcc_4.json
                 run_results_tcc_5.json
                 run_results_gcc_1.json
-
+                run_results_gcc_2.json
                 run_results_gcc_3.json
                 run_results_gcc_4.json
                 run_results_gcc_5.json
@@ -520,6 +520,7 @@ jobs:
                 etiss-Mac.tar
 
                 run_results.json
+                wiki_text.md
 
 
 
@@ -563,7 +564,7 @@ jobs:
                 run_results_tcc_4.json
                 run_results_tcc_5.json
                 run_results_gcc_1.json
-
+                run_results_gcc_2.json
                 run_results_gcc_3.json
                 run_results_gcc_4.json
                 run_results_gcc_5.json
@@ -578,6 +579,8 @@ jobs:
                 run_results.json
                 mips_issue_text.html
                 mips_issue_text.md
+                wiki_text.md
+
 
 
 
