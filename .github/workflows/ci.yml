@@ -490,7 +490,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           cp ../wiki_text.md ./Performance_Metrics_Push.md
-          git add Performance_Metrics.md
+          git add Performance_Metrics_Push.md
           git commit -m "update perf"
           git push
 
@@ -546,7 +546,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           cp ../wiki_text.md ./Performance_Metrics_PR.md
-          git add Performance_Metrics.md
+          git add Performance_Metrics_PR.md
           git commit -m "update perf"
           git push
 
