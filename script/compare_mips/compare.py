@@ -156,7 +156,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
     new_dict['best_mips_tcc'] = best_mips[0]
     new_dict['best_mips_gcc'] = best_mips[1]
-    new_dict['best_mips_llvm'] = best_mips[3]
+    new_dict['best_mips_llvm'] = best_mips[2]
     new_dict['best_hash'] = best_hash
     new_dict['regressed_hash'] = regressed_hash
 
