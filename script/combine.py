@@ -2,13 +2,22 @@ import pathlib
 import json
 import argparse
 
-def main(file_one, file_two, file_three):
+
+#program valid for three jit engines
+
+def main(file_one, file_two, file_three): #can I make these variable?
+
+    jit_engines = ["tcc", "gcc", "llvm"]
+    dictionary = ["dict_one", "dict_two", "dict_three"]
+
     path_one = pathlib.Path(file_one)
     path_two = pathlib.Path(file_two)
     path_three = pathlib.Path(file_three)
 
 
     with open(path_one, 'r') as f1, open(path_two, 'r') as f2, open(path_three, 'r') as f3:
+
+
         dict_one = json.load(f1)
         dict_two = json.load(f2)
         dict_three = json.load(f3)
@@ -19,51 +28,28 @@ def main(file_one, file_two, file_three):
 
         #replacing keys with jit engine attribute
 
-        new_key_mips_tcc= 'mips_tcc'
-        old_key_mips_tcc= 'mips'
-        new_key_Simulation_Time_tcc= 'Simulation_Time_tcc'
-        old_key_Simulation_Time_tcc= 'Simulation_Time'
-        new_key_CPU_Time_tcc= 'CPU_Time_tcc'
-        old_key_CPU_Time_tcc= 'CPU_Time'
-        new_key_CPU_Cycle_tcc= 'CPU_Cycle_tcc'
-        old_key_CPU_Cycle_tcc= 'CPU_cycle'
-        dict_one[new_key_mips_tcc] = dict_one.pop(old_key_mips_tcc)
-        dict_one[new_key_Simulation_Time_tcc] = dict_one.pop(old_key_Simulation_Time_tcc)
-        dict_one[new_key_CPU_Time_tcc] = dict_one.pop(old_key_CPU_Time_tcc)
-        dict_one[new_key_CPU_Cycle_tcc] = dict_one.pop(old_key_CPU_Cycle_tcc)
+        #dict_one creation
 
+        dict_one[f'mips_{jit_engines[0]}'] = dict_one.pop('mips')
+        dict_one[f'Simulation_Time_{jit_engines[0]}'] = dict_one.pop('Simulation_Time')
+        dict_one[f'CPU_Time_{jit_engines[0]}'] = dict_one.pop('CPU_Time')
+        dict_one[f'CPU_Cycle_{jit_engines[0]}'] = dict_one.pop('CPU_Cycle')
         print(dict_one)
 
-        new_key_mips_gcc= 'mips_gcc'
-        old_key_mips_gcc= 'mips'
-        new_key_Simulation_Time_gcc= 'Simulation_Time_gcc'
-        old_key_Simulation_Time_gcc= 'Simulation_Time'
-        new_key_CPU_Time_gcc= 'CPU_Time_gcc'
-        old_key_CPU_Time_gcc= 'CPU_Time'
-        new_key_CPU_Cycle_gcc= 'CPU_Cycle_gcc'
-        old_key_CPU_Cycle_gcc= 'CPU_cycle'
-        dict_two[new_key_mips_gcc] = dict_two.pop(old_key_mips_gcc)
-        dict_two[new_key_Simulation_Time_gcc] = dict_two.pop(old_key_Simulation_Time_gcc)
-        dict_two[new_key_CPU_Time_gcc] = dict_two.pop(old_key_CPU_Time_gcc)
-        dict_two[new_key_CPU_Cycle_gcc] = dict_two.pop(old_key_CPU_Cycle_gcc)
+        #dict_two_creation
 
-
+        dict_two[f'mips_{jit_engines[1]}'] = dict_two.pop('mips')
+        dict_two[f'Simulation_Time_{jit_engines[1]}'] = dict_two.pop('Simulation_Time')
+        dict_two[f'CPU_Time_{jit_engines[1]}'] = dict_two.pop('CPU_Time')
+        dict_two[f'CPU_Cycle_{jit_engines[1]}'] = dict_two.pop('CPU_Cycle')
         print(dict_two)
 
+        #dict_three_creation
 
-        new_key_mips_llvm= 'mips_llvm'
-        old_key_mips_llvm= 'mips'
-        new_key_Simulation_Time_llvm= 'Simulation_Time_llvm'
-        old_key_Simulation_Time_llvm= 'Simulation_Time'
-        new_key_CPU_Time_llvm= 'CPU_Time_llvm'
-        old_key_CPU_Time_llvm= 'CPU_Time'
-        new_key_CPU_Cycle_llvm= 'CPU_Cycle_llvm'
-        old_key_CPU_Cycle_llvm= 'CPU_cycle'
-        dict_three[new_key_mips_llvm] = dict_three.pop(old_key_mips_llvm)
-        dict_three[new_key_Simulation_Time_llvm] = dict_three.pop(old_key_Simulation_Time_llvm)
-        dict_three[new_key_CPU_Time_llvm] = dict_three.pop(old_key_CPU_Time_llvm)
-        dict_three[new_key_CPU_Cycle_llvm] = dict_three.pop(old_key_CPU_Cycle_llvm)
-
+        dict_three[f'mips_{jit_engines[2]}'] = dict_three.pop('mips')
+        dict_three[f'Simulation_Time_{jit_engines[2]}'] = dict_three.pop('Simulation_Time')
+        dict_three[f'CPU_Time_{jit_engines[2]}'] = dict_three.pop('CPU_Time')
+        dict_three[f'CPU_Cycle_{jit_engines[2]}'] = dict_three.pop('CPU_Cycle')
         print(dict_three)
 
 
