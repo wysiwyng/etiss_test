@@ -8,7 +8,6 @@ import argparse
 def main(file_one, file_two, file_three): #can I make these variable?
 
     jit_engines = ["tcc", "gcc", "llvm"]
-    dictionary = ["dict_one", "dict_two", "dict_three"]
 
     path_one = pathlib.Path(file_one)
     path_two = pathlib.Path(file_two)
@@ -33,7 +32,7 @@ def main(file_one, file_two, file_three): #can I make these variable?
         dict_one[f'mips_{jit_engines[0]}'] = dict_one.pop('mips')
         dict_one[f'Simulation_Time_{jit_engines[0]}'] = dict_one.pop('Simulation_Time')
         dict_one[f'CPU_Time_{jit_engines[0]}'] = dict_one.pop('CPU_Time')
-        dict_one[f'CPU_Cycle_{jit_engines[0]}'] = dict_one.pop('CPU_Cycle')
+        dict_one[f'CPU_Cycle_{jit_engines[0]}'] = dict_one.pop('CPU_cycle')
         print(dict_one)
 
         #dict_two_creation
@@ -41,7 +40,7 @@ def main(file_one, file_two, file_three): #can I make these variable?
         dict_two[f'mips_{jit_engines[1]}'] = dict_two.pop('mips')
         dict_two[f'Simulation_Time_{jit_engines[1]}'] = dict_two.pop('Simulation_Time')
         dict_two[f'CPU_Time_{jit_engines[1]}'] = dict_two.pop('CPU_Time')
-        dict_two[f'CPU_Cycle_{jit_engines[1]}'] = dict_two.pop('CPU_Cycle')
+        dict_two[f'CPU_Cycle_{jit_engines[1]}'] = dict_two.pop('CPU_cycle')
         print(dict_two)
 
         #dict_three_creation
@@ -49,7 +48,7 @@ def main(file_one, file_two, file_three): #can I make these variable?
         dict_three[f'mips_{jit_engines[2]}'] = dict_three.pop('mips')
         dict_three[f'Simulation_Time_{jit_engines[2]}'] = dict_three.pop('Simulation_Time')
         dict_three[f'CPU_Time_{jit_engines[2]}'] = dict_three.pop('CPU_Time')
-        dict_three[f'CPU_Cycle_{jit_engines[2]}'] = dict_three.pop('CPU_Cycle')
+        dict_three[f'CPU_Cycle_{jit_engines[2]}'] = dict_three.pop('CPU_cycle')
         print(dict_three)
 
 

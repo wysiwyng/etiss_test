@@ -2,6 +2,10 @@ import pathlib
 import json
 import argparse
 
+
+
+# Valid for 5 test runs, have to change if necessary
+
 def main(file_one, file_two, file_three, file_four, file_five):
     path_one = pathlib.Path(file_one)
     path_two = pathlib.Path(file_two)
@@ -21,6 +25,9 @@ def main(file_one, file_two, file_three, file_four, file_five):
         dict_five['mips']= new_mips
         with open(path_five, 'w') as f5:
             json.dump(dict_five, f5)
+
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
