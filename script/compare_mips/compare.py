@@ -20,6 +20,7 @@ ${message_gcc}\
 
 **Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}\
 
+
 **Status** (for commit ${current_hash})**:**
 ${message_llvm}\
 
@@ -109,12 +110,14 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
         if best_diff[i] < -tolerance:
-            message.append(f'⚠ Major regression since commit {regressed_hash} ⚠')
             print('major regression')
-
             if regressed_hash is None:
-                message.append(f'⚠ Major regression introduced! ⚠')
-            regressed = True
+              message.append(f'⚠ Major regression introduced! ⚠')
+              regressed_hash = current_hash
+            else:
+              message.append(f'⚠ Major regression since commit {f"[{regressed_hash[:8]}](https://github.com/{repo_url}/commit/{regressed_hash})"} ⚠')
+              regressed = True
+
 
         elif new_mips[i] > best_mips[i]:
             print('new best')
