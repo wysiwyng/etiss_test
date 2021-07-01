@@ -102,7 +102,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
     best_hash = [old_dict.get('best_hash_TCC', None), old_dict.get('best_hash_GCC', None), old_dict.get('best_hash_LLVM', None)],
-    regressed_hash = [old_dict.get('regressed_hash_TCC', None)[:8], old_dict.get('regfressed_hash_GCC', None)[:8], old_dict.get('regressed_hash_LLVM', None)[:8]]
+    regressed_hash = [old_dict.get('regressed_hash_TCC', None), old_dict.get('regressed_hash_GCC', None), old_dict.get('regressed_hash_LLVM', None)]
     old_best_hash = []
 
 
