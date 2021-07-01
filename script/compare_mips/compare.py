@@ -110,7 +110,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     for i in range(len(loop_iteration["jit_engines"])):
 
 
-        old_best_hash.append(loop_iteration["best_hash"][i])
+        old_best_hash.append(best_hash[i])
         loop_iteration["best_diff"].append(loop_iteration["new_mips"][i] / loop_iteration["best_mips"][i] - 1)
         regressed = False
         current_hash = current_hash[:8]
