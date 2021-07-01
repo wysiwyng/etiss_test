@@ -281,6 +281,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Fetch Compiled System
+        uses: actions/download-artifact@v2
+        with:
+          name: etiss-Linux.tar
+          path: ${{runner.workspace}}
+
+      - name: Unpack Compiled System
+        working-directory: ${{runner.workspace}}
+        run: tar -xf etiss.tar
+
       - name: Get benchmark results
         uses: actions/download-artifact@v2
         with:
@@ -328,6 +338,15 @@ jobs:
         if: ${{github.event_name == 'pull_request'}}
         run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
 
+
+      - name: Run graphical analysis (Push)
+         if: ${{github.event_name == 'push'}}
+         run: python3 script/graph.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json
+
+      - name: Run graphical analysis (PR)
+         if: ${{github.event_name == 'pull_request'}}
+         run: python3 script/graph.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json
+
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
         uses: peaceiris/actions-gh-pages@v3
@@ -344,6 +363,30 @@ jobs:
           name: run_results.json
 
           path: benchmark_results_new/run_results.json
+
+      - name: uploading images MIPS
+        uses: actions/upload-artifact@v2
+        with:
+          name: mips.png
+          path: mips.png
+
+      - name: uploading images Simulation Time
+        uses: actions/upload-artifact@v2
+        with:
+          name: Simulation_Time.png
+          path: Simulation_Time.png
+
+      - name: uploading images CPU Time
+        uses: actions/upload-artifact@v2
+        with:
+          name: CPU_Time.png
+          path: CPU_Time.png
+
+      - name: uploading images CPU Cycle
+        uses: actions/upload-artifact@v2
+        with:
+          name: CPU_Cycle.png
+          path: CPU_Cycle.png
 
 
 
@@ -369,6 +412,10 @@ jobs:
         with:
           name: wiki_text.md
           path: wiki_text.md
+
+
+
+
 
 
 
@@ -489,8 +536,8 @@ jobs:
           cd wiki
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          cp ../wiki_text.md ./Performance_Metrics_Push.md
-          git add Performance_Metrics_Push.md
+          cp ../wiki_text.md ./Performance_Metric.md
+          git add Performance_Metrics.md
           git commit -m "update perf"
           git push
 
@@ -524,62 +571,7 @@ jobs:
 
 
 
-  display-wiki-pr:
-    needs: combine_and_compare
-    runs-on: ubuntu-latest
-    if: ${{github.event_name == 'pull_request'}}
 
-    steps:
-
-
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
-      - name: Get comment text
-        uses: actions/download-artifact@v2
-        with:
-          name: wiki_text.md
-
-      - name: Update wiki
-        run: |
-          echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
-          git clone "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.wiki.git" "wiki"
-          cd wiki
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          cp ../wiki_text.md ./Performance_Metrics_PR.md
-          git add Performance_Metrics_PR.md
-          git commit -m "update perf"
-          git push
-
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-                run_results_tcc.json
-                run_results_gcc.json
-                run_results_llvm.json
-                run_results_tcc_1.json
-                run_results_tcc_2.json
-                run_results_tcc_3.json
-                run_results_tcc_4.json
-                run_results_tcc_5.json
-                run_results_gcc_1.json
-                run_results_gcc_2.json
-                run_results_gcc_3.json
-                run_results_gcc_4.json
-                run_results_gcc_5.json
-                run_results_llvm_1.json
-                run_results_llvm_2.json
-                run_results_llvm_3.json
-                run_results_llvm_4.json
-                run_results_llvm_5.json
-                etiss-Linux.tar
-                etiss-Mac.tar
-
-                run_results.json
-                mips_issue_text.html
-                mips_issue_text.md
-                wiki_text.md
 
 
 
