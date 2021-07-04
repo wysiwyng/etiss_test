@@ -168,7 +168,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
         for index, fname in enumerate(output_files):
             with open(fname, 'w') as fw:
-                fw.write(templates[index.render(
+                fw.write(templates[index].render(
 
                     current_hash = current_hash,
 
@@ -198,7 +198,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                     best_diff_gcc = best_diff[1],
                     best_diff_llvm = best_diff[2],
 
-                )])
+                ))
 
 
 
