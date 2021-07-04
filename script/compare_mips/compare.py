@@ -7,43 +7,43 @@ from mako.template import Template
 
 
 ISSUE_TEMPLATE = r''' **Status** (for commit ${current_hash})**:**
-${message_TCC}\
+${message_tcc}\
 
-**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_TCC}\
+**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}\
 
-**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_TCC}, difference ${f'{best_diff_TCC:+.2%}'}\
-
-
-**Status** (for commit ${current_hash})**:**
-${message_GCC}\
-
-**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_GCC}\
-
-**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_GCC}, difference ${f'{best_diff_GCC:+.2%}'}\
+**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}\
 
 
 **Status** (for commit ${current_hash})**:**
-${message_LLVM}\
+${message_gcc}\
 
-**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_LLVM}\
+**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}\
 
-**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_LLVM}, difference ${f'{best_diff_LLVM:+.2%}'}\
+**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}\
+
+
+**Status** (for commit ${current_hash})**:**
+${message_llvm}\
+
+**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}\
+
+**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}\
 
 <sub>This comment was created automatically, please do not change!</sub>
 '''
 
 WIKI_TEMPLATE = r'''**Status** (for commit ${current_hash})**:**
-${message_TCC}<br/>
-**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_TCC}<br/>
-**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_TCC}, difference ${f'{best_diff_TCC:+.2%}'}<br/>
+${message_tcc}<br/>
+**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}<br/>
+**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
 **Status** (for commit ${current_hash})**:**
-${message_GCC}<br/>
-**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_GCC}<br/>
-**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_GCC}, difference ${f'{best_diff_GCC:+.2%}'}<br/>
+${message_gcc}<br/>
+**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}<br/>
+**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
 **Status** (for commit ${current_hash})**:**
-${message_LLVM}<br/>
-**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_LLVM}<br/>
-**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_LLVM}, difference ${f'{best_diff_LLVM:+.2%}'}
+${message_llvm}<br/>
+**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}<br/>
+**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
 '''
 
 HTML_TEMPLATE= r'''
@@ -54,17 +54,17 @@ HTML_TEMPLATE= r'''
 <body>
 <h1>Performance Metrics for the three JIT engines from the last commit</h1>
 <p><b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
-${message_TCC}<br/>
-<b>Current dhrystone MIPS for TCCJIT</b> <b>:</b> ${new_mips_TCC}<br/>
-<b>Previous best for TCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_TCC}>${best_hash}</a>)<b>:</b> ${best_mips_TCC}, difference ${f'{best_diff_TCC:+.2%}'}<br/>
+${message_tcc}<br/>
+<b>Current dhrystone MIPS for TCCJIT</b> <b>:</b> ${new_mips_tcc}<br/>
+<b>Previous best for TCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_tcc}>${best_hash}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
 <b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
-${message_GCC}<br/>
-<b>Current dhrystone MIPS for GCCJIT</b> <b>:</b> ${new_mips_GCC}<br/>
-<b>Previous best for GCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_GCC}>${best_hash}</a>)<b>:</b> ${best_mips_GCC}, difference ${f'{best_diff_GCC:+.2%}'}<br/>
+${message_gcc}<br/>
+<b>Current dhrystone MIPS for GCCJIT</b> <b>:</b> ${new_mips_gcc}<br/>
+<b>Previous best for GCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_gcc}>${best_hash}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
 <b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
-${message_LLVM}<br/>
-<b>Current dhrystone MIPS for LLVMJIT</b> <b>:</b> ${new_mips_LLVM}<br/>
-<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${link_to_old_best_hash_LLVM}>${best_hash}</a>)<b>:</b> ${best_mips_LLVM}, difference ${f'{best_diff_LLVM:+.2%}'}</br>
+${message_llvm}<br/>
+<b>Current dhrystone MIPS for LLVMJIT</b> <b>:</b> ${new_mips_llvm}<br/>
+<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${link_to_old_best_hash_llvm}>${best_hash}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
 </body>
 </html>
 '''
@@ -89,18 +89,18 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict = json.load(f1)
         old_dict = json.load(f2)
 
-    print(type(old_dict["mips_TCC"]))
-    print(type(new_dict["mips_TCC"]))
+    print(type(old_dict["mips_tcc"]))
+    print(type(new_dict["mips_tcc"]))
 
 
 
 
 
-    jit_engines = ["TCC", "GCC", "LLVM"]
-    new_mips = [new_dict.get('mips_TCC'), new_dict.get('mips_GCC'), new_dict.get('mips_LLVM')]
-    best_mips = [old_dict.get('best_mips_TCC', 0.00000001), old_dict.get('best_mips_GCC', 0.00000001), old_dict.get('best_mips_LLVM', 0.00000001)]
-    best_hash = [old_dict.get('best_hash_TCC', None), old_dict.get('best_hash_GCC', None), old_dict.get('best_hash_LLVM', None)]
-    regressed_hash = [old_dict.get('regressed_hash_TCC', None), old_dict.get('regressed_hash_GCC', None), old_dict.get('regressed_hash_LLVM', None)]
+    jit_engines = ["tcc", "gcc", "llvm"]
+    new_mips = [new_dict.get('mips_tcc'), new_dict.get('mips_gcc'), new_dict.get('mips_llvm')]
+    best_mips = [old_dict.get('best_mips_tcc', 0.00000001), old_dict.get('best_mips_gcc', 0.00000001), old_dict.get('best_mips_llvm', 0.00000001)]
+    best_hash = [old_dict.get('best_hash_tcc', None), old_dict.get('best_hash_gcc', None), old_dict.get('best_hash_llvm', None)]
+    regressed_hash = [old_dict.get('regressed_hash_tcc', None), old_dict.get('regressed_hash_gcc', None), old_dict.get('regressed_hash_llvm', None)]
     old_best_hash = []
     message = []
     best_diff = []
@@ -129,7 +129,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
         elif new_mips[i] > best_mips[i]:
             print('new best')
-            message.append(f'🥇 New best performance for {jit_engines[i]} Just-in-Time engine!')
+            message.append(f'🥇 New best performance!')
             best_mips[i] = new_mips[i]
             best_hash[i] = current_hash
             regressed_hash[i] = None
@@ -139,7 +139,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                 message.append('Regression cleared')
 
             else:
-                message.append(f'No significant performance change for {jit_engines[i]} Just-in-Time engine.')
+                message.append(f'No significant performance change.')
                 print('no significant change')
                 regressed_hash[i] = None
 
@@ -162,9 +162,9 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         templates = [issue_template, wiki_template, html_template]
         output_files = ['mips_issue_text.md', 'mips_issue_text.html', 'wiki_text.md']
         link_to_current_hash = f"https://github.com/{repo_url}/commit/{current_hash}"
-        link_to_old_best_hash_TCC = [f"https://github.com/{repo_url}/commit/{old_best_hash[0]}"]
-        link_to_old_best_hash_GCC = [f"https://github.com/{repo_url}/commit/{old_best_hash[1]}"]
-        link_to_old_best_hash_LLVM = [f"https://github.com/{repo_url}/commit/{old_best_hash[2]}"]
+        link_to_old_best_hash_tcc = [f"https://github.com/{repo_url}/commit/{old_best_hash[0]}"]
+        link_to_old_best_hash_gcc = [f"https://github.com/{repo_url}/commit/{old_best_hash[1]}"]
+        link_to_old_best_hash_llvm = [f"https://github.com/{repo_url}/commit/{old_best_hash[2]}"]
 
         for index, fname in enumerate(output_files):
             with open(fname, 'w') as fw:
@@ -174,29 +174,29 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
                     link_to_current_hash = link_to_current_hash,
 
-                    link_to_old_best_hash_TCC = link_to_old_best_hash_TCC,
-                    link_to_old_best_hash_GCC = link_to_old_best_hash_GCC,
-                    link_to_old_best_hash_LLVM = link_to_old_best_hash_LLVM,
+                    link_to_old_best_hash_tcc = link_to_old_best_hash_tcc,
+                    link_to_old_best_hash_gcc = link_to_old_best_hash_gcc,
+                    link_to_old_best_hash_llvm = link_to_old_best_hash_llvm,
 
-                    best_hash_TCC = old_best_hash[0],
-                    best_hash_GCC = old_best_hash[1],
-                    best_hash_LLVM = old_best_hash[2],
+                    best_hash_tcc = old_best_hash[0],
+                    best_hash_gcc = old_best_hash[1],
+                    best_hash_llvm = old_best_hash[2],
 
-                    new_mips_TCC = new_mips[0],
-                    new_mips_GCC = new_mips[1],
-                    new_mips_LLVM = new_mips[2],
+                    new_mips_tcc = new_mips[0],
+                    new_mips_gcc = new_mips[1],
+                    new_mips_llvm = new_mips[2],
 
-                    message_TCC = message[0],
-                    message_GCC = message[1],
-                    message_LLVM = message[2],
+                    message_tcc = message[0],
+                    message_gcc = message[1],
+                    message_llvm = message[2],
 
-                    best_mips_TCC = best_mips[0],
-                    best_mips_GCC = best_mips[1],
-                    best_mips_LLVM = best_mips[2],
+                    best_mips_tcc = best_mips[0],
+                    best_mips_gcc = best_mips[1],
+                    best_mips_llvm = best_mips[2],
 
-                    best_diff_TCC = best_diff[0],
-                    best_diff_GCC = best_diff[1],
-                    best_diff_LLVM = best_diff[2],
+                    best_diff_tcc = best_diff[0],
+                    best_diff_gcc = best_diff[1],
+                    best_diff_llvm = best_diff[2],
 
                 )])
 

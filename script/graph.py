@@ -29,15 +29,15 @@ def main(new_file, old_file):
         old_dict = json.load(f2)
 
 
-    if isinstance(old_dict["mips_TCC"], list):
+    if isinstance(old_dict["mips_tcc"], list):
 
         print("old_dict is list!")
         old_dict = old_dict
 
     else:
-        keys_to_keep = {"best_mips_TCC", "best_hash_TCC", "regressed_hash_TCC", "best_mips_GCC", "best_hash_GCC", "regressed_hash_GCC", "best_mips_LLVM", "best_hash_LLVM", "regressed_hash_LLVM" }
+        keys_to_keep = {"best_mips_tcc", "best_hash_tcc", "regressed_hash_tcc", "best_mips_gcc", "best_hash_gcc", "regressed_hash_gcc", "best_mips_llvm", "best_hash_llvm", "regressed_hash_llvm" }
         old_dict_keep = { key:value for key,value in old_dict.items() if key in keys_to_keep}
-        keys_to_extract = {"mips_TCC", "Simulation_Time_TCC", "CPU_Time_TCC", "CPU_Cycle_TCC", "mips_GCC", "Simulation_Time_GCC", "CPU_Time_GCC", "CPU_Cycle_GCC", "mips_LLVM", "Simulation_Time_LLVM", "CPU_Time_LLVM", "CPU_Cycle_LLVM"}
+        keys_to_extract = {"mips_tcc", "Simulation_Time_tcc", "CPU_Time_tcc", "CPU_Cycle_tcc", "mips_gcc", "Simulation_Time_gcc", "CPU_Time_gcc", "CPU_Cycle_gcc", "mips_llvm", "Simulation_Time_llvm", "CPU_Time_llvm", "CPU_Cycle_llvm"}
         old_dict_extract = { key:value for key,value in old_dict.items() if key in keys_to_extract}
         dict_to_list_extract = old_dict_extract.items()
         old_dict_extract = defaultdict(list)
@@ -52,7 +52,7 @@ def main(new_file, old_file):
 
 
     to_plot = [ "mips", "Simulation_Time", "CPU_Time", "CPU_Cycle"]
-    jit_engines = ["TCC", "GCC", "LLVM"]
+    jit_engines = ["tcc", "gcc", "llvm"]
     graph_data = {}
 
 
@@ -91,15 +91,15 @@ def main(new_file, old_file):
 
 
     commit_number = np.arange(0,old_dict['commit_number'],1)
-    mips_TCC = np.array(old_dict["mips_TCC"])
-    mips_GCC = np.array(old_dict["mips_GCC"])
-    mips_LLVM = np.array(old_dict["mips_LLVM"])
+    mips_tcc = np.array(old_dict["mips_tcc"])
+    mips_gcc = np.array(old_dict["mips_gcc"])
+    mips_llvm = np.array(old_dict["mips_llvm"])
 
     fig_mips = plt.figure()
-    plt.plot(commit_number, mips_TCC)
-    plt.plot(commit_number, mips_GCC)
-    plt.plot(commit_number, mips_LLVM)
-    plt.legend(["MIPS_TCC", "MIPS_GCC", "MIPS_LLVM"])
+    plt.plot(commit_number, mips_tcc)
+    plt.plot(commit_number, mips_gcc)
+    plt.plot(commit_number, mips_llvm)
+    plt.legend(["MIPS_tcc", "MIPS_gcc", "MIPS_llvm"])
     plt.title('MIPS value for the last 50 commits')
     plt.xlabel('commit number')
     plt.ylabel('MIPS')
@@ -109,14 +109,14 @@ def main(new_file, old_file):
     #plotting simulation time
 
     commit_number = np.arange(0,old_dict['commit_number'],1)
-    Simulation_Time_TCC = np.array(old_dict["Simulation_Time_TCC"])
-    Simulation_Time_GCC = np.array(old_dict["Simulation_Time_GCC"])
-    Simulation_Time_LLVM = np.array(old_dict["Simulation_Time_LLVM"])
+    Simulation_Time_tcc = np.array(old_dict["Simulation_Time_tcc"])
+    Simulation_Time_gcc = np.array(old_dict["Simulation_Time_gcc"])
+    Simulation_Time_llvm = np.array(old_dict["Simulation_Time_llvm"])
 
     fig_Simulation_Time = plt.figure()
-    plt.plot(commit_number, Simulation_Time_TCC)
-    plt.plot(commit_number, Simulation_Time_GCC)
-    plt.plot(commit_number, Simulation_Time_LLVM)
+    plt.plot(commit_number, Simulation_Time_tcc)
+    plt.plot(commit_number, Simulation_Time_gcc)
+    plt.plot(commit_number, Simulation_Time_llvm)
     plt.title('Simulation Time for the last 50 commits')
     plt.xlabel('commit number')
     plt.ylabel('Simulation Time')
@@ -127,14 +127,14 @@ def main(new_file, old_file):
     #plotting CPU time
 
     commit_number = np.arange(0,old_dict['commit_number'],1)
-    CPU_Time_TCC = np.array(old_dict["CPU_Time_TCC"])
-    CPU_Time_GCC = np.array(old_dict["CPU_Time_GCC"])
-    CPU_Time_LLVM = np.array(old_dict["CPU_Time_LLVM"])
+    CPU_Time_tcc = np.array(old_dict["CPU_Time_tcc"])
+    CPU_Time_gcc = np.array(old_dict["CPU_Time_gcc"])
+    CPU_Time_llvm = np.array(old_dict["CPU_Time_llvm"])
 
     fig_CPU_Time = plt.figure()
-    plt.plot(commit_number, CPU_Time_TCC)
-    plt.plot(commit_number, CPU_Time_GCC)
-    plt.plot(commit_number, CPU_Time_LLVM)
+    plt.plot(commit_number, CPU_Time_tcc)
+    plt.plot(commit_number, CPU_Time_gcc)
+    plt.plot(commit_number, CPU_Time_llvm)
     plt.title('CPU Time for the last 50 commits')
     plt.xlabel('commit number')
     plt.ylabel('CPU Time')
@@ -144,14 +144,14 @@ def main(new_file, old_file):
     #plotting CPU Cycle
 
     commit_number = np.arange(0,old_dict['commit_number'],1)
-    CPU_Cycle_TCC = np.array(old_dict["CPU_Cycle_TCC"])
-    CPU_Cycle_GCC = np.array(old_dict["CPU_Cycle_GCC"])
-    CPU_Cycle_LLVM = np.array(old_dict["CPU_Cycle_LLVM"])
+    CPU_Cycle_tcc = np.array(old_dict["CPU_Cycle_tcc"])
+    CPU_Cycle_gcc = np.array(old_dict["CPU_Cycle_gcc"])
+    CPU_Cycle_llvm = np.array(old_dict["CPU_Cycle_llvm"])
 
     fig_CPU_Cycle = plt.figure()
-    plt.plot(commit_number, CPU_Cycle_TCC)
-    plt.plot(commit_number, CPU_Cycle_GCC)
-    plt.plot(commit_number, CPU_Cycle_LLVM)
+    plt.plot(commit_number, CPU_Cycle_tcc)
+    plt.plot(commit_number, CPU_Cycle_gcc)
+    plt.plot(commit_number, CPU_Cycle_llvm)
     plt.title('CPU Cycle for the last 50 commits')
     plt.xlabel('commit number')
     plt.ylabel('CPU Cycle')

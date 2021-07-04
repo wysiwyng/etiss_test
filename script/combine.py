@@ -8,7 +8,7 @@ import argparse
 def main(file_one, file_two, file_three): #can I make these variable?
 
     loop_iteration={
-        "jit_engines" : ["TCC", "GCC", "LLVM"],
+        "jit_engines" : ["tcc", "gcc", "llvm"],
         "mips" : [],
         "Simulation_Time" : [],
         "CPU_Time" : [],
