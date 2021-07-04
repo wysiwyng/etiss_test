@@ -281,16 +281,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Fetch Compiled System
-        uses: actions/download-artifact@v2
-        with:
-          name: etiss-Linux.tar
-          path: ${{runner.workspace}}
-
-      - name: Unpack Compiled System
-        working-directory: ${{runner.workspace}}
-        run: tar -xf etiss.tar
-
       - name: Get benchmark results
         uses: actions/download-artifact@v2
         with:
