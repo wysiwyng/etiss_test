@@ -196,9 +196,90 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
                     best_diff_tcc = best_diff[0],
                     best_diff_gcc = best_diff[1],
-                    best_diff_llvm = best_diff[2],
+                    best_diff_llvm = best_diff[2]
 
                 ))
+    # with open('mips_issue_text.md', 'w') as f1:
+    #         f1.write(issue_template.render(
+    #             current_hash=current_hash,
+    #             best_hash_tcc = old_best_hash[0],
+    #             best_hash_gcc = old_best_hash[1],
+    #             best_hash_llvm = old_best_hash[2],
+
+    #             new_mips_tcc = new_mips[0],
+    #             new_mips_gcc = new_mips[1],
+    #             new_mips_llvm = new_mips[2],
+
+    #             message_tcc = message[0],
+    #             message_gcc = message[1],
+    #             message_llvm = message[2],
+
+    #             best_mips_tcc = best_mips[0],
+    #             best_mips_gcc = best_mips[1],
+    #             best_mips_llvm = best_mips[2],
+
+    #             best_diff_tcc = best_diff[0],
+    #             best_diff_gcc = best_diff[1],
+    #             best_diff_llvm = best_diff[2]
+    #         ))
+
+    #     if repo_url:
+
+    #     link_to_current_hash = f"https://github.com/{repo_url}/commit/{final_current_hash}"
+    #     link_to_old_best_hash = f"https://github.com/{repo_url}/commit/{old_best_hash}"
+
+    #     with open('mips_issue_text.html', 'w') as f2:
+    #         f2.write(html_template.render(
+    #             link_to_current_hash=link_to_current_hash,
+    #             link_to_old_best_hash=link_to_old_best_hash,
+    #             current_hash=current_hash,
+    #             best_hash_tcc = old_best_hash[0],
+    #             best_hash_gcc = old_best_hash[1],
+    #             best_hash_llvm = old_best_hash[2],
+
+    #             new_mips_tcc=new_mips[0],
+    #             message_tcc=message[0],
+    #             best_mips_tcc=old_best_mips[0],
+    #             best_diff_tcc=best_diff[0],
+
+    #             new_mips_gcc=new_mips[1],
+    #             message_gcc=message[1],
+    #             best_mips_gcc=old_best_mips[1],
+    #             best_diff_gcc=best_diff[1],
+
+    #             new_mips_llvm=new_mips[2],
+    #             message_llvm=message[2],
+    #             best_mips_llvm=old_best_mips[2],
+    #             best_diff_llvm=best_diff[2]
+    #         ))
+
+
+    #     if repo_url:
+    #             final_current_hash = f"[{final_current_hash[:8]}](https://github.com/{repo_url}/commit/{final_current_hash})"
+    #             old_best_hash = f"[{old_best_hash[:8]}](https://github.com/{repo_url}/commit/{old_best_hash})"
+
+    #     with open('wiki_text.md', 'w') as f1:
+    #             f1.write(wiki_template.render(
+    #             current_hash=final_current_hash,
+    #             best_hash_tcc = old_best_hash[0],
+    #             best_hash_gcc = old_best_hash[1],
+    #             best_hash_llvm = old_best_hash[2],
+
+    #             new_mips_tcc=new_mips[0],
+    #             message_tcc=message[0],
+    #             best_mips_tcc=old_best_mips[0],
+    #             best_diff_tcc=best_diff[0],
+
+    #             new_mips_gcc=new_mips[1],
+    #             message_gcc=message[1],
+    #             best_mips_gcc=old_best_mips[1],
+    #             best_diff_gcc=best_diff[1],
+
+    #             new_mips_llvm=new_mips[2],
+    #             message_llvm=message[2],
+    #             best_mips_llvm=old_best_mips[2],
+    #             best_diff_llvm=best_diff[2]
+    #         ))
 
 
 
