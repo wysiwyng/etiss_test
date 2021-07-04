@@ -2,9 +2,14 @@ import argparse
 import json
 import pathlib
 import shutil
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 from collections import defaultdict
+from collections import ChainMap
+from IPython.display import display
+from PIL import Image
 
 
 def main(new_file, old_file):
@@ -24,59 +29,71 @@ def main(new_file, old_file):
         old_dict = json.load(f2)
 
 
+    if isinstance(old_dict["mips_TCC"], list):
+
+        print("old_dict is list!")
+        old_dict = old_dict
+
+    else:
+        keys_to_keep = {"best_mips_TCC", "best_hash_TCC", "regressed_hash_TCC", "best_mips_GCC", "best_hash_GCC", "regressed_hash_GCC", "best_mips_LLVM", "best_hash_LLVM", "regressed_hash_LLVM" }
+        old_dict_keep = { key:value for key,value in old_dict.items() if key in keys_to_keep}
+        keys_to_extract = {"mips_TCC", "Simulation_Time_TCC", "CPU_Time_TCC", "CPU_Cycle_TCC", "mips_GCC", "Simulation_Time_GCC", "CPU_Time_GCC", "CPU_Cycle_GCC", "mips_LLVM", "Simulation_Time_LLVM", "CPU_Time_LLVM", "CPU_Cycle_LLVM"}
+        old_dict_extract = { key:value for key,value in old_dict.items() if key in keys_to_extract}
+        dict_to_list_extract = old_dict_extract.items()
+        old_dict_extract = defaultdict(list)
+        # iterating over list of tuples
+        for key, val in dict_to_list_extract:
+
+            old_dict_extract[key].append(val)
+
+
+        old_dict = dict(ChainMap(old_dict_keep, old_dict_extract))
+        print(old_dict)
+
+
     to_plot = [ "mips", "Simulation_Time", "CPU_Time", "CPU_Cycle"]
     jit_engines = ["TCC", "GCC", "LLVM"]
     graph_data = {}
 
 
-    #converting dict to list
-    dict_to_list = old_dict.items()
-
-    #creating dictionary of lists
-    old_dict = defaultdict(list)
-
-    # iterating over list of tuples
-    for key, val in dict_to_list:
-        old_dict[key].append(val)
-
     #maximum number of elements to be stored
-    buffer_size = 51
+    buffer_size = 50
 
     #getting commit number from dictionary
 
-    commit = old_dict.get('commit_number',0)
+    commit = old_dict.get('commit_number',1)
 
-    if commit < buffer_size:
+    if commit <= buffer_size:
         for i in range(len(jit_engines)):
-            old_dict[f'{to_plot[0]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[0]}_{jit_engines[i]}'))
-            old_dict[f'{to_plot[1]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[1]}_{jit_engines[i]}'))
-            old_dict[f'{to_plot[2]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[2]}_{jit_engines[i]}'))
-            old_dict[f'{to_plot[3]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[3]}_{jit_engines[i]}'))
+            for j in range(len(to_plot)):
+              old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
+
 
     else:
         for i in range(len(jit_engines)):
-            old_dict[f'{to_plot[0]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[0]}_{jit_engines[i]}'))
-            old_dict[f'{to_plot[1]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[1]}_{jit_engines[i]}'))
-            old_dict[f'{to_plot[2]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[2]}_{jit_engines[i]}'))
-            old_dict[f'{to_plot[3]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[3]}_{jit_engines[i]}'))
-            old_dict[f'{to_plot[0]}_{jit_engines[i]}'].pop(0)
-            old_dict[f'{to_plot[1]}_{jit_engines[i]}'].pop(0)
-            old_dict[f'{to_plot[2]}_{jit_engines[i]}'].pop(0)
-            old_dict[f'{to_plot[3]}_{jit_engines[i]}'].pop(0)
+            for j in range(len(to_plot)):
+               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
+               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].pop(0)
+
 
 
 
     old_dict["commit_number"] = commit + 1
+    print(old_dict)
+
+    with open(old_path, 'w') as f1:
+            json.dump(old_dict, f1)
 
 
 
 
     #plotting mips
 
-    commit_number = np.arange(0,old_dict['commit_number']+1,1)
-    mips_TCC = np.array(old_dict["mips_tcc"])
-    mips_GCC = np.array(old_dict["mips_gcc"])
-    mips_LLVM = np.array(old_dict["mips_llvm"])
+
+    commit_number = np.arange(0,old_dict['commit_number'],1)
+    mips_TCC = np.array(old_dict["mips_TCC"])
+    mips_GCC = np.array(old_dict["mips_GCC"])
+    mips_LLVM = np.array(old_dict["mips_LLVM"])
 
     fig_mips = plt.figure()
     plt.plot(commit_number, mips_TCC)
@@ -87,14 +104,14 @@ def main(new_file, old_file):
     plt.xlabel('commit number')
     plt.ylabel('MIPS')
 
-    fig_mips.savefig('mips.png')
+    fig_mips.savefig('/home/ge75guy/Desktop/etiss_new/script/mips.png')
 
     #plotting simulation time
 
-    commit_number = np.arange(0,old_dict['commit_number']+1,1)
-    Simulation_Time_TCC = np.array(old_dict["Simulation_Time_tcc"])
-    Simulation_Time_GCC = np.array(old_dict["Simulation_Time_gcc"])
-    Simulation_Time_LLVM = np.array(old_dict["Simulation_Time_llvm"])
+    commit_number = np.arange(0,old_dict['commit_number'],1)
+    Simulation_Time_TCC = np.array(old_dict["Simulation_Time_TCC"])
+    Simulation_Time_GCC = np.array(old_dict["Simulation_Time_GCC"])
+    Simulation_Time_LLVM = np.array(old_dict["Simulation_Time_LLVM"])
 
     fig_Simulation_Time = plt.figure()
     plt.plot(commit_number, Simulation_Time_TCC)
@@ -109,10 +126,10 @@ def main(new_file, old_file):
 
     #plotting CPU time
 
-    commit_number = np.arange(0,old_dict['commit_number']+1,1)
-    CPU_Time_TCC = np.array(old_dict["CPU_Time_tcc"])
-    CPU_Time_GCC = np.array(old_dict["CPU_Time_gcc"])
-    CPU_Time_LLVM = np.array(old_dict["CPU_Time_llvm"])
+    commit_number = np.arange(0,old_dict['commit_number'],1)
+    CPU_Time_TCC = np.array(old_dict["CPU_Time_TCC"])
+    CPU_Time_GCC = np.array(old_dict["CPU_Time_GCC"])
+    CPU_Time_LLVM = np.array(old_dict["CPU_Time_LLVM"])
 
     fig_CPU_Time = plt.figure()
     plt.plot(commit_number, CPU_Time_TCC)
@@ -126,10 +143,10 @@ def main(new_file, old_file):
 
     #plotting CPU Cycle
 
-    commit_number = np.arange(0,old_dict['commit_number']+1,1)
-    CPU_Cycle_TCC = np.array(old_dict["CPU_Cycle_tcc"])
-    CPU_Cycle_GCC = np.array(old_dict["CPU_Cycle_gcc"])
-    CPU_Cycle_LLVM = np.array(old_dict["CPU_Cycle_llvm"])
+    commit_number = np.arange(0,old_dict['commit_number'],1)
+    CPU_Cycle_TCC = np.array(old_dict["CPU_Cycle_TCC"])
+    CPU_Cycle_GCC = np.array(old_dict["CPU_Cycle_GCC"])
+    CPU_Cycle_LLVM = np.array(old_dict["CPU_Cycle_LLVM"])
 
     fig_CPU_Cycle = plt.figure()
     plt.plot(commit_number, CPU_Cycle_TCC)
@@ -140,6 +157,9 @@ def main(new_file, old_file):
     plt.ylabel('CPU Cycle')
     fig_CPU_Cycle.savefig('CPU_Cycle.png')
 
+
+
+    output_files = ['mips.png', 'Simulation_Time.png', 'CPU_Time.png', 'CPU_Cycle.png']
 
 
 

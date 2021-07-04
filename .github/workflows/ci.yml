@@ -368,25 +368,25 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: mips.png
-          path: mips.png
+          path: script/mips.png
 
       - name: uploading images Simulation Time
         uses: actions/upload-artifact@v2
         with:
           name: Simulation_Time.png
-          path: Simulation_Time.png
+          path: script/Simulation_Time.png
 
       - name: uploading images CPU Time
         uses: actions/upload-artifact@v2
         with:
           name: CPU_Time.png
-          path: CPU_Time.png
+          path: script/CPU_Time.png
 
       - name: uploading images CPU Cycle
         uses: actions/upload-artifact@v2
         with:
           name: CPU_Cycle.png
-          path: CPU_Cycle.png
+          path: script/CPU_Cycle.png
 
 
 
@@ -529,6 +529,26 @@ jobs:
         with:
           name: wiki_text.md
 
+      - name: Get mips.png
+        uses: actions/download-artifact@v2
+        with:
+          name: mips.png
+
+      - name: Get Simulation_Time.png
+        uses: actions/download-artifact@v2
+        with:
+          name: Simulation_Time.png
+
+      - name: Get CPU_Time.png
+        uses: actions/download-artifact@v2
+        with:
+          name: CPU_Time.png
+
+      - name: Get CPU_Cycle.png
+        uses: actions/download-artifact@v2
+        with:
+          name: CPU_Cycle.png
+
       - name: Update wiki
         run: |
           echo "Cloning wiki repo https://github.com/$GITHUB_REPOSITORY.wiki.git"
@@ -537,7 +557,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           cp ../wiki_text.md ./Performance_Metric.md
-          git add Performance_Metrics.md
+          git add Performance_Metrics.md mips.png Simulation_Time.png CPU_Time.png CPU_Cycle.png
           git commit -m "update perf"
           git push
 
@@ -565,6 +585,10 @@ jobs:
                 run_results_llvm_5.json
                 etiss-Linux.tar
                 etiss-Mac.tar
+                mips.png
+                Simulation_Time.png
+                CPU_Time.png
+                CPU_Cycle.png
 
                 run_results.json
                 wiki_text.md

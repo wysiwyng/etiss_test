@@ -2,8 +2,9 @@ import argparse
 import json
 import pathlib
 import shutil
-
 from mako.template import Template
+
+
 
 ISSUE_TEMPLATE = r''' **Status** (for commit ${current_hash})**:**
 ${message_TCC}\
@@ -88,65 +89,65 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict = json.load(f1)
         old_dict = json.load(f2)
 
-    loop_iteration = {
-
-    "jit_engines" : ["TCC", "GCC", "LLVM"],
-    "new_mips" : [new_dict.get('mips_TCC'), new_dict.get('mips_GCC'), new_dict.get('mips_LLVM')],
-    "best_mips" : [old_dict.get('best_mips_TCC', 0.00000001), old_dict.get('best_mips_GCC', 0.00000001), old_dict.get('best_mips_LLVM', 0.00000001)],
-    #"best_hash" : [old_dict.get('best_hash_TCC', None), old_dict.get('best_hash_GCC', None), old_dict.get('best_hash_LLVM', None)],
-    #"regressed_hash" : [old_dict.get('regressed_hash_TCC', None)[:8], old_dict.get('regfressed_hash_GCC', None)[:8], old_dict.get('regressed_hash_LLVM', None)[:8]],
-    #"old_best_hash" : [],
-    "message" : [],
-    "best_diff" : []
-    }
+    print(type(old_dict["mips_TCC"]))
+    print(type(new_dict["mips_TCC"]))
 
 
-    best_hash = [old_dict.get('best_hash_TCC', None), old_dict.get('best_hash_GCC', None), old_dict.get('best_hash_LLVM', None)],
+
+
+
+    jit_engines = ["TCC", "GCC", "LLVM"]
+    new_mips = [new_dict.get('mips_TCC'), new_dict.get('mips_GCC'), new_dict.get('mips_LLVM')]
+    best_mips = [old_dict.get('best_mips_TCC', 0.00000001), old_dict.get('best_mips_GCC', 0.00000001), old_dict.get('best_mips_LLVM', 0.00000001)]
+    best_hash = [old_dict.get('best_hash_TCC', None), old_dict.get('best_hash_GCC', None), old_dict.get('best_hash_LLVM', None)]
     regressed_hash = [old_dict.get('regressed_hash_TCC', None), old_dict.get('regressed_hash_GCC', None), old_dict.get('regressed_hash_LLVM', None)]
     old_best_hash = []
+    message = []
+    best_diff = []
 
-
-
-    for i in range(len(loop_iteration["jit_engines"])):
+    for i in range(len(jit_engines)):
 
 
         old_best_hash.append(best_hash[i])
-        loop_iteration["best_diff"].append(loop_iteration["new_mips"][i] / loop_iteration["best_mips"][i] - 1)
+        best_diff.append(new_mips[i] / best_mips[i] - 1)
+        print("")
+        print(best_diff)
+
         regressed = False
         current_hash = current_hash[:8]
 
-
-        if loop_iteration["best_diff"][i] < -tolerance:
+        if best_diff[i] < -tolerance:
             print('major regression')
             if regressed_hash[i] is None:
-              loop_iteration["message"].append(f'⚠ Major regression introduced! ⚠')
+              message.append(f'⚠ Major regression introduced! ⚠')
               regressed_hash[i] = current_hash
+              print(regressed_hash)
             else:
-              loop_iteration["message"].append(f'⚠ Major regression since commit {f"[{regressed_hash[i]}](https://github.com/{repo_url}/commit/{regressed_hash[i]})"} ⚠') #cannot put a dictionary value here :( )
+              message.append(f'⚠ Major regression since commit {f"[{regressed_hash[i]}](https://github.com/{repo_url}/commit/{regressed_hash[i]})"} ⚠') #cannot put a dictionary value here :( )
               regressed = True
 
 
-        elif loop_iteration["new_mips"][i] > loop_iteration["best_mips"][i]:
+        elif new_mips[i] > best_mips[i]:
             print('new best')
-            loop_iteration["message"].append(f'🥇 New best performance for {loop_iteration["jit_engines"][i]} Just-in-Time engine!')
-            loop_iteration["best_mips"][i] = loop_iteration["new_mips"][i]
+            message.append(f'🥇 New best performance for {jit_engines[i]} Just-in-Time engine!')
+            best_mips[i] = new_mips[i]
             best_hash[i] = current_hash
-            regressed_hash = None
+            regressed_hash[i] = None
 
         else:
             if regressed_hash[i] is not None:
-                loop_iteration["message"].append('Regression cleared')
+                message.append('Regression cleared')
 
             else:
-                loop_iteration["message"].append(f'No significant performance change for {loop_iteration["jit_engines"][i]} Just-in-Time engine.')
+                message.append(f'No significant performance change for {jit_engines[i]} Just-in-Time engine.')
                 print('no significant change')
-                regressed_hash = None
+                regressed_hash[i] = None
 
 
 
-        new_dict[f'best_mips_{loop_iteration["jit_engines"][i]}'] = loop_iteration["best_mips"][i]
-        new_dict[f'best_hash_{loop_iteration["jit_engines"][i]}'] = best_hash[i]
-        new_dict[f'regressed_hash_{loop_iteration["jit_engines"][i]}'] = regressed_hash[i]
+        new_dict[f'best_mips_{jit_engines[i]}'] = best_mips[i]
+        new_dict[f'best_hash_{jit_engines[i]}'] = best_hash[i]
+        new_dict[f'regressed_hash_{jit_engines[i]}'] = regressed_hash[i]
 
 
 
@@ -181,21 +182,21 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                     best_hash_GCC = old_best_hash[1],
                     best_hash_LLVM = old_best_hash[2],
 
-                    new_mips_TCC = loop_iteration["new_mips"][0],
-                    new_mips_GCC = loop_iteration["new_mips"][1],
-                    new_mips_LLVM = loop_iteration["new_mips"][2],
+                    new_mips_TCC = new_mips[0],
+                    new_mips_GCC = new_mips[1],
+                    new_mips_LLVM = new_mips[2],
 
-                    message_TCC = loop_iteration["message"][0],
-                    message_GCC = loop_iteration["message"][1],
-                    message_LLVM = loop_iteration["message"][2],
+                    message_TCC = message[0],
+                    message_GCC = message[1],
+                    message_LLVM = message[2],
 
-                    best_mips_TCC = loop_iteration["best_mips"][0],
-                    best_mips_GCC = loop_iteration["best_mips"][1],
-                    best_mips_LLVM = loop_iteration["best_mips"][2],
+                    best_mips_TCC = best_mips[0],
+                    best_mips_GCC = best_mips[1],
+                    best_mips_LLVM = best_mips[2],
 
-                    best_diff_TCC = loop_iteration["best_diff"][0],
-                    best_diff_GCC = loop_iteration["best_diff"][1],
-                    best_diff_LLVM = loop_iteration["best_diff"][2],
+                    best_diff_TCC = best_diff[0],
+                    best_diff_GCC = best_diff[1],
+                    best_diff_LLVM = best_diff[2],
 
                 )])
 
