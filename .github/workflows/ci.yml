@@ -320,6 +320,14 @@ jobs:
         run: pip install -r script/compare_mips/requirements.txt
 
 
+
+      - name: remove image files
+        run: |
+            rm -rf mips.png
+            rm -rf Simulation_Time.png
+            rm -rf CPU_Cycle.png
+            rm -rf CPU_Time.png
+
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
         run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.sha }} -r $GITHUB_REPOSITORY
