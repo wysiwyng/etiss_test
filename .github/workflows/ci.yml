@@ -557,7 +557,7 @@ jobs:
           cp ../wiki_text.md ./Performance_Metric.md
           cp ../mips.png ./mips.png
           cp ../Simulation_Time.png ./Simulation_Time.png
-          cp ../CPU_Time.png ./CPU_Tine.png
+          cp ../CPU_Time.png ./CPU_Time.png
           cp ../CPU_Cycle.png ./CPU_Cycle.png
           git add Performance_Metrics.md mips.png Simulation_Time.png CPU_Time.png CPU_Cycle.png
           git commit -m "update perf"
