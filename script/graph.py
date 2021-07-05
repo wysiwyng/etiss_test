@@ -104,7 +104,7 @@ def main(new_file, old_file):
     plt.xlabel('commit number')
     plt.ylabel('MIPS')
 
-    fig_mips.savefig('mips.png')
+    fig_mips.savefig('script/mips.png')
 
     #plotting simulation time
 
@@ -120,7 +120,7 @@ def main(new_file, old_file):
     plt.title('Simulation Time for the last 50 commits')
     plt.xlabel('commit number')
     plt.ylabel('Simulation Time')
-    fig_Simulation_Time.savefig('Simulation_Time.png')
+    fig_Simulation_Time.savefig('script/Simulation_Time.png')
 
 
 
@@ -138,7 +138,7 @@ def main(new_file, old_file):
     plt.title('CPU Time for the last 50 commits')
     plt.xlabel('commit number')
     plt.ylabel('CPU Time')
-    fig_CPU_Time.savefig('CPU_Time.png')
+    fig_CPU_Time.savefig('script/CPU_Time.png')
 
 
     #plotting CPU Cycle
@@ -155,7 +155,7 @@ def main(new_file, old_file):
     plt.title('CPU Cycle for the last 50 commits')
     plt.xlabel('commit number')
     plt.ylabel('CPU Cycle')
-    fig_CPU_Cycle.savefig('CPU_Cycle.png')
+    fig_CPU_Cycle.savefig('script/CPU_Cycle.png')
 
 
 
