@@ -11,7 +11,7 @@ ${message_tcc}\
 
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}\
 
-**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}\
+**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}\
 
 
 **Status** (for commit ${current_hash})**:**
@@ -19,7 +19,7 @@ ${message_gcc}\
 
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}\
 
-**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}\
+**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}\
 
 
 **Status** (for commit ${current_hash})**:**
@@ -27,7 +27,7 @@ ${message_llvm}\
 
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}\
 
-**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}\
+**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}\
 
 <sub>This comment was created automatically, please do not change!</sub>
 '''
@@ -35,15 +35,15 @@ ${message_llvm}\
 WIKI_TEMPLATE = r'''**Status** (for commit ${current_hash})**:**
 ${message_tcc}<br/>
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}<br/>
-**Previous best for TCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
 **Status** (for commit ${current_hash})**:**
 ${message_gcc}<br/>
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}<br/>
-**Previous best for GCCJIT** (recorded in commit ${best_hash})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
 **Status** (for commit ${current_hash})**:**
 ${message_llvm}<br/>
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}<br/>
-**Previous best for LLVMJIT** (recorded in commit ${best_hash})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
+**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
 '''
 
 HTML_TEMPLATE= r'''
@@ -56,15 +56,15 @@ HTML_TEMPLATE= r'''
 <p><b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_tcc}<br/>
 <b>Current dhrystone MIPS for TCCJIT</b> <b>:</b> ${new_mips_tcc}<br/>
-<b>Previous best for TCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_tcc}>${best_hash}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+<b>Previous best for TCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_tcc}>${best_hash_tcc}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
 <b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_gcc}<br/>
 <b>Current dhrystone MIPS for GCCJIT</b> <b>:</b> ${new_mips_gcc}<br/>
-<b>Previous best for GCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_gcc}>${best_hash}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+<b>Previous best for GCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_gcc}>${best_hash_gcc}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
 <b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_llvm}<br/>
 <b>Current dhrystone MIPS for LLVMJIT</b> <b>:</b> ${new_mips_llvm}<br/>
-<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${link_to_old_best_hash_llvm}>${best_hash}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
+<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${link_to_old_best_hash_llvm}>${best_hash_llvm}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
 </body>
 </html>
 '''
@@ -104,6 +104,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     old_best_hash = []
     message = []
     best_diff = []
+    old_best_mips = best_mips
 
     for i in range(len(jit_engines)):
 
@@ -149,6 +150,9 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict[f'best_hash_{jit_engines[i]}'] = best_hash[i]
         new_dict[f'regressed_hash_{jit_engines[i]}'] = regressed_hash[i]
 
+    print(best_diff[2])
+    print(old_best_mips[2])
+
 
 
     if not no_update:
@@ -161,11 +165,10 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
         templates = [issue_template, wiki_template, html_template]
         output_files = ['mips_issue_text.md', 'mips_issue_text.html', 'wiki_text.md']
-        link_to_current_hash = f"https://github.com/{repo_url}/commit/{current_hash}"
-        link_to_old_best_hash_tcc = [f"https://github.com/{repo_url}/commit/{old_best_hash[0]}"]
-        link_to_old_best_hash_gcc = [f"https://github.com/{repo_url}/commit/{old_best_hash[1]}"]
-        link_to_old_best_hash_llvm = [f"https://github.com/{repo_url}/commit/{old_best_hash[2]}"]
-
+        link_to_current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
+        link_to_old_best_hash_tcc = f"[{old_best_hash[0]}](https://github.com/{repo_url}/commit/{old_best_hash[0]})"
+        link_to_old_best_hash_gcc = f"[{old_best_hash[1]}](https://github.com/{repo_url}/commit/{old_best_hash[1]})"
+        link_to_old_best_hash_llvm = f"[{old_best_hash[2]}]https://github.com/{repo_url}/commit/{old_best_hash[2]})"
         for index, fname in enumerate(output_files):
             with open(fname, 'w') as fw:
                 fw.write(templates[index].render(
@@ -199,39 +202,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                     best_diff_llvm = best_diff[2]
 
                 ))
-    # with open('mips_issue_text.md', 'w') as f1:
-    #         f1.write(issue_template.render(
-    #             current_hash=current_hash,
-    #             best_hash_tcc = old_best_hash[0],
-    #             best_hash_gcc = old_best_hash[1],
-    #             best_hash_llvm = old_best_hash[2],
-
-    #             new_mips_tcc = new_mips[0],
-    #             new_mips_gcc = new_mips[1],
-    #             new_mips_llvm = new_mips[2],
-
-    #             message_tcc = message[0],
-    #             message_gcc = message[1],
-    #             message_llvm = message[2],
-
-    #             best_mips_tcc = best_mips[0],
-    #             best_mips_gcc = best_mips[1],
-    #             best_mips_llvm = best_mips[2],
-
-    #             best_diff_tcc = best_diff[0],
-    #             best_diff_gcc = best_diff[1],
-    #             best_diff_llvm = best_diff[2]
-    #         ))
-
-    #     if repo_url:
-
-    #     link_to_current_hash = f"https://github.com/{repo_url}/commit/{final_current_hash}"
-    #     link_to_old_best_hash = f"https://github.com/{repo_url}/commit/{old_best_hash}"
-
-    #     with open('mips_issue_text.html', 'w') as f2:
-    #         f2.write(html_template.render(
-    #             link_to_current_hash=link_to_current_hash,
-    #             link_to_old_best_hash=link_to_old_best_hash,
+    # with open('mips_issue_text.md', 'w') as fw:
+    #         fw.write(issue_template.render(
     #             current_hash=current_hash,
     #             best_hash_tcc = old_best_hash[0],
     #             best_hash_gcc = old_best_hash[1],
@@ -253,12 +225,49 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     #             best_diff_llvm=best_diff[2]
     #         ))
 
+    # if repo_url:
 
-    #     if repo_url:
-    #             final_current_hash = f"[{final_current_hash[:8]}](https://github.com/{repo_url}/commit/{final_current_hash})"
-    #             old_best_hash = f"[{old_best_hash[:8]}](https://github.com/{repo_url}/commit/{old_best_hash})"
+    #     link_to_current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
+    #     link_to_old_best_hash_tcc = f"[{old_best_hash[0]}](https://github.com/{repo_url}/commit/{old_best_hash[0]})"
+    #     link_to_old_best_hash_gcc = f"[{old_best_hash[1]}](https://github.com/{repo_url}/commit/{old_best_hash[1]})"
+    #     link_to_old_best_hash_llvm = f"[{old_best_hash[2]}]https://github.com/{repo_url}/commit/{old_best_hash[2]})"
 
-    #     with open('wiki_text.md', 'w') as f1:
+    #     with open('mips_issue_text.html', 'w') as f2:
+    #         f2.write(html_template.render(
+    #             link_to_current_hash=link_to_current_hash,
+    #             link_to_old_best_hash_tcc = link_to_old_best_hash_tcc,
+    #             link_to_old_best_hash_gcc = link_to_old_best_hash_gcc,
+    #             link_to_old_best_hash_llvm = link_to_old_best_hash_llvm,
+    #             current_hash=current_hash,
+    #             best_hash_tcc = old_best_hash[0],
+    #             best_hash_gcc = old_best_hash[1],
+    #             best_hash_llvm = old_best_hash[2],
+
+    #             new_mips_tcc=new_mips[0],
+    #             message_tcc=message[0],
+    #             best_mips_tcc=best_mips[0],
+    #             best_diff_tcc=best_diff[0],
+
+    #             new_mips_gcc=new_mips[1],
+    #             message_gcc=message[1],
+    #             best_mips_gcc=best_mips[1],
+    #             best_diff_gcc=best_diff[1],
+
+    #             new_mips_llvm=new_mips[2],
+    #             message_llvm=message[2],
+    #             best_mips_llvm=best_mips[2],
+    #             best_diff_llvm=best_diff[2]
+    #         ))
+
+
+    # if repo_url:
+    #             final_current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
+    #             link_to_old_best_hash_tcc = f"[{old_best_hash[0]}](https://github.com/{repo_url}/commit/{old_best_hash[0]})"
+    #             link_to_old_best_hash_gcc = f"[{old_best_hash[1]}](https://github.com/{repo_url}/commit/{old_best_hash[1]})"
+    #             link_to_old_best_hash_llvm = f"[{old_best_hash[2]}]https://github.com/{repo_url}/commit/{old_best_hash[2]})"
+
+
+    # with open('wiki_text.md', 'w') as f1:
     #             f1.write(wiki_template.render(
     #             current_hash=final_current_hash,
     #             best_hash_tcc = old_best_hash[0],
@@ -267,17 +276,17 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
     #             new_mips_tcc=new_mips[0],
     #             message_tcc=message[0],
-    #             best_mips_tcc=old_best_mips[0],
+    #             best_mips_tcc=best_mips[0],
     #             best_diff_tcc=best_diff[0],
 
     #             new_mips_gcc=new_mips[1],
     #             message_gcc=message[1],
-    #             best_mips_gcc=old_best_mips[1],
+    #             best_mips_gcc=best_mips[1],
     #             best_diff_gcc=best_diff[1],
 
     #             new_mips_llvm=new_mips[2],
     #             message_llvm=message[2],
-    #             best_mips_llvm=old_best_mips[2],
+    #             best_mips_llvm=best_mips[2],
     #             best_diff_llvm=best_diff[2]
     #         ))
 
