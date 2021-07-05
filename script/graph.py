@@ -104,7 +104,7 @@ def main(new_file, old_file):
     plt.xlabel('commit number')
     plt.ylabel('MIPS')
 
-    fig_mips.savefig('/home/ge75guy/Desktop/etiss_new/script/mips.png')
+    fig_mips.savefig('mips.png')
 
     #plotting simulation time
 
