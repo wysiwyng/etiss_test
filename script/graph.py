@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from collections import defaultdict
 from collections import ChainMap
-from IPython.display import display
-from PIL import Image
+
+
 
 
 def main(new_file, old_file):
