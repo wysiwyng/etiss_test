@@ -32,18 +32,25 @@ ${message_llvm}\
 <sub>This comment was created automatically, please do not change!</sub>
 '''
 
-WIKI_TEMPLATE = r'''**Status** (for commit ${current_hash_wiki})**:**
+WIKI_TEMPLATE = r'''**Status for the TCC Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message_tcc}<br/>
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}<br/>
 **Previous best for TCCJIT** (recorded in commit ${best_hash_tcc_wiki})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
-**Status** (for commit ${current_hash_wiki})**:**
+**Status for the GCC Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message_gcc}<br/>
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}<br/>
 **Previous best for GCCJIT** (recorded in commit ${best_hash_gcc_wiki})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
-**Status** (for commit ${current_hash_wiki})**:**
+**Status for the LLVM Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message_llvm}<br/>
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}<br/>
-**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
+**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}<br/>
+
+**Graphical Analysis for the last 50 commits:**
+[[mips.png]]<br/>
+[[Simulation_Time.png]]<br/>
+[[CPU_Time.png]]<br/>
+
+
 '''
 
 HTML_TEMPLATE= r'''
