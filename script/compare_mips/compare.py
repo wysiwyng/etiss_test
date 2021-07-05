@@ -32,18 +32,18 @@ ${message_llvm}\
 <sub>This comment was created automatically, please do not change!</sub>
 '''
 
-WIKI_TEMPLATE = r'''**Status** (for commit ${current_hash})**:**
+WIKI_TEMPLATE = r'''**Status** (for commit ${current_hash_wiki})**:**
 ${message_tcc}<br/>
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}<br/>
-**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
-**Status** (for commit ${current_hash})**:**
+**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc_wiki})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+**Status** (for commit ${current_hash_wiki})**:**
 ${message_gcc}<br/>
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}<br/>
-**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
-**Status** (for commit ${current_hash})**:**
+**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc_wiki})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+**Status** (for commit ${current_hash_wiki})**:**
 ${message_llvm}<br/>
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}<br/>
-**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
+**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}
 '''
 
 HTML_TEMPLATE= r'''
@@ -165,17 +165,21 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
         templates = [issue_template, wiki_template, html_template]
         output_files = ['mips_issue_text.md', 'mips_issue_text.html', 'wiki_text.md']
-        link_to_current_hash = f"[{current_hash[:8]}](https://github.com/{repo_url}/commit/{current_hash})"
-        link_to_old_best_hash_tcc = f"[{old_best_hash[0]}](https://github.com/{repo_url}/commit/{old_best_hash[0]})"
-        link_to_old_best_hash_gcc = f"[{old_best_hash[1]}](https://github.com/{repo_url}/commit/{old_best_hash[1]})"
-        link_to_old_best_hash_llvm = f"[{old_best_hash[2]}]https://github.com/{repo_url}/commit/{old_best_hash[2]})"
+        link_to_current_hash = f"(https://github.com/{repo_url}/commit/{current_hash})"
+        link_to_old_best_hash_tcc = f"(https://github.com/{repo_url}/commit/{old_best_hash[0]})"
+        link_to_old_best_hash_gcc = f"(https://github.com/{repo_url}/commit/{old_best_hash[1]})"
+        link_to_old_best_hash_llvm = f"https://github.com/{repo_url}/commit/{old_best_hash[2]})"
+        best_hash_tcc_wiki = f"[{old_best_hash[0]}](https://github.com/{repo_url}/commit/{old_best_hash[0]})"
+        best_hash_gcc_wiki = f"[{old_best_hash[1]}](https://github.com/{repo_url}/commit/{old_best_hash[1]})"
+        best_hash_llvm_wiki = f"[{old_best_hash[2]}](https://github.com/{repo_url}/commit/{old_best_hash[2]})"
+        current_hash_wiki = f"[{current_hash}](https://github.com/{repo_url}/commit/{current_hash})"
         for index, fname in enumerate(output_files):
             with open(fname, 'w') as fw:
                 fw.write(templates[index].render(
 
                     current_hash = current_hash,
-
                     link_to_current_hash = link_to_current_hash,
+                    current_hash_wiki = current_hash_wiki,
 
                     link_to_old_best_hash_tcc = link_to_old_best_hash_tcc,
                     link_to_old_best_hash_gcc = link_to_old_best_hash_gcc,
@@ -184,6 +188,10 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                     best_hash_tcc = old_best_hash[0],
                     best_hash_gcc = old_best_hash[1],
                     best_hash_llvm = old_best_hash[2],
+
+                    best_hash_tcc_wiki = best_hash_tcc_wiki,
+                    best_hash_gcc_wiki = best_hash_gcc_wiki,
+                    best_hash_llvm_wiki = best_hash_llvm_wiki,
 
                     new_mips_tcc = new_mips[0],
                     new_mips_gcc = new_mips[1],
