@@ -554,7 +554,7 @@ jobs:
           cd wiki
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          cp ../wiki_text.md ./Performance_Metric.md
+          cp ../wiki_text.md ./Performance_Metrics.md
           cp ../mips.png ./mips.png
           cp ../Simulation_Time.png ./Simulation_Time.png
           cp ../CPU_Time.png ./CPU_Time.png
@@ -591,9 +591,9 @@ jobs:
                 Simulation_Time.png
                 CPU_Time.png
                 CPU_Cycle.png
-
                 run_results.json
                 wiki_text.md
+                mips_issue_text.html
 
 
 
