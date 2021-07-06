@@ -323,10 +323,8 @@ jobs:
 
       - name: remove image files
         run: |
-            rm -rf mips.png
-            rm -rf Simulation_Time.png
-            rm -rf CPU_Cycle.png
-            rm -rf CPU_Time.png
+            rm -rf performance_metrics.png
+
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
@@ -362,29 +360,11 @@ jobs:
 
           path: benchmark_results_new/run_results.json
 
-      - name: uploading images MIPS
+      - name: uploading image
         uses: actions/upload-artifact@v2
         with:
-          name: mips.png
-          path: script/mips.png
-
-      - name: uploading images Simulation Time
-        uses: actions/upload-artifact@v2
-        with:
-          name: Simulation_Time.png
-          path: script/Simulation_Time.png
-
-      - name: uploading images CPU Time
-        uses: actions/upload-artifact@v2
-        with:
-          name: CPU_Time.png
-          path: script/CPU_Time.png
-
-      - name: uploading images CPU Cycle
-        uses: actions/upload-artifact@v2
-        with:
-          name: CPU_Cycle.png
-          path: script/CPU_Cycle.png
+          name: performance_metrics.png
+          path: script/performance_metrics.png
 
 
 
@@ -527,25 +507,11 @@ jobs:
         with:
           name: wiki_text.md
 
-      - name: Get mips.png
+      - name: Get performance_metrics.png
         uses: actions/download-artifact@v2
         with:
-          name: mips.png
+          name: performance_metrics.png
 
-      - name: Get Simulation_Time.png
-        uses: actions/download-artifact@v2
-        with:
-          name: Simulation_Time.png
-
-      - name: Get CPU_Time.png
-        uses: actions/download-artifact@v2
-        with:
-          name: CPU_Time.png
-
-      - name: Get CPU_Cycle.png
-        uses: actions/download-artifact@v2
-        with:
-          name: CPU_Cycle.png
 
       - name: Update wiki
         run: |
@@ -554,16 +520,10 @@ jobs:
           cd wiki
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          rm -rf ./mips.png
-          rm -rf ./Simulation_Time.png
-          rm -rf ./CPU_Time.png
-          rm -rf ./CPU_Cycle.png
+          rm -rf ./performance_metrics.png
           cp ../wiki_text.md ./Performance_Metrics.md
-          cp ../mips.png ./mips.png
-          cp ../Simulation_Time.png ./Simulation_Time.png
-          cp ../CPU_Time.png ./CPU_Time.png
-          cp ../CPU_Cycle.png ./CPU_Cycle.png
-          git add Performance_Metrics.md mips.png Simulation_Time.png CPU_Time.png CPU_Cycle.png
+          cp ../performance_metrics.png ./performance_metrics.png
+          git add Performance_Metrics.md performance_metrics.png
           git commit -m "update perf"
           git push
 
@@ -591,10 +551,6 @@ jobs:
                 run_results_llvm_5.json
                 etiss-Linux.tar
                 etiss-Mac.tar
-                mips.png
-                Simulation_Time.png
-                CPU_Time.png
-                CPU_Cycle.png
                 run_results.json
 
 
