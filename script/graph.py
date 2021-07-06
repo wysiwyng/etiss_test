@@ -87,79 +87,28 @@ def main(new_file, old_file):
 
 
 
-    #plotting mips
+    #figure:
 
 
-    commit_number = np.arange(0,old_dict['commit_number'],1)
-    mips_tcc = np.array(old_dict["mips_tcc"])
-    mips_gcc = np.array(old_dict["mips_gcc"])
-    mips_llvm = np.array(old_dict["mips_llvm"])
-
-    fig_mips = plt.figure()
-    plt.plot(commit_number, mips_tcc)
-    plt.plot(commit_number, mips_gcc)
-    plt.plot(commit_number, mips_llvm)
-    plt.legend(["MIPS_tcc", "MIPS_gcc", "MIPS_llvm"])
-    plt.title('MIPS value for the last 50 commits')
-    plt.xlabel('commit number')
-    plt.ylabel('MIPS')
-
-    fig_mips.savefig('script/mips.png')
-
-    #plotting simulation time
-
-    commit_number = np.arange(0,old_dict['commit_number'],1)
-    Simulation_Time_tcc = np.array(old_dict["Simulation_Time_tcc"])
-    Simulation_Time_gcc = np.array(old_dict["Simulation_Time_gcc"])
-    Simulation_Time_llvm = np.array(old_dict["Simulation_Time_llvm"])
-
-    fig_Simulation_Time = plt.figure()
-    plt.plot(commit_number, Simulation_Time_tcc)
-    plt.plot(commit_number, Simulation_Time_gcc)
-    plt.plot(commit_number, Simulation_Time_llvm)
-    plt.title('Simulation Time for the last 50 commits')
-    plt.xlabel('commit number')
-    plt.ylabel('Simulation Time')
-    fig_Simulation_Time.savefig('script/Simulation_Time.png')
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(14,12))
+    fig.suptitle('Performance Metrics')
+    axs = axs.flatten()
 
 
 
-    #plotting CPU time
+    for j in range(len(to_plot)):
+            for i in range(len(jit_engines)):
 
-    commit_number = np.arange(0,old_dict['commit_number'],1)
-    CPU_Time_tcc = np.array(old_dict["CPU_Time_tcc"])
-    CPU_Time_gcc = np.array(old_dict["CPU_Time_gcc"])
-    CPU_Time_llvm = np.array(old_dict["CPU_Time_llvm"])
-
-    fig_CPU_Time = plt.figure()
-    plt.plot(commit_number, CPU_Time_tcc)
-    plt.plot(commit_number, CPU_Time_gcc)
-    plt.plot(commit_number, CPU_Time_llvm)
-    plt.title('CPU Time for the last 50 commits')
-    plt.xlabel('commit number')
-    plt.ylabel('CPU Time')
-    fig_CPU_Time.savefig('script/CPU_Time.png')
-
-
-    #plotting CPU Cycle
-
-    commit_number = np.arange(0,old_dict['commit_number'],1)
-    CPU_Cycle_tcc = np.array(old_dict["CPU_Cycle_tcc"])
-    CPU_Cycle_gcc = np.array(old_dict["CPU_Cycle_gcc"])
-    CPU_Cycle_llvm = np.array(old_dict["CPU_Cycle_llvm"])
-
-    fig_CPU_Cycle = plt.figure()
-    plt.plot(commit_number, CPU_Cycle_tcc)
-    plt.plot(commit_number, CPU_Cycle_gcc)
-    plt.plot(commit_number, CPU_Cycle_llvm)
-    plt.title('CPU Cycle for the last 50 commits')
-    plt.xlabel('commit number')
-    plt.ylabel('CPU Cycle')
-    fig_CPU_Cycle.savefig('script/CPU_Cycle.png')
+                axs[j].plot(np.arange(0,old_dict['commit_number'],1), np.array(old_dict[f'{to_plot[j]}_{jit_engines[i]}']) )
+                axs[j].legend([f'{to_plot[j]}_{jit_engines[0]}', f'{to_plot[j]}_{jit_engines[1]}', f'{to_plot[j]}_{jit_engines[2]}'])
+                #axs[j].title(f'{to_plot[j]} value for the last 50 commits')
+                axs[j].set(title=f'{to_plot[j]} value for the last 50 commits', xlabel='commit number', ylabel = f'{to_plot[j]}')
 
 
 
-    output_files = ['mips.png', 'Simulation_Time.png', 'CPU_Time.png', 'CPU_Cycle.png']
+
+
+    fig.savefig('performance_metrics.png')
 
 
 
