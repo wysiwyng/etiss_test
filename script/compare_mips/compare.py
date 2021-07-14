@@ -49,7 +49,7 @@ ${message_llvm}<br/>
 **Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}<br/>
 
 **Graphical Analysis for the last 50 commits:**
-[[performance_metrics.png]]
+[[performance_metrics.svg]]
 
 
 '''
