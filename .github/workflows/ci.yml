@@ -328,13 +328,8 @@ jobs:
         run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
 
 
-      - name: Run graphical analysis (Push)
-        if: ${{github.event_name == 'push'}}
-        run: python3 script/graph.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json
 
-      - name: Run graphical analysis (PR)
-        if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/graph.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json
+
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -344,6 +339,15 @@ jobs:
           publish_dir: ./benchmark_results_new
           publish_branch: benchmark_results
           enable_jekyll: true
+
+
+     - name: Run graphical analysis (Push)
+        if: ${{github.event_name == 'push'}}
+        run: python3 script/graph.py benchmark_results_new/run_results.json
+
+     - name: Run graphical analysis (PR)
+        if: ${{github.event_name == 'pull_request'}}
+        run: python3 script/graph.py  benchmark_results_new/run_results.json
 
 
       - name: uploading benchmark_results
@@ -356,8 +360,8 @@ jobs:
       - name: uploading image
         uses: actions/upload-artifact@v2
         with:
-          name: performance_metrics.png
-          path: script/performance_metrics.png
+          name: performance_metrics.svg
+          path: script/performance_metrics.svg
 
 
 

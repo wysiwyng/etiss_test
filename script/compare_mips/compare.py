@@ -3,6 +3,9 @@ import json
 import pathlib
 import shutil
 from mako.template import Template
+from collections import defaultdict
+from collections import ChainMap
+
 
 
 
@@ -94,12 +97,28 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict = json.load(f1)
         old_dict = json.load(f2)
 
-    print(type(old_dict["mips_tcc"]))
-    print(type(new_dict["mips_tcc"]))
+    if isinstance(old_dict["mips_tcc"], list):
+
+        print("old_dict is list!")
+        old_dict = old_dict
+
+    else:
+        keys_to_keep = {"best_mips_tcc", "best_hash_tcc", "regressed_hash_tcc", "best_mips_gcc", "best_hash_gcc", "regressed_hash_gcc", "best_mips_llvm", "best_hash_llvm", "regressed_hash_llvm" }
+        old_dict_keep = { key:value for key,value in old_dict.items() if key in keys_to_keep}
+        keys_to_extract = {"mips_tcc", "Simulation_Time_tcc", "CPU_Time_tcc", "CPU_Cycle_tcc", "mips_gcc", "Simulation_Time_gcc", "CPU_Time_gcc", "CPU_Cycle_gcc", "mips_llvm", "Simulation_Time_llvm", "CPU_Time_llvm", "CPU_Cycle_llvm"}
+        old_dict_extract = { key:value for key,value in old_dict.items() if key in keys_to_extract}
+        dict_to_list_extract = old_dict_extract.items()
+        old_dict_extract = defaultdict(list)
+        # iterating over list of tuples
+        for key, val in dict_to_list_extract:
+
+            old_dict_extract[key].append(val)
 
 
+        old_dict = dict(ChainMap(old_dict_keep, old_dict_extract))
+        print(old_dict)
 
-
+    to_plot = [ "mips", "Simulation_Time", "CPU_Time", "CPU_Cycle"]
 
     jit_engines = ["tcc", "gcc", "llvm"]
     new_mips = [new_dict.get('mips_tcc'), new_dict.get('mips_gcc'), new_dict.get('mips_llvm')]
@@ -110,6 +129,27 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     message = []
     best_diff = []
     old_best_mips = best_mips
+
+    #maximum number of elements to be stored
+    buffer_size = 50
+
+    #getting commit number from dictionary
+
+    commit = len(old_dict['mips_tcc'])#old_dict.get('commit_number',1)
+
+    if commit <= buffer_size:
+        for i in range(len(jit_engines)):
+            for j in range(len(to_plot)):
+              old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
+
+
+    else:
+        for i in range(len(jit_engines)):
+            for j in range(len(to_plot)):
+               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
+               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].pop(0)
+
+
 
     for i in range(len(jit_engines)):
 
@@ -151,18 +191,17 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
 
-        new_dict[f'best_mips_{jit_engines[i]}'] = best_mips[i]
-        new_dict[f'best_hash_{jit_engines[i]}'] = best_hash[i]
-        new_dict[f'regressed_hash_{jit_engines[i]}'] = regressed_hash[i]
+        old_dict[f'best_mips_{jit_engines[i]}'] = best_mips[i]
+        old_dict[f'best_hash_{jit_engines[i]}'] = best_hash[i]
+        old_dict[f'regressed_hash_{jit_engines[i]}'] = regressed_hash[i]
 
-    print(best_diff[2])
-    print(old_best_mips[2])
 
+    print(old_dict)
 
 
     if not no_update:
         with open(new_path, 'w') as f1:
-            json.dump(new_dict, f1)
+            json.dump(old_dict, f1)
 
 
 
