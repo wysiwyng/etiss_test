@@ -39,7 +39,7 @@ def main(file ): #, image):
     #figure: svg image output
     #put commit hashes in xlabel, xaxis
 
-    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(14,12))
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(30,30))
     fig.suptitle('Performance Metrics')
     axs = axs.flatten()
 
@@ -50,6 +50,8 @@ def main(file ): #, image):
         for i in range(len(jit_engines)):
 
             axs[j].plot(commit, np.array(file_dict[f'{to_plot[j]}_{jit_engines[i]}']) )
+            #axs[j].set_xticks(np.arange(len(commit)), commit)
+            axs[j].tick_params(axis='x', rotation=45)
             axs[j].legend([f'{to_plot[j]}_{jit_engines[0]}', f'{to_plot[j]}_{jit_engines[1]}', f'{to_plot[j]}_{jit_engines[2]}'])
             axs[j].set(title=f'{to_plot[j]} value for the last 50 commits', xlabel='commit hash', ylabel = f'{to_plot[j]}')
 
