@@ -182,7 +182,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
               print(regressed_hash)
             else:
               message.append(f'⚠ Major regression since commit  {f"[{regressed_hash[i]}](https://github.com/{repo_url}/commit/{regressed_hash[i]})"} ⚠')
-              message_html.append(f'⚠ Major regression since commit  {f"(https://github.com/{repo_url}/commit/{regressed_hash[i]})"} ⚠')
+              message_html.append(f'⚠ Major regression since commit  <a href=${f"(https://github.com/{repo_url}/commit/{regressed_hash[i]})"}>${regressed_hash[i]}</a>) ⚠')
 
               regressed = True
 

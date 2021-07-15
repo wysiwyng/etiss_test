@@ -34,13 +34,13 @@ def main(file ): #, image):
         file_dict = json.load(f1)
 
 
-    to_plot = [ "mips", "Simulation_Time", "CPU_Time", "CPU_Cycle"]
+    to_plot = [ "mips", "Simulation_Time"]
 
     jit_engines = ["tcc", "gcc", "llvm"]
     #figure: svg image output
     #put commit hashes in xlabel, xaxis
 
-    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(35,35))
+    fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(40,15))
     fig.suptitle('Performance Metrics', size=80)
     axs = axs.flatten()
 
