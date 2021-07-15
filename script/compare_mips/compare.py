@@ -14,7 +14,7 @@ ${message_tcc}\
 
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}\
 
-**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}\
+**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc}'}\
 
 
 **Status** (for commit ${current_hash})**:**
@@ -22,7 +22,7 @@ ${message_gcc}\
 
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}\
 
-**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}\
+**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc}'}\
 
 
 **Status** (for commit ${current_hash})**:**
@@ -30,7 +30,7 @@ ${message_llvm}\
 
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}\
 
-**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}\
+**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm}'}\
 
 <sub>This comment was created automatically, please do not change!</sub>
 '''
@@ -38,15 +38,15 @@ ${message_llvm}\
 WIKI_TEMPLATE = r'''**Status for the TCC Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message_tcc}<br/>
 **Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}<br/>
-**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc_wiki})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc_wiki})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc}'}<br/>
 **Status for the GCC Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message_gcc}<br/>
 **Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}<br/>
-**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc_wiki})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc_wiki})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc}'}<br/>
 **Status for the LLVM Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message_llvm}<br/>
 **Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}<br/>
-**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}<br/>
+**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm}'}<br/>
 
 **Graphical Analysis for the last 50 commits:**
 [[performance_metrics.svg]]
@@ -64,15 +64,15 @@ HTML_TEMPLATE= r'''
 <p><b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_tcc}<br/>
 <b>Current dhrystone MIPS for TCCJIT</b> <b>:</b> ${new_mips_tcc}<br/>
-<b>Previous best for TCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_tcc}>${best_hash_tcc}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc:+.2%}'}<br/>
+<b>Previous best for TCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_tcc}>${best_hash_tcc}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc}'}<br/>
 <b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_gcc}<br/>
 <b>Current dhrystone MIPS for GCCJIT</b> <b>:</b> ${new_mips_gcc}<br/>
-<b>Previous best for GCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_gcc}>${best_hash_gcc}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc:+.2%}'}<br/>
+<b>Previous best for GCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_gcc}>${best_hash_gcc}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc}'}<br/>
 <b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
 ${message_llvm}<br/>
 <b>Current dhrystone MIPS for LLVMJIT</b> <b>:</b> ${new_mips_llvm}<br/>
-<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${link_to_old_best_hash_llvm}>${best_hash_llvm}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm:+.2%}'}</br>
+<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${link_to_old_best_hash_llvm}>${best_hash_llvm}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm}'}</br>
 </body>
 </html>
 '''
@@ -128,6 +128,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     old_best_hash = []
     message = []
     best_diff = []
+    hash_count = ["9ba9bd80","9812e2b8","d50957d5","994aeee8","c1c53136"]
+    current_hash=current_hash[:8]
     old_best_mips = best_mips
 
     #maximum number of elements to be stored
@@ -138,16 +140,22 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     commit = len(old_dict['mips_tcc'])#old_dict.get('commit_number',1)
 
     if commit <= buffer_size:
+        hash_count.append(current_hash)
         for i in range(len(jit_engines)):
             for j in range(len(to_plot)):
               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
 
 
+
     else:
+        hash_count.append(current_hash)
+        hash_count.pop(0)
         for i in range(len(jit_engines)):
             for j in range(len(to_plot)):
                old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
                old_dict[f'{to_plot[j]}_{jit_engines[i]}'].pop(0)
+
+    old_dict["hash_count"] = hash_count
 
 
 
@@ -160,7 +168,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         print(best_diff)
 
         regressed = False
-        current_hash = current_hash[:8]
+
 
         if best_diff[i] < -tolerance:
             print('major regression')
