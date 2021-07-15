@@ -6,6 +6,7 @@ import json
 import pathlib
 import shutil
 import matplotlib
+from numpy.core.fromnumeric import size
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,8 +40,8 @@ def main(file ): #, image):
     #figure: svg image output
     #put commit hashes in xlabel, xaxis
 
-    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(30,30))
-    fig.suptitle('Performance Metrics')
+    fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(35,35))
+    fig.suptitle('Performance Metrics', size=80)
     axs = axs.flatten()
 
     commit = file_dict["hash_count"]
@@ -51,9 +52,17 @@ def main(file ): #, image):
 
             axs[j].plot(commit, np.array(file_dict[f'{to_plot[j]}_{jit_engines[i]}']) )
             #axs[j].set_xticks(np.arange(len(commit)), commit)
+            axs[j].set_xticks(np.arange(len(commit)))
+            axs[j].set_xticklabels(commit)
             axs[j].tick_params(axis='x', rotation=45)
+            for tick in axs[j].xaxis.get_major_ticks():
+                tick.label.set_fontsize(10)
+            for tick in axs[j].yaxis.get_major_ticks():
+                tick.label.set_fontsize(20)
             axs[j].legend([f'{to_plot[j]}_{jit_engines[0]}', f'{to_plot[j]}_{jit_engines[1]}', f'{to_plot[j]}_{jit_engines[2]}'])
-            axs[j].set(title=f'{to_plot[j]} value for the last 50 commits', xlabel='commit hash', ylabel = f'{to_plot[j]}')
+            axs[j].set_title(f'{to_plot[j]} value for the last 50 commits', size = 30)
+            axs[j].set_xlabel('commt hash', size = 25)
+            axs[j].set_ylabel(f'{to_plot[j]}', size = 25)
 
 
 
