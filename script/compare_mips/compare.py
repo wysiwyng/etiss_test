@@ -138,6 +138,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     #getting commit number from dictionary
 
     commit = len(old_dict['mips_tcc'])#old_dict.get('commit_number',1)
+    print("commit")
+    print(commit)
 
     if commit <= buffer_size:
         old_dict["hash_count"].append(current_hash)
