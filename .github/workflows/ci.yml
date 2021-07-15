@@ -346,8 +346,7 @@ jobs:
         run: |
               python3 script/graph.py benchmark_results_new/run_results.json
               ls
-              cd script
-              ls
+
 
       - name: Run graphical analysis (PR)
         if: ${{github.event_name == 'pull_request'}}
@@ -365,7 +364,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: performance_metrics.svg
-          path: script/performance_metrics.svg
+          path: performance_metrics.svg
 
 
 
