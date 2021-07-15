@@ -343,7 +343,9 @@ jobs:
 
       - name: Run graphical analysis (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/graph.py benchmark_results_new/run_results.json
+        run: |
+        python3 script/graph.py benchmark_results_new/run_results.json
+        ls
 
       - name: Run graphical analysis (PR)
         if: ${{github.event_name == 'pull_request'}}

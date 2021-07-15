@@ -169,7 +169,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
               regressed_hash[i] = current_hash
               print(regressed_hash)
             else:
-              message.append(f'⚠ Major regression since commit {f"[{regressed_hash[i]}](https://github.com/{repo_url}/commit/{regressed_hash[i]})"} ⚠') #cannot put a dictionary value here :( )
+              message.append(f'⚠ Major regression since commit  {f"[{regressed_hash[i]}](https://github.com/{repo_url}/commit/{regressed_hash[i]})"} ⚠') #cannot put a dictionary value here :( )
               regressed = True
 
 
