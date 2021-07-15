@@ -37,10 +37,10 @@ def main(file ): #, image):
     to_plot = [ "mips", "Simulation_Time"]
 
     jit_engines = ["tcc", "gcc", "llvm"]
-    #figure: svg image output
-    #put commit hashes in xlabel, xaxis
 
-    fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(40,15))
+    #remove white border, tightlayout
+
+    fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(40,25))
     fig.suptitle('Performance Metrics', size=80)
     axs = axs.flatten()
 
@@ -51,7 +51,6 @@ def main(file ): #, image):
         for i in range(len(jit_engines)):
 
             axs[j].plot(commit, np.array(file_dict[f'{to_plot[j]}_{jit_engines[i]}']) )
-            #axs[j].set_xticks(np.arange(len(commit)), commit)
             axs[j].set_xticks(np.arange(len(commit)))
             axs[j].set_xticklabels(commit)
             axs[j].tick_params(axis='x', rotation=45)

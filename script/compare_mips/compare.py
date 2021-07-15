@@ -35,52 +35,58 @@ ${message_llvm}\
 <sub>This comment was created automatically, please do not change!</sub>
 '''
 
-WIKI_TEMPLATE = r'''**Status for the TCC Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
-${message_tcc}<br/>
-**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}<br/>
-**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc_wiki})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc}'}<br/>
+WIKI_TEMPLATE = r'''**Performance Metrics**
+<br/>
+<br/>
+<br/>
+**Status for the TCC Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
+${message_tcc}
+<br/>
+<br/>
+**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}
+<br/>
+<br/>
+**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc_wiki})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc}'}
+<br/>
+<br/>
+<br/>
 **Status for the GCC Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
-${message_gcc}<br/>
-**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}<br/>
-**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc_wiki})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc}'}<br/>
+${message_gcc}
+<br/>
+<br/>
+**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}
+<br/>
+<br/>
+**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc_wiki})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc}'}
+<br/>
+<br/>
+<br/>
 **Status for the LLVM Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
-${message_llvm}<br/>
-**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}<br/>
-**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm}'}<br/>
+${message_llvm}
+<br/>
+<br/>
+**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}
+<br/>
+<br/>
+**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm_wiki})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm}'}
+<br/>
+<br/>
+<br/>
 
 **Graphical Analysis for the last 50 commits:**
+<br/>
+<br/>
 [[performance_metrics.svg]]
 
 
 '''
 
-HTML_TEMPLATE= r'''
-<html>
-<head>
-<title>Performance Metrics</title>
-</head>
-<body>
-<h1>Performance Metrics for the three JIT engines from the last commit</h1>
-<p><b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
-${message_html_tcc}<br/>
-<b>Current dhrystone MIPS for TCCJIT</b> <b>:</b> ${new_mips_tcc}<br/>
-<b>Previous best for TCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_tcc}>${best_hash_tcc}</a>)<b>:</b> ${best_mips_tcc}, difference ${f'{best_diff_tcc}'}<br/>
-<b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
-${message_html_gcc}<br/>
-<b>Current dhrystone MIPS for GCCJIT</b> <b>:</b> ${new_mips_gcc}<br/>
-<b>Previous best for GCCJIT</b> (recorded in commit <a href=${link_to_old_best_hash_gcc}>${best_hash_gcc}</a>)<b>:</b> ${best_mips_gcc}, difference ${f'{best_diff_gcc}'}<br/>
-<b>Status</b> (for commit <a href=${link_to_current_hash}>${current_hash}</a>)<b>:</b>
-${message_html_llvm}<br/>
-<b>Current dhrystone MIPS for LLVMJIT</b> <b>:</b> ${new_mips_llvm}<br/>
-<b>Previous best for LLVMJIT</b> (recorded in commit <a href=${link_to_old_best_hash_llvm}>${best_hash_llvm}</a>)<b>:</b> ${best_mips_llvm}, difference ${f'{best_diff_llvm}'}</br>
-</body>
-</html>
-'''
+
 
 def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     issue_template = Template(text=ISSUE_TEMPLATE)
     wiki_template = Template(text=WIKI_TEMPLATE)
-    html_template = Template(text=HTML_TEMPLATE)
+
 
     new_path = pathlib.Path(new_file)
     old_path = pathlib.Path(old_file)
@@ -127,7 +133,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     regressed_hash = [old_dict.get('regressed_hash_tcc', None), old_dict.get('regressed_hash_gcc', None), old_dict.get('regressed_hash_llvm', None)]
     old_best_hash = []
     message = []
-    message_html = []
+
     best_diff = []
 
     current_hash=current_hash[:8]
@@ -177,20 +183,16 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
             print('major regression')
             if regressed_hash[i] is None:
               message.append(f'⚠ Major regression introduced! ⚠')
-              message_html.append(f'⚠ Major regression introduced! ⚠')
               regressed_hash[i] = current_hash
               print(regressed_hash)
             else:
               message.append(f'⚠ Major regression since commit  {f"[{regressed_hash[i]}](https://github.com/{repo_url}/commit/{regressed_hash[i]})"} ⚠')
-              message_html.append(f'⚠ Major regression since commit  <a href=${f"(https://github.com/{repo_url}/commit/{regressed_hash[i]})"}>${regressed_hash[i]}</a>) ⚠')
-
               regressed = True
 
 
         elif new_mips[i] > best_mips[i]:
             print('new best')
             message.append(f'🥇 New best performance!')
-            message_html.append(f'🥇 New best performance!')
             best_mips[i] = new_mips[i]
             best_hash[i] = current_hash
             regressed_hash[i] = None
@@ -198,11 +200,9 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         else:
             if regressed_hash[i] is not None:
                 message.append('Regression cleared')
-                message_html.append('Regression cleared')
 
             else:
                 message.append(f'No significant performance change.')
-                message_html.append(f'No significant performance change.')
                 print('no significant change')
                 regressed_hash[i] = None
 
@@ -224,12 +224,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
     if repo_url:
 
-        templates = [issue_template, html_template, wiki_template]
-        output_files = ['mips_issue_text.md', 'mips_issue_text.html', 'wiki_text.md']
-        link_to_current_hash = f"https://github.com/{repo_url}/commit/{current_hash}"
-        link_to_old_best_hash_tcc = f"https://github.com/{repo_url}/commit/{old_best_hash[0]}"
-        link_to_old_best_hash_gcc = f"https://github.com/{repo_url}/commit/{old_best_hash[1]}"
-        link_to_old_best_hash_llvm = f"https://github.com/{repo_url}/commit/{old_best_hash[2]}"
+        templates = [issue_template, wiki_template]
+        output_files = ['mips_issue_text.md', 'wiki_text.md']
         best_hash_tcc_wiki = f"[{old_best_hash[0]}](https://github.com/{repo_url}/commit/{old_best_hash[0]})"
         best_hash_gcc_wiki = f"[{old_best_hash[1]}](https://github.com/{repo_url}/commit/{old_best_hash[1]})"
         best_hash_llvm_wiki = f"[{old_best_hash[2]}](https://github.com/{repo_url}/commit/{old_best_hash[2]})"
@@ -241,12 +237,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                 fw.write(templates[index].render(
 
                     current_hash = current_hash,
-                    link_to_current_hash = link_to_current_hash,
                     current_hash_wiki = current_hash_wiki,
-
-                    link_to_old_best_hash_tcc = link_to_old_best_hash_tcc,
-                    link_to_old_best_hash_gcc = link_to_old_best_hash_gcc,
-                    link_to_old_best_hash_llvm = link_to_old_best_hash_llvm,
 
                     best_hash_tcc = old_best_hash[0],
                     best_hash_gcc = old_best_hash[1],
@@ -263,10 +254,6 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                     message_tcc = message[0],
                     message_gcc = message[1],
                     message_llvm = message[2],
-
-                    message_html_tcc = message_html[0],
-                    message_html_gcc = message_html[1],
-                    message_html_llvm = message_html[2],
 
                     best_mips_tcc = best_mips[0],
                     best_mips_gcc = best_mips[1],
