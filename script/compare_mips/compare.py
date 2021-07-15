@@ -128,7 +128,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     old_best_hash = []
     message = []
     best_diff = []
-    hash_count = ["9ba9bd80","9812e2b8","d50957d5","994aeee8","c1c53136"]
+
     current_hash=current_hash[:8]
     old_best_mips = best_mips
 
@@ -140,7 +140,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     commit = len(old_dict['mips_tcc'])#old_dict.get('commit_number',1)
 
     if commit <= buffer_size:
-        hash_count.append(current_hash)
+        old_dict["hash_count"].append(current_hash)
         for i in range(len(jit_engines)):
             for j in range(len(to_plot)):
               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
@@ -148,14 +148,14 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
     else:
-        hash_count.append(current_hash)
-        hash_count.pop(0)
+        old_dict["hash_count"].append(current_hash)
+        old_dict["hash_count"].pop(0)
         for i in range(len(jit_engines)):
             for j in range(len(to_plot)):
                old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
                old_dict[f'{to_plot[j]}_{jit_engines[i]}'].pop(0)
 
-    old_dict["hash_count"] = hash_count
+
 
 
 
