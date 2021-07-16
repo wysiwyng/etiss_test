@@ -37,12 +37,12 @@ ${message_llvm}\
 
 WIKI_TEMPLATE = r'''
 % for jit_engine_name, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff in zip_form:
-**Status for the ${jit_engines} Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
+**Status for the ${jit_engine_name} Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message}
 <br/>
-**Current dhrystone MIPS for ${jit_engines} JIT** **:** ${new_mips}
+**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}
 <br/>
-**Previous best for ${jit_engines} JIT** (recorded in commit ${best_hash_link})**:** ${best_mips}, difference ${f'{best_diff}'}
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${best_hash_link})**:** ${best_mips}, difference ${f'{best_diff}'}
 <br/>
 <br/>
 % endfor
