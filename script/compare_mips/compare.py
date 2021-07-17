@@ -9,29 +9,15 @@ from collections import ChainMap
 
 
 
-ISSUE_TEMPLATE = r''' **Status** (for commit ${current_hash})**:**
-${message_tcc}\
-
-**Current dhrystone MIPS for TCCJIT** **:** ${new_mips_tcc}\
-
-**Previous best for TCCJIT** (recorded in commit ${best_hash_tcc})**:** ${best_mips_tcc}, difference ${f'{best_diff_tcc}'}\
-
-
+ISSUE_TEMPLATE = r'''
+% for jit_engine_name, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff in zip_form:
 **Status** (for commit ${current_hash})**:**
-${message_gcc}\
+${message}\
 
-**Current dhrystone MIPS for GCCJIT** **:** ${new_mips_gcc}\
+**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}\
 
-**Previous best for GCCJIT** (recorded in commit ${best_hash_gcc})**:** ${best_mips_gcc}, difference ${f'{best_diff_gcc}'}\
-
-
-**Status** (for commit ${current_hash})**:**
-${message_llvm}\
-
-**Current dhrystone MIPS for LLVMJIT** **:** ${new_mips_llvm}\
-
-**Previous best for LLVMJIT** (recorded in commit ${best_hash_llvm})**:** ${best_mips_llvm}, difference ${f'{best_diff_llvm}'}\
-
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff}'}\
+% endfor
 <sub>This comment was created automatically, please do not change!</sub>
 '''
 
