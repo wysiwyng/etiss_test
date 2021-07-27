@@ -1,14 +1,11 @@
-import pathlib
+import re
 import json
 import argparse
 
 
-#program valid for three jit engines
-
-def main(file_one, file_two, file_three): #can I make these variable?
+def main(files):
 
     loop_iteration={
-        "jit_engines" : ["tcc", "gcc", "llvm"],
         "mips" : [],
         "Simulation_Time" : [],
         "CPU_Time" : [],
@@ -16,16 +13,14 @@ def main(file_one, file_two, file_three): #can I make these variable?
     }
 
     results = {}
-    json_files = [file_one, file_two, file_three]
-    # path_one = pathlib.Path(file_one)
-    # print(path_one)
-    # path_two = pathlib.Path(file_two)
-    # path_three = pathlib.Path(file_three)
+    jit_engines = []
+    for index, fname in enumerate(files):
+        start = files[index].find('results_') + 8
+        end = files[index].find('.json', start)
+        engine = files[index][start:end]
+        jit_engines.append(engine)
 
-    #path = [path_one, path_two, path_three]
-
-    for index, fname in enumerate(json_files):
-
+    for index, fname in enumerate(files):
         with open(fname, 'r') as f:
             json_dict = json.load(f)
             json_dict = {k: round(v, 2) for k, v in json_dict.items()}
@@ -33,27 +28,18 @@ def main(file_one, file_two, file_three): #can I make these variable?
             loop_iteration["Simulation_Time"].append(json_dict["Simulation_Time"])
             loop_iteration["CPU_Time"].append(json_dict["CPU_Time"])
             loop_iteration["CPU_cycle"].append(json_dict["CPU_cycle"])
-            results[f'mips_{loop_iteration["jit_engines"][index]}'] = loop_iteration["mips"][index]
-            results[f'Simulation_Time_{loop_iteration["jit_engines"][index]}'] = loop_iteration["Simulation_Time"][index]
-            results[f'CPU_Time_{loop_iteration["jit_engines"][index]}'] = loop_iteration["CPU_Time"][index]
-            results[f'CPU_Cycle_{loop_iteration["jit_engines"][index]}'] = loop_iteration["CPU_cycle"][index]
+            results[f'mips_{jit_engines[index]}'] = loop_iteration["mips"][index]
+            results[f'Simulation_Time_{jit_engines[index]}'] = loop_iteration["Simulation_Time"][index]
+            results[f'CPU_Time_{jit_engines[index]}'] = loop_iteration["CPU_Time"][index]
+            results[f'CPU_Cycle_{jit_engines[index]}'] = loop_iteration["CPU_cycle"][index]
 
 
-
-
-
-    with open(file_one, 'w') as f1:
+    with open(files[0], 'w') as f1:
             json.dump(results, f1)
 
 
 if __name__ == '__main__':
        parser = argparse.ArgumentParser()
-
-       parser.add_argument('file_one')
-       parser.add_argument('file_two')
-       parser.add_argument('file_three')
-
-
-
+       parser.add_argument("files", nargs="+")
        args = parser.parse_args()
-       main(args.file_one, args.file_two, args.file_three)
+       main(args.files)

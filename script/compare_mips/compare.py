@@ -2,9 +2,15 @@ import argparse
 import json
 import pathlib
 import shutil
+from mako import exceptions, template
 from mako.template import Template
 from collections import defaultdict
 from collections import ChainMap
+import sys
+from mako.template import DefTemplate
+from mako.runtime import _render
+
+
 
 
 
@@ -18,6 +24,7 @@ ${message}\
 
 **Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff}'}\
 % endfor
+
 <sub>This comment was created automatically, please do not change!</sub>
 '''
 
@@ -200,6 +207,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                     current_hash_wiki = current_hash_wiki,
                     zip_form = zip_form
 
+
+
                     # best_hash_tcc = old_best_hash[0],
                     # best_hash_gcc = old_best_hash[1],
                     # best_hash_llvm = old_best_hash[2],
@@ -224,7 +233,8 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
                     # best_diff_gcc = best_diff[1],
                     # best_diff_llvm = best_diff[2]
 
-                ))
+                )
+                )
 
 
 if __name__ == '__main__':
@@ -239,5 +249,6 @@ if __name__ == '__main__':
 
 
     args = parser.parse_args()
+
 
     main(args.new_file, args.old_file, args.git_commit_hash, args.tolerance, args.no_update, args.repo_url)
