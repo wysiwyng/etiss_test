@@ -69,7 +69,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict = json.load(f1)
         old_dict = json.load(f2)
 
-    #old_dict["jit_engines"] = ["tcc", "gcc", "llvm"]
+    old_dict["jit_engines"] = ["tcc", "gcc", "llvm"]
     if isinstance(old_dict["mips_tcc"], list):
 
         print("old_dict is list!")
@@ -220,7 +220,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
                     current_hash = current_hash,
                     current_hash_wiki = current_hash_wiki,
-                    zip_form = zip_form
+                    zip_form = zip_list
 
 
 

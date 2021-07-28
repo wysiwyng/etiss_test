@@ -1,16 +1,10 @@
 import json
 import argparse
-
+from collections import defaultdict
 
 def main(files):
 
-    loop_iteration={
-        "mips" : [],
-        "Simulation_Time" : [],
-        "CPU_Time" : [],
-        "CPU_cycle" : []
-    }
-
+    loop_iteration=defaultdict(list)
     results = {}
     jit_engines = []
     for index, fname in enumerate(files):
