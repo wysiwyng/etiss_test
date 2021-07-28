@@ -69,13 +69,14 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict = json.load(f1)
         old_dict = json.load(f2)
 
+    old_dict["jit_engines"] = ["tcc", "gcc", "llvm"]
     if isinstance(old_dict["mips_tcc"], list):
 
         print("old_dict is list!")
         old_dict = old_dict
 
     else:
-        keys_to_keep = {"best_mips_tcc", "best_hash_tcc", "regressed_hash_tcc", "best_mips_gcc", "best_hash_gcc", "regressed_hash_gcc", "best_mips_llvm", "best_hash_llvm", "regressed_hash_llvm" }
+        keys_to_keep = {"best_mips_tcc", "best_hash_tcc", "regressed_hash_tcc", "best_mips_gcc", "best_hash_gcc", "regressed_hash_gcc", "best_mips_llvm", "best_hash_llvm", "regressed_hash_llvm", "jit_engines" }
         old_dict_keep = { key:value for key,value in old_dict.items() if key in keys_to_keep}
         keys_to_extract = {"mips_tcc", "Simulation_Time_tcc", "CPU_Time_tcc", "CPU_Cycle_tcc", "mips_gcc", "Simulation_Time_gcc", "CPU_Time_gcc", "CPU_Cycle_gcc", "mips_llvm", "Simulation_Time_llvm", "CPU_Time_llvm", "CPU_Cycle_llvm"}
         old_dict_extract = { key:value for key,value in old_dict.items() if key in keys_to_extract}
@@ -92,7 +93,6 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
     to_plot = [ "mips", "Simulation_Time", "CPU_Time", "CPU_Cycle"]
 
-    jit_engines = ["tcc", "gcc", "llvm"]
     new_mips = [new_dict.get('mips_tcc'), new_dict.get('mips_gcc'), new_dict.get('mips_llvm')]
     best_mips = [old_dict.get('best_mips_tcc', 0.00000001), old_dict.get('best_mips_gcc', 0.00000001), old_dict.get('best_mips_llvm', 0.00000001)]
     best_hash = [old_dict.get('best_hash_tcc', None), old_dict.get('best_hash_gcc', None), old_dict.get('best_hash_llvm', None)]
@@ -114,25 +114,25 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
     if commit <= buffer_size:
         old_dict["hash_count"].append(current_hash)
-        for i in range(len(jit_engines)):
+        for i in range(len(old_dict["jit_engines"])):
             for j in range(len(to_plot)):
-              old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
+              old_dict[f'{to_plot[j]}_{old_dict["jit_engines"][i]}'].append(new_dict.get(f'{to_plot[j]}_{old_dict["jit_engines"][i]}'))
 
 
 
     else:
         old_dict["hash_count"].append(current_hash)
         old_dict["hash_count"].pop(0)
-        for i in range(len(jit_engines)):
+        for i in range(len(old_dict["jit_engines"])):
             for j in range(len(to_plot)):
-               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].append(new_dict.get(f'{to_plot[j]}_{jit_engines[i]}'))
-               old_dict[f'{to_plot[j]}_{jit_engines[i]}'].pop(0)
+               old_dict[f'{to_plot[j]}_{old_dict["jit_engines"][i]}'].append(new_dict.get(f'{to_plot[j]}_{old_dict["jit_engines"][i]}'))
+               old_dict[f'{to_plot[j]}_{old_dict["jit_engines"][i]}'].pop(0)
 
 
 
 
 
-    for i in range(len(jit_engines)):
+    for i in range(len(old_dict["jit_engines"][i])):
 
 
         old_best_hash.append(best_hash[i])
@@ -172,14 +172,14 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
 
-        old_dict[f'best_mips_{jit_engines[i]}'] = best_mips[i]
-        old_dict[f'best_hash_{jit_engines[i]}'] = best_hash[i]
-        old_dict[f'regressed_hash_{jit_engines[i]}'] = regressed_hash[i]
+        old_dict[f'best_mips_{old_dict["jit_engines"][i]}'] = best_mips[i]
+        old_dict[f'best_hash_{old_dict["jit_engines"][i]}'] = best_hash[i]
+        old_dict[f'regressed_hash_{old_dict["jit_engines"][i]}'] = regressed_hash[i]
 
 
     print(old_dict)
 
-
+    jit_engines = old_dict["jit_engines"]
     if not no_update:
         with open(new_path, 'w') as f1:
             json.dump(old_dict, f1)

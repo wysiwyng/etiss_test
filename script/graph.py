@@ -39,11 +39,11 @@ def main(file ):
             axs[j].set_title(f'{to_plot[j]} value for the last 50 commits', size = 30)
             axs[j].set_xlabel('commit hash', size = 25)
             axs[j].set_ylabel(f'{to_plot[j]}', size = 25)
-
+    plt.subplots_adjust(left=None, bottom=1, right=None, top=2, wspace=None, hspace=None)
     image_format = 'svg'
     image_name = 'performance_metrics.svg'
-
-    fig.savefig(image_name, format= image_format, bbox_inches='tight',pad_inches = 0)
+    fig.tight_layout()
+    fig.savefig(image_name, format= image_format)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

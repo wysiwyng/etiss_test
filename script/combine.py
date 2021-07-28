@@ -31,7 +31,7 @@ def main(files):
             results[f'Simulation_Time_{jit_engines[index]}'] = loop_iteration["Simulation_Time"][index]
             results[f'CPU_Time_{jit_engines[index]}'] = loop_iteration["CPU_Time"][index]
             results[f'CPU_Cycle_{jit_engines[index]}'] = loop_iteration["CPU_cycle"][index]
-
+    results["jit_engines"] = jit_engines
     print(results)
     with open(files[0], 'w') as f1:
             json.dump(results, f1)
