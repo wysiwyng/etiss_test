@@ -132,7 +132,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
 
 
 
-    for i in range(len(old_dict["jit_engines"][i])):
+    for i in range(len(old_dict["jit_engines"])):
 
 
         old_best_hash.append(best_hash[i])
