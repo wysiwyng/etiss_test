@@ -69,7 +69,7 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict = json.load(f1)
         old_dict = json.load(f2)
 
-
+    #old_dict["jit_engines"] = ["tcc", "gcc", "llvm"]
     if isinstance(old_dict["mips_tcc"], list):
 
         print("old_dict is list!")
@@ -193,6 +193,21 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
     best_hash_link = [best_hash_tcc_wiki, best_hash_gcc_wiki, best_hash_llvm_wiki]
     zip_form = zip(jit_engines, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff)
     zip_list = list(zip_form)
+    print(zip_list)
+    print("message")
+    print(message)
+    print("jit")
+    print(jit_engines)
+    print("old hash")
+    print(old_best_hash)
+    print("links")
+    print(best_hash_link)
+    print("mips")
+    print(new_mips)
+    print("best mips")
+    print(best_mips)
+    print("best diff")
+    print(best_diff)
 
 
 
