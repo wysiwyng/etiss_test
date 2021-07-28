@@ -14,7 +14,7 @@ def main(files):
     results = {}
     jit_engines = []
     for index, fname in enumerate(files):
-        start = files[index].find('results_') + 8
+        start = files[index].find('run_results_') + 12
         end = files[index].find('.json', start)
         engine = files[index][start:end]
         jit_engines.append(engine)
