@@ -22,7 +22,7 @@ ${message}\
 
 **Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}\
 
-**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff}'}\
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff}'+.2%}\
 % endfor
 
 <sub>This comment was created automatically, please do not change!</sub>
@@ -69,7 +69,6 @@ def main(new_file, old_file, current_hash, tolerance, no_update, repo_url):
         new_dict = json.load(f1)
         old_dict = json.load(f2)
 
-    old_dict["jit_engines"] = ["tcc", "gcc", "llvm"]
     if isinstance(old_dict["mips_tcc"], list):
 
         print("old_dict is list!")

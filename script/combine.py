@@ -1,21 +1,23 @@
 import json
 import argparse
 from collections import defaultdict
+import pathlib
 
 def main(files):
+
 
     loop_iteration=defaultdict(list)
     results = {}
     jit_engines = []
     for index, fname in enumerate(files):
-        start = files[index].find('run_results_') + 12
-        end = files[index].find('.json', start)
-        engine = files[index][start:end]
+        path_file = pathlib.Path(files[index])
+        name_part_a, name_part_b, engine = path_file.stem.split('_')
         jit_engines.append(engine)
 
     for index, fname in enumerate(files):
         with open(fname, 'r') as f:
             json_dict = json.load(f)
+            print(json_dict)
             json_dict = {k: round(v, 2) for k, v in json_dict.items()}
             loop_iteration["mips"].append(json_dict["mips"])
             loop_iteration["Simulation_Time"].append(json_dict["Simulation_Time"])
