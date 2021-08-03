@@ -16,13 +16,19 @@ from mako.runtime import _render
 
 
 ISSUE_TEMPLATE = r'''
+**Performance Statistics**
+
 % for jit_engine_name, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff in zip_form:
+
 **Status** (for commit ${current_hash})**:**
-${message}\
+
+${jit_engine_name} jit engine's performance message: ${message}\
 
 **Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}\
 
-**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff}'+.2%}\
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff+.2%}'}\
+
+
 % endfor
 
 <sub>This comment was created automatically, please do not change!</sub>
@@ -35,7 +41,7 @@ ${message}
 <br/>
 **Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}
 <br/>
-**Previous best for ${jit_engine_name} JIT** (recorded in commit ${best_hash_link})**:** ${best_mips}, difference ${f'{best_diff}'}
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${best_hash_link})**:** ${best_mips}, difference  ${f'{best_diff+.2%}'}
 <br/>
 <br/>
 % endfor
