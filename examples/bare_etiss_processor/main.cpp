@@ -93,6 +93,7 @@ int main(int argc, const char *argv[])
     // create a cpu core named core0 with the or1k architecture
     std::string CPUArchName = etiss::cfg().get<std::string>("arch.cpu", "");
     bool output_json =   etiss::cfg().get<bool>("output_json_stat", false);
+    //output_json = etiss::cfg().isSet("results", false)
 	etiss::uint64 startAddress = dsys.get_startaddr();
 	std::cout << "ELF start address: 0x" << std::hex << startAddress << std::dec << std::endl;
     std::shared_ptr<etiss::CPUCore> cpu = etiss::CPUCore::create(CPUArchName, "core0");
@@ -201,7 +202,7 @@ int main(int argc, const char *argv[])
 }
 void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips )// Save the information in JSON format
 {
-     std::ofstream json_output("run_results.json");
+     std::ofstream json_output("run.json");
      json_output << "{\"mips\": " << mips << ", \"Simulation_Time\": " << simulation_time << ", \"CPU_Time\": " << cpu_time << ", \"CPU_cycle\": " << cpu_cycle << "}" << std::endl;
      json_output.close();
 

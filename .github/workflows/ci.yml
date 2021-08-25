@@ -178,25 +178,27 @@ jobs:
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
       run: |
         ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}}
-        mv run_results.json run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        mv run.json run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
 
 
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
-        name: run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
 
 
 
 
   compare_mips:
+
     strategy:
       matrix:
         run-no: [1, 2, 3, 4, 5]
         jit-engine: ["tcc", "gcc", "llvm"]
+
 
 
     needs: benchmark
@@ -214,11 +216,11 @@ jobs:
       - name: get files
         uses: actions/download-artifact@v2
         with:
-          name: run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+          name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
       - name: save files
         run:
-            cp run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json json_files/
+            cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json json_files/
 
       - name: install dependencies
         run: pip install -r script/compare_mips/requirements.txt
