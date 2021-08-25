@@ -229,13 +229,15 @@ jobs:
 
     steps:
 
-      - name: install dependencies
-        run: pip install -r script/requirements.txt
+      - uses: actions/checkout@v2
 
       - name: download input_files
         uses: actions/download-artifact@v2
         with:
           path: benchmark_results_new/
+
+      - name: install dependencies
+        run: pip install -r script/requirements.txt
 
       - name: get old benchmark results
         uses: actions/download-artifact@v2
