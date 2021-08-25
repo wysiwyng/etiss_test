@@ -179,14 +179,14 @@ def calculating_performance_metrics(input_files, stats_file, wiki_md, issue_md, 
         best_mips.append(nested_dict["best_mips"])
         new_mips.append(nested_dict["mips"][-1])
         best_hash.append(nested_dict["best_hash"][0])
-        #best_hash_link = nested_dict["best_hash"][0]
-        #best_hash_link.append(f"[{best_hash_link}](https://github.com/{repo_url}/commit/{best_hash_link})") # this doesn't work! ask!
+        best_hash_ = nested_dict["best_hash"][0]
+        best_hash_link.append(f"[{best_hash_}](https://github.com/{repo_url}/commit/{best_hash_})") # this doesn't work! ask!
 
     # Hence hard coding:
-    best_hash_tcc_wiki = f"[{best_hash[0]}](https://github.com/{repo_url}/commit/{best_hash[0]})"
-    best_hash_gcc_wiki = f"[{best_hash[1]}](https://github.com/{repo_url}/commit/{best_hash[1]})"
-    best_hash_llvm_wiki = f"[{best_hash[2]}](https://github.com/{repo_url}/commit/{best_hash[2]})"
-    best_hash_link = [best_hash_tcc_wiki, best_hash_gcc_wiki, best_hash_llvm_wiki]
+    # best_hash_tcc_wiki = f"[{best_hash[0]}](https://github.com/{repo_url}/commit/{best_hash[0]})"
+    # best_hash_gcc_wiki = f"[{best_hash[1]}](https://github.com/{repo_url}/commit/{best_hash[1]})"
+    # best_hash_llvm_wiki = f"[{best_hash[2]}](https://github.com/{repo_url}/commit/{best_hash[2]})"
+    # best_hash_link = [best_hash_tcc_wiki, best_hash_gcc_wiki, best_hash_llvm_wiki]
 
     zip_form = zip(jit_engines, best_hash, best_hash_link, new_mips, message, best_mips, best_diff)
     zip_list = list(zip_form)
