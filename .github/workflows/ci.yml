@@ -226,13 +226,16 @@ jobs:
         run: pip install -r script/compare_mips/requirements.txt
 
       - name: get old benchmark results
+        uses: actions/download-artifact@v2
         with:
           ref: benchmark_results
           path: benchmark_results_old
+
       - name: saving all results
         run: |
             rm -rf results
             mkdir results
+
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
         run: python3 script/compare.py benchmark_results_new/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY
