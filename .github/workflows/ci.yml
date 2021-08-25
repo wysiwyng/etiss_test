@@ -187,7 +187,7 @@ jobs:
 
 
 
-  compare_mips:
+  store_files:
 
     strategy:
       matrix:
@@ -216,8 +216,26 @@ jobs:
         run:
             cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json benchmark_results_new/
 
+      - name: upload files
+        uses: actions/upload-artifact@v2
+        with:
+          path: benchmark_results_new/
+
+
+
+  compare_mips:
+    needs: store_files
+    runs-on: ubuntu-latest
+
+    steps:
+
       - name: install dependencies
         run: pip install -r script/requirements.txt
+
+      - name: download input_files
+        uses: actions/download-artifact@v2
+        with:
+          path: benchmark_results_new/
 
       - name: get old benchmark results
         uses: actions/download-artifact@v2
