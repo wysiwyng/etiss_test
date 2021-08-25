@@ -374,7 +374,7 @@ jobs:
 
 
   display-wiki:
-    needs: combine_and_compare
+    needs: compare_mips
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
 
