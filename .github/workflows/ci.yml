@@ -192,9 +192,10 @@ jobs:
 
 
 
-  average:
+  compare_mips:
     strategy:
       matrix:
+        run-no: [1, 2, 3, 4, 5]
         jit-engine: ["tcc", "gcc", "llvm"]
 
 
@@ -205,131 +206,38 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: create directory for storing json files
+      - name: create directory for storing new benchmark results
         run: |
-            rm -rf json_files
-            mkdir json_files
+            rm -rf benchmark_results_new
+            mkdir benchmark_results_new
 
-      - name: get file_one
+      - name: get files
         uses: actions/download-artifact@v2
         with:
-          name: run_results_${{matrix.jit-engine}}_1.json
+          name: run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
-      - name: save file_one
+      - name: save files
         run:
-            cp run_results_${{matrix.jit-engine}}_1.json json_files/
-
-
-      - name: get file_two
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_${{matrix.jit-engine}}_2.json
-
-      - name: save file_two
-        run:
-            cp run_results_${{matrix.jit-engine}}_2.json json_files/
-
-      - name: get file_three
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_${{matrix.jit-engine}}_3.json
-
-      - name: save file_three
-        run:
-            cp run_results_${{matrix.jit-engine}}_3.json json_files/
-
-      - name: get file_four
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_${{matrix.jit-engine}}_4.json
-
-      - name: save file_four
-        run:
-            cp run_results_${{matrix.jit-engine}}_4.json json_files/
-
-      - name: get file_five
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_${{matrix.jit-engine}}_5.json
-
-      - name: save file_five
-        run:
-            cp run_results_${{matrix.jit-engine}}_5.json json_files/
-
-      - name: averaging out
-        run: |
-             python3 script/average.py json_files/run_results_${{matrix.jit-engine}}_1.json json_files/run_results_${{matrix.jit-engine}}_2.json json_files/run_results_${{matrix.jit-engine}}_3.json json_files/run_results_${{matrix.jit-engine}}_4.json json_files/run_results_${{matrix.jit-engine}}_5.json
-             mv json_files/run_results_${{matrix.jit-engine}}_5.json json_files/run_results_${{matrix.jit-engine}}.json
-
-      - name: checking folder contents
-        working-directory: json_files
-        run: ls
-
-      - name: uploading average results
-        uses: actions/upload-artifact@v2
-        with:
-          name: run_results_${{matrix.jit-engine}}.json
-
-          path: json_files/run_results_${{matrix.jit-engine}}.json
-
-
-
-  combine_and_compare:
-    needs: average
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Get benchmark results
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_tcc.json
-
-      - name: Get benchmark results
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_gcc.json
-
-      - name: Get benchmark results
-        uses: actions/download-artifact@v2
-        with:
-          name: run_results_llvm.json
-
-      - name: Save benchmark results
-        run: |
-          rm -rf benchmark_results_new
-          mkdir benchmark_results_new
-          cp run_results_tcc.json benchmark_results_new/
-          cp run_results_gcc.json benchmark_results_new/
-          cp run_results_llvm.json benchmark_results_new/
-
-      - name: combining info from three jit into a single json file
-        run: |
-          python3 script/combine.py benchmark_results_new/run_results_tcc.json benchmark_results_new/run_results_gcc.json benchmark_results_new/run_results_llvm.json
-          mv benchmark_results_new/run_results_tcc.json benchmark_results_new/run_results.json
-
-
-      - name: get old benchmark results
-        uses: actions/checkout@v2
-        with:
-          ref: benchmark_results
-          path: benchmark_results_old
+            cp run_results_${{matrix.jit-engine}}_${{matrix.run-no}}.json json_files/
 
       - name: install dependencies
         run: pip install -r script/compare_mips/requirements.txt
 
+      - name: get old benchmark results
+        with:
+          ref: benchmark_results
+          path: benchmark_results_old
+      - name: saving all results
+        run: |
+            rm -rf results
+            mkdir results
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.sha }} -r $GITHUB_REPOSITORY
+        run: python3 script/compare.py benchmark_results_new/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare_mips/compare.py benchmark_results_new/run_results.json benchmark_results_old/run_results.json ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
-
-
-
-
+        run: python3 script/compare.py benchmark_results_new/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -341,24 +249,12 @@ jobs:
           enable_jekyll: true
 
 
-      - name: Run graphical analysis (Push)
-        if: ${{github.event_name == 'push'}}
-        run: |
-              python3 script/graph.py benchmark_results_new/run_results.json
-              ls
-
-
-      - name: Run graphical analysis (PR)
-        if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/graph.py  benchmark_results_new/run_results.json
-
-
       - name: uploading benchmark_results
         uses: actions/upload-artifact@v2
         with:
-          name: run_results.json
+          name: stats_file.json
 
-          path: benchmark_results_new/run_results.json
+          path: benchmark_results_old/stats_file.json
 
       - name: uploading image
         uses: actions/upload-artifact@v2
@@ -373,42 +269,19 @@ jobs:
         with:
           name: mips_issue_text.md
 
-          path: mips_issue_text.md
-
-
-
-      - name: Upload html file
-        uses: actions/upload-artifact@v2
-        with:
-          name: mips_issue_text.html
-
-          path: mips_issue_text.html
+          path: results/issue.md
 
 
       - name: Upload wiki text
         uses: actions/upload-artifact@v2
         with:
           name: wiki_text.md
-          path: wiki_text.md
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          path: results/wiki.md
 
 
 
   display-push:
-    needs: combine_and_compare
+    needs: compare_mips
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
 
@@ -531,24 +404,6 @@ jobs:
         uses: geekyeggo/delete-artifact@v1
         with:
           name: |
-                run_results_tcc.json
-                run_results_gcc.json
-                run_results_llvm.json
-                run_results_tcc_1.json
-                run_results_tcc_2.json
-                run_results_tcc_3.json
-                run_results_tcc_4.json
-                run_results_tcc_5.json
-                run_results_gcc_1.json
-                run_results_gcc_2.json
-                run_results_gcc_3.json
-                run_results_gcc_4.json
-                run_results_gcc_5.json
-                run_results_llvm_1.json
-                run_results_llvm_2.json
-                run_results_llvm_3.json
-                run_results_llvm_4.json
-                run_results_llvm_5.json
                 etiss-Linux.tar
                 etiss-Mac.tar
 
