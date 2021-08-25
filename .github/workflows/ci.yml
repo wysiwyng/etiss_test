@@ -224,6 +224,7 @@ jobs:
         run: pip install -r script/compare_mips/requirements.txt
 
       - name: get old benchmark results
+        uses: actions/checkout@v2
         with:
           ref: benchmark_results
           path: benchmark_results_old
