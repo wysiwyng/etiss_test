@@ -194,11 +194,9 @@ jobs:
 
   compare_mips:
 
-    strategy:
       matrix:
         run-no: [1, 2, 3, 4, 5]
         jit-engine: ["tcc", "gcc", "llvm"]
-
 
 
     needs: benchmark
@@ -220,22 +218,19 @@ jobs:
 
       - name: save files
         run:
-            cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json json_files/
+            cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json benchmark_results_new/
 
       - name: install dependencies
         run: pip install -r script/compare_mips/requirements.txt
 
       - name: get old benchmark results
-        uses: actions/download-artifact@v2
         with:
           ref: benchmark_results
           path: benchmark_results_old
-
       - name: saving all results
         run: |
             rm -rf results
             mkdir results
-
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
         run: python3 script/compare.py benchmark_results_new/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY
@@ -329,7 +324,7 @@ jobs:
           body: ${{ steps.get-comment-body.outputs.body }}
 
   display-pr:
-    needs: compare_mips
+    needs: combine_and_compare
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'pull_request'}}
 
@@ -374,7 +369,7 @@ jobs:
 
 
   display-wiki:
-    needs: compare_mips
+    needs: combine_and_compare
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
 
