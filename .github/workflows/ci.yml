@@ -261,16 +261,16 @@ jobs:
       - name: saving all results
         run: |
             ls benchmark_results_new
-            rm -rf results
-            mkdir results
+            rm -rf results_
+            mkdir results_
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/results/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare.py benchmark_results_new/results/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -302,14 +302,14 @@ jobs:
         with:
           name: mips_issue_text.md
 
-          path: results/issue.md
+          path: results_/issue.md
 
 
       - name: Upload wiki text
         uses: actions/upload-artifact@v2
         with:
           name: wiki_text.md
-          path: results/wiki.md
+          path: results_/wiki.md
 
       - name: delete unnecessary artifacts
         uses: geekyeggo/delete-artifact@v1
