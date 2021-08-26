@@ -143,7 +143,7 @@ jobs:
       if: matrix.config.name == 'Linux'
       shell: bash
       run: |
-        ./run_helper.sh ../SW/riscv/build/riscv_example 
+        ./run_helper.sh ../SW/riscv/build/riscv_example
         ./run_helper.sh ../SW/riscv/build/riscv_example gcc
         ./run_helper.sh ../SW/riscv/build/riscv_example llvm
         ./run_helper.sh ../SW/riscv_cpp/build/riscv_example
@@ -277,7 +277,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./benchmark_results_new
+          publish_dir: ./benchmark_results_old
           publish_branch: benchmark_results
           enable_jekyll: true
 
@@ -337,12 +337,12 @@ jobs:
       - name: Get comment text
         uses: actions/download-artifact@v2
         with:
-          name: mips_issue_text.md
+          name: issue.md
 
       - name: Load comment body
         id: get-comment-body
         run: |
-          body=$(cat mips_issue_text.md)
+          body=$(cat issue.md)
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
@@ -380,12 +380,12 @@ jobs:
       - name: Get comment text
         uses: actions/download-artifact@v2
         with:
-          name: mips_issue_text.md
+          name: issue.md
 
       - name: Load comment body
         id: get-comment-body
         run: |
-          body=$(cat mips_issue_text.md)
+          body=$(cat issue.md)
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
@@ -447,9 +447,4 @@ jobs:
           git add Performance_Metrics.md performance_metrics.svg
           git commit -m "update perf"
           git push
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-                etiss-Linux.tar
-                etiss-Mac.tar
+
