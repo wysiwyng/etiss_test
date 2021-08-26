@@ -214,7 +214,7 @@ jobs:
 
       - name: save files
         run:
-            cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json benchmark_results_new/
+            cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json stored_files/
 
       - name: upload files
         uses: actions/upload-artifact@v2
