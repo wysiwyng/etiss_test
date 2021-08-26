@@ -187,8 +187,51 @@ jobs:
         path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
 
-  compare_mips:
+  store_files:
+
+    strategy:
+      matrix:
+        run-no: [1, 2, 3, 4, 5]
+        jit-engine: ["tcc", "gcc", "llvm"]
+
+
+
     needs: benchmark
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: create directory for storing new benchmark results
+        run: |
+            rm -rf storeed_files
+            mkdir stored_files
+      - name: get files
+        uses: actions/download-artifact@v2
+        with:
+          name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+
+      - name: save files
+        run:
+            cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json benchmark_results_new/
+
+      - name: upload files
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: stored_files/
+
+      - name: delete unnecessary artifacts
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: |
+                etiss-Linux.tar
+                etiss-Mac.tar
+
+
+  compare_mips:
+    needs: store_files
     runs-on: ubuntu-latest
 
     steps:
@@ -203,12 +246,8 @@ jobs:
       - name: download input_files
         uses: actions/download-artifact@v2
         with:
-          path: ${{runner.workspace}}/run_*.json
-
-      - name: save files
-        run:
-          cp ${{runner.workspace}}/run_*.json benchmark_results_new/
-          ls benchmark_results_new
+          name: results
+          path: benchmark_results_new/
 
       - name: install dependencies
         run: pip install -r script/requirements.txt
@@ -227,11 +266,11 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY
+        run: python3 script/compare.py benchmark_results_new/results/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
+        run: python3 script/compare.py benchmark_results_new/results/run_*.json -o benchmark_results_old/stats_file.json -i results/issue.md -w results/wiki.md -gr results/perf_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
