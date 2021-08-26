@@ -203,11 +203,11 @@ jobs:
       - name: download input_files
         uses: actions/download-artifact@v2
         with:
-          path: run_*.json
+          path: ${{runner.workspace}}/run_*.json
 
       - name: save files
         run:
-          cp run_*.json benchmark_results_new/
+          cp ${{runner.workspace}}/run_*.json benchmark_results_new/
           ls benchmark_results_new
 
       - name: install dependencies
