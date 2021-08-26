@@ -151,6 +151,8 @@ jobs:
         ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm
         ./run_helper.sh ../SW/riscv/build64/riscv_example
         ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example
+
+
   benchmark:
     strategy:
       matrix:
@@ -177,6 +179,7 @@ jobs:
       run: |
         ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}}
         mv run.json run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
@@ -184,9 +187,9 @@ jobs:
         path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: delete unnecessary artifacts
-    uses: geekyeggo/delete-artifact@v1
-    with:
-      name: |
+      uses: geekyeggo/delete-artifact@v1
+      with:
+        name: |
             etiss-Linux.tar
             etiss-Mac.tar
 
@@ -275,6 +278,21 @@ jobs:
         with:
           name: wiki_text.md
           path: results/wiki.md
+
+      - name: delete unnecessary artifacts
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: |
+            run_tcc_1.json
+            run_tcc_2.json
+            run_tcc_3.json
+            run_gcc_1.json
+            run_gcc_2.json
+            run_gcc_3.json
+            run_llvm_1.json
+            run_llvm_2.json
+            run_llvm_3.json
+
 
 
 
