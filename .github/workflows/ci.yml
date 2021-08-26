@@ -190,7 +190,7 @@ jobs:
 
 
   compare_mips:
-    needs: store_files
+    needs: benchmark
     runs-on: ubuntu-latest
 
     steps:
