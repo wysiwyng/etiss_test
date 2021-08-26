@@ -187,47 +187,6 @@ jobs:
         path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
 
-  store_files:
-
-    strategy:
-      matrix:
-        run-no: [1, 2, 3, 4, 5]
-        jit-engine: ["tcc", "gcc", "llvm"]
-
-
-
-    needs: benchmark
-    runs-on: ubuntu-latest
-
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: create directory for storing new benchmark results
-        run: |
-            rm -rf storeed_files
-            mkdir stored_files
-      - name: get files
-        uses: actions/download-artifact@v2
-        with:
-          name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-
-      - name: save files
-        run:
-            cp run_${{matrix.jit-engine}}_${{matrix.run-no}}.json stored_files/
-
-      - name: upload files
-        uses: actions/upload-artifact@v2
-        with:
-          name: results
-          path: stored_files/
-
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-                etiss-Linux.tar
-                etiss-Mac.tar
 
 
   compare_mips:
@@ -238,16 +197,17 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: create directory for storing results
+      - name: Fetch results
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Prepare files
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-
-      - name: download input_files
-        uses: actions/download-artifact@v2
-        with:
-          name: results
-          path: benchmark_results_new/
+          find artifacts -type f -name '*.json' -exec mv {} benchmark_results_new \;
+          find artifacts -type f -name '*.tar' -exec mv {} . \;
 
       - name: install dependencies
         run: pip install -r script/requirements.txt
@@ -324,6 +284,10 @@ jobs:
             run_llvm_1.json
             run_llvm_2.json
             run_llvm_3.json
+            etiss-Linux.tar
+            etiss-Mac.tar
+
+
 
 
 
