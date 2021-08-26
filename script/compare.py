@@ -60,7 +60,7 @@ KEY_TO_COMPARE= "mips" # the key from the input files to compare across engines
 MAX_HISTORY = 50 # max amount of past data to keep
 TOLERANCE = 0.2
 
-def calculating_performance_metrics(input_files, stats_file, wiki_md, issue_md, graph_file, current_hash, repo_url):
+def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, graph_file, current_hash, repo_url):
 
     current_hash = current_hash[:8] #truncating hash value to first 8 characters
 

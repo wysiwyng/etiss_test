@@ -224,7 +224,7 @@ jobs:
 
       - name: delete unnecessary artifacts
         uses: geekyeggo/delete-artifact@v1
-        with:
+         with:
           name: |
                 etiss-Linux.tar
                 etiss-Mac.tar
@@ -253,12 +253,12 @@ jobs:
         run: pip install -r script/requirements.txt
 
       - name: get old benchmark results
-        uses: actions/download-artifact@v2
+        uses: actions/checkout@v2
         with:
           ref: benchmark_results
           path: benchmark_results_old
 
-      - name: saving all results
+      - name: creating a directory results_ for storing wiki text, issue text and the graph
         run: |
             ls benchmark_results_new
             rm -rf results_
