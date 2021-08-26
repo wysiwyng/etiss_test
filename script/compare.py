@@ -10,6 +10,7 @@ from numpy.lib.arraypad import pad
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
+from itertools import chain, islice
 
 
 
@@ -94,42 +95,34 @@ def calculating_performance_metrics(input_files, stats_file, wiki_md, issue_md, 
     if not stats_file.exists(): # first time performance measured
         # filling up the stats dictionary with values from the current run
         for engine, value in runs_avg.items():
-            stats[engine]=defaultdict(list)
-            stats[engine][KEY_TO_COMPARE].append(value)
-            stats[engine][f"best_" + KEY_TO_COMPARE].append(value) # assuming first MIPS value as the best MIPS  value on first run
-            stats[engine][f"best_hash"].append(None) # ask
-            stats[engine][f"regressed_hash"].append(None) # ask
+            stats[engine] = {
+                KEY_TO_COMPARE: [(value, current_hash)],
+                "best_" + KEY_TO_COMPARE: value,
+                "best_hash" : current_hash,
+                "regressed_hash" : None
+            }
 
     else:
         with open(stats_file, 'r') as f: # load already existing previous statistics
            stats = json.load(f)
 
 
-    for engine, value in runs_avg.items():
+        for engine, value in runs_avg.items(): #comes within else
 
             if engine not in stats: # adding a new engine
-                stats[engine][KEY_TO_COMPARE] = value
-
-            elif stats_file.exists(): # a repition step, ask!
-
-                stats[engine][KEY_TO_COMPARE].append(value) # adding the MIPS from current run
-                stats[engine][KEY_TO_COMPARE] = stats[engine][KEY_TO_COMPARE][-MAX_HISTORY:] # truncating it to only MAX_ HISTORY
-
-                stats[engine]["hash_count"].append(current_hash) #storing the git commit hashes
-                stats[engine]["hash_count"]=stats[engine]["hash_count"][-MAX_HISTORY:]
-
-                best = stats[engine]["best_" + KEY_TO_COMPARE][0] # previous best MIPS
-
-                diff = value / best - 1 # difference with current MIPS
-                diffs[engine] = diff
+                stats[engine] = {
+                    KEY_TO_COMPARE: [(value, current_hash)],
+                    "best_" + KEY_TO_COMPARE: value,
+                    "best_hash" : current_hash,
+                    "regressed_hash" : None,
+                    "message": "no file to compare, assuming first entry"
+                }
 
             else:
-                stats[engine][KEY_TO_COMPARE] = stats[engine][KEY_TO_COMPARE][-MAX_HISTORY:] # for first time run. No need to add current run value; already done earlier
+                stats[engine][KEY_TO_COMPARE].append((value,current_hash)) # adding the MIPS from current run
+                stats[engine][KEY_TO_COMPARE]= stats[engine][KEY_TO_COMPARE][-MAX_HISTORY:] # for first time run. No need to add current run value; already done earlier
 
-                stats[engine]["hash_count"].append(current_hash)
-                stats[engine]["hash_count"]=stats[engine]["hash_count"][-MAX_HISTORY:]
-
-                best = stats[engine]["best_" + KEY_TO_COMPARE][0]
+                best = stats[engine]["best_" + KEY_TO_COMPARE]
 
                 diff = value / best - 1
                 diffs[engine] = diff
@@ -137,24 +130,23 @@ def calculating_performance_metrics(input_files, stats_file, wiki_md, issue_md, 
             # Comparison logic:
 
             if value > best:
-                stats[engine][f"best_" + KEY_TO_COMPARE][0] = value
-                stats[engine][f"best_hash"][0] = current_hash[:8]
+                stats[engine][f"best_" + KEY_TO_COMPARE] = value
+                stats[engine][f"best_hash"] = current_hash[:8]
                 messages[engine] = f'🥇 New best performance!'
 
             elif diff < -TOLERANCE:
-                if stats[engine]["regressed_hash"][0] is None:
-                    stats[engine]["regressed_hash"][0] = current_hash[:8]
+                if stats[engine]["regressed_hash"] is None:
+                    stats[engine]["regressed_hash"] = current_hash[:8]
                     messages[engine] = "Regression introduced"
                 else:
-                    messages[engine] = "Regressed since commit " + stats[engine]['regressed_hash'][0]
+                    messages[engine] = "Regressed since commit " + stats[engine]['regressed_hash']
 
             else:
-                if stats[engine]["regressed_hash"][0] is not None:
-                    stats[engine]["regressed_hash"][0] = None
+                if stats[engine]["regressed_hash"] is not None:
+                    stats[engine]["regressed_hash"] = None
                     messages[engine] = "Regression cleared"
                 else:
-                    messages[engine] = "No significant performance change" # regressed hash needs aa value? ask!
-                    #stats[engine]["regressed_hash"][0]=current_hash[:8]
+                    messages[engine] = "No significant performance change"
 
 
     # Template rendering for issue and Github Wiki:
@@ -178,8 +170,8 @@ def calculating_performance_metrics(input_files, stats_file, wiki_md, issue_md, 
         jit_engines.append(engine)
         best_mips.append(nested_dict["best_mips"])
         new_mips.append(nested_dict["mips"][-1])
-        best_hash.append(nested_dict["best_hash"][0])
-        best_hash_ = nested_dict["best_hash"][0]
+        best_hash.append(nested_dict["best_hash"])
+        best_hash_ = nested_dict["best_hash"]
         best_hash_link.append(f"[{best_hash_}](https://github.com/{repo_url}/commit/{best_hash_})")
 
     zip_form = zip(jit_engines, best_hash, best_hash_link, new_mips, message, best_mips, best_diff)
@@ -188,12 +180,16 @@ def calculating_performance_metrics(input_files, stats_file, wiki_md, issue_md, 
 
     # Graphical Analysis of Performance Metrics:
     fig = plt.figure(figsize=(20,20))
+
     for engine in stats:
-        print(stats[engine]["hash_count"])
-        plt.plot(stats[engine]["hash_count"], np.array(stats[engine][KEY_TO_COMPARE]), label=f'{KEY_TO_COMPARE}_{engine}')
+        commit_history=list(chain.from_iterable(islice(item, 1, 2) for item in stats[engine][KEY_TO_COMPARE]))
+        print(commit_history)
+        mips_value= list(chain.from_iterable(islice(item, 0, 1) for item in stats[engine][KEY_TO_COMPARE]))
+        print(mips_value)
+        plt.plot(commit_history, mips_value, label=f'{KEY_TO_COMPARE}_{engine}')
 
     plt.xticks(fontsize=15,rotation =45)
-    plt.title(f'MIPS values for the last  {len(stats[engine]["hash_count"])} commits', size=50)
+    plt.title(f'MIPS values for the last  {len(commit_history)} commits', size=50)
     plt.xlabel("Commit History", size=30)
     plt.ylabel("MIPS", size=30)
 
