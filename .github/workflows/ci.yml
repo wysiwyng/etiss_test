@@ -186,13 +186,6 @@ jobs:
         name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
         path: ${{runner.workspace}}/install/examples/bare_etiss_processor/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
-    - name: delete unnecessary artifacts
-      uses: geekyeggo/delete-artifact@v1
-      with:
-        name: |
-            etiss-Linux.tar
-            etiss-Mac.tar
-
 
   compare_mips:
     needs: benchmark
@@ -210,7 +203,7 @@ jobs:
       - name: download input_files
         uses: actions/download-artifact@v2
         with:
-          name: run_*.json
+          path: run_*.json
 
       - name: save files
         run:
