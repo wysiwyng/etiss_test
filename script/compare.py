@@ -5,8 +5,6 @@ from mako.template import Template
 from collections import defaultdict
 import statistics
 import matplotlib
-from numpy.core.fromnumeric import size
-from numpy.lib.arraypad import pad
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -189,7 +187,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
         plt.plot(commit_history, mips_value, label=f'{KEY_TO_COMPARE}_{engine}')
 
     plt.xticks(fontsize=15,rotation =45)
-    plt.title(f'MIPS values for the last  {len(commit_history)} commits', size=50)
+    plt.title(f'MIPS values for the last  {len(commit_history)} commit(s)', size=50)
     plt.xlabel("Commit History", size=30)
     plt.ylabel("MIPS", size=30)
 
