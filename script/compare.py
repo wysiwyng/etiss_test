@@ -45,7 +45,7 @@ ${message}
 <br/>
 <br/>
 % endfor
-**Graphical Analysis for the last 50 commits:**
+**Graphical Analysis for the last ${commit_history} commits:**
 <br/>
 <br/>
 [[performance_metrics.svg]]
@@ -181,9 +181,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
     for engine in stats:
         commit_history=list(chain.from_iterable(islice(item, 1, 2) for item in stats[engine][KEY_TO_COMPARE]))
-        print(commit_history)
         mips_value= list(chain.from_iterable(islice(item, 0, 1) for item in stats[engine][KEY_TO_COMPARE]))
-        print(mips_value)
         plt.plot(commit_history, mips_value, label=f'{KEY_TO_COMPARE}_{engine}')
 
     plt.xticks(fontsize=15,rotation =45)
@@ -209,7 +207,8 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
                     current_hash = current_hash,
                     current_hash_wiki = current_hash_wiki,
-                    zip_form = zip_list
+                    zip_form = zip_list,
+                    commit_history = commit_history
                 )
                 )
 
