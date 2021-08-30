@@ -149,12 +149,7 @@ int main(int argc, const char *argv[])
     float mips = (cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps / simulation_time / 1.0E6);
 
    //print out the simulation calculations via json file
-    const char *path_var="vp.stats_file_path/run.json";
 
-    if(valid_json_output_path==vp.stats_file_path)
-    {
-        writeFileJson(cpu_time, simulation_time, cpu_cycle, mips );
-    }
 
 
     try {
@@ -168,14 +163,16 @@ int main(int argc, const char *argv[])
     po::notify(vm);
 
     catch(exception& e) {
-        cerr << "error: " << e.what() << "\n";
-        return 1;
-    }
-    catch(...) {
-        cerr << "Exception of unknown type!\n";
-    return 1;
+        etiss::log(etiss::FATALERROR, std::string(e.what()) +
+                                               "\n\t Address not provided. \n");
     }
 
+    const char *path_var="vp.stats_file_path/run.json";
+
+    if(valid_json_output_path==vp.stats_file_path)
+    {
+        writeFileJson(cpu_time, simulation_time, cpu_cycle, mips );
+    }
 
     // print the exception code returned by the cpu core
     std::cout << "CPU0 exited with exception: 0x" << std::hex << exception << std::dec << ": "
