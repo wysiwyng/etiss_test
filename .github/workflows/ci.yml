@@ -177,13 +177,13 @@ jobs:
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
       run: |
         ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=../../../script/run.json
-        mv ../../../script/results/run.json ../../../script/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        mv ../../../script/run.json ../../../script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
         name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: script/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
 
 
