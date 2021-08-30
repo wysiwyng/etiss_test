@@ -156,17 +156,17 @@ int main(int argc, const char *argv[])
 
     po::options_description desc("Allowed options");
     desc.add_options()
-        ("vp.stats_file_path", po::value<std::string>(), "Path where the output json file gets stored after bare processor is run.")
+        ("vp.stats_file_path", po::value<std::string>(), "Path where the output json file gets stored after bare processor is run.");
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
-
+    }
     catch(exception& e) {
         etiss::log(etiss::FATALERROR, std::string(e.what()) +
                                                "\n\t Address not provided. \n");
     }
-    }
+
 
     const char *path_var="vp.stats_file_path/run.json";
 
