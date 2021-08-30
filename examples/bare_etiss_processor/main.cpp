@@ -43,7 +43,7 @@
 #include "TracePrinter.h"
 #include "etiss/SimpleMemSystem.h"
 #include "etiss/ETISS.h"
-void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, char *path_var );// Save the information in JSON format
+void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, std::string valid_json_output_path);// Save the information in JSON format
 
 int main(int argc, const char *argv[])
 {
@@ -94,6 +94,7 @@ int main(int argc, const char *argv[])
     // create a cpu core named core0 with the or1k architecture
     std::string CPUArchName = etiss::cfg().get<std::string>("arch.cpu", "");
     std::string valid_json_output_path = etiss::cfg().get<std::string>("vp.stats_file_path", "");
+    bool output_json =   etiss::cfg().get<bool>("output_json_stat", false);
 	etiss::uint64 startAddress = dsys.get_startaddr();
 	std::cout << "ELF start address: 0x" << std::hex << startAddress << std::dec << std::endl;
     std::shared_ptr<etiss::CPUCore> cpu = etiss::CPUCore::create(CPUArchName, "core0");
@@ -148,11 +149,9 @@ int main(int argc, const char *argv[])
 
    //print out the simulation calculations via json file
 
-    char *path_var="vp.stats_file_path/run.json";
-
-    if(valid_json_output_path==path_var)
+    if(output_json==true)
     {
-        writeFileJson(cpu_time, simulation_time, cpu_cycle, mips, *path_var);
+        writeFileJson(cpu_time, simulation_time, cpu_cycle, mips, valid_json_output_path);
     }
 
     // print the exception code returned by the cpu core
@@ -200,10 +199,10 @@ int main(int argc, const char *argv[])
         break;
     }
 }
-void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, char *path_var)// Save the information in JSON format
+void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, std::string valid_json_output_path)// Save the information in JSON format
 {
 
-     std::ofstream json_output(path_var);
+     std::ofstream json_output(valid_json_output_path);
      json_output << "{\"mips\": " << mips << ", \"Simulation_Time\": " << simulation_time << ", \"CPU_Time\": " << cpu_time << ", \"CPU_cycle\": " << cpu_cycle << "}" << std::endl;
      json_output.close();
 
