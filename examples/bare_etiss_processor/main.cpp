@@ -43,7 +43,7 @@
 #include "TracePrinter.h"
 #include "etiss/SimpleMemSystem.h"
 #include "etiss/ETISS.h"
-void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips );// Save the information in JSON format
+void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, const char *path_var );// Save the information in JSON format
 
 int main(int argc, const char *argv[])
 {
@@ -152,7 +152,7 @@ int main(int argc, const char *argv[])
 
     if(valid_json_output_path==path_var)
     {
-        writeFileJson(cpu_time, simulation_time, cpu_cycle, mips );
+        writeFileJson(cpu_time, simulation_time, cpu_cycle, mips, *path_var);
     }
 
     // print the exception code returned by the cpu core
