@@ -222,7 +222,7 @@ int main(int argc, const char *argv[])
         break;
     }
 }
-void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, const char *path_var )// Save the information in JSON format
+void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, const char *path_var)// Save the information in JSON format
 {
 
      std::ofstream json_output(path_var);
