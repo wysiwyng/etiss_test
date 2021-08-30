@@ -162,7 +162,7 @@ int main(int argc, const char *argv[])
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
     }
-    catch(exception& e) {
+    catch(std::exception& e) {
         etiss::log(etiss::FATALERROR, std::string(e.what()) +
                                                "\n\t Address not provided. \n");
     }
@@ -170,7 +170,7 @@ int main(int argc, const char *argv[])
 
     const char *path_var="vp.stats_file_path/run.json";
 
-    if(valid_json_output_path==vp.stats_file_path)
+    if(valid_json_output_path==path_var)
     {
         writeFileJson(cpu_time, simulation_time, cpu_cycle, mips );
     }
