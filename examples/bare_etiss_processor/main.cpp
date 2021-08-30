@@ -166,6 +166,7 @@ int main(int argc, const char *argv[])
         etiss::log(etiss::FATALERROR, std::string(e.what()) +
                                                "\n\t Address not provided. \n");
     }
+    }
 
     const char *path_var="vp.stats_file_path/run.json";
 
