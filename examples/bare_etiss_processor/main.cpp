@@ -151,7 +151,7 @@ int main(int argc, const char *argv[])
    //print out the simulation calculations via json file
 
 
-
+    namespace po = boost::program_options;
     try {
 
     po::options_description desc("Allowed options");
