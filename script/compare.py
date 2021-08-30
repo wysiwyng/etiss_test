@@ -22,11 +22,12 @@ ISSUE_TEMPLATE = r'''
 
 **Status** (for commit ${current_hash})**:**
 
-${jit_engine_name} jit engine's performance message: ${message}\
+**${jit_engine_name} jit engine's performance:** ${message}
 
-**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}\
+**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}
 
-**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff:.2%}'}\
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff:.2%}'}
+
 
 
 % endfor
