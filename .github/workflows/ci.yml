@@ -143,14 +143,14 @@ jobs:
       if: matrix.config.name == 'Linux'
       shell: bash
       run: |
-        ./run_helper.sh ../SW/riscv/build/riscv_example --vp.stats_file_path=../../../script/results/run.json
-        ./run_helper.sh ../SW/riscv/build/riscv_example gcc --vp.stats_file_path=../../../script/results/run.json
-        ./run_helper.sh ../SW/riscv/build/riscv_example llvm --vp.stats_file_path=../../../script/results/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example --vp.stats_file_path=../../../script/results/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example gcc --vp.stats_file_path=../../../script/results/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm --vp.stats_file_path=../../../script/results/run.json
-        ./run_helper.sh ../SW/riscv/build64/riscv_example --vp.stats_file_path=../../../script/results/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example --vp.stats_file_path=../../../script/results/run.json
+        ./run_helper.sh ../SW/riscv/build/riscv_example --vp.stats_file_path=../../../script/run.json
+        ./run_helper.sh ../SW/riscv/build/riscv_example gcc --vp.stats_file_path=../../../script/run.json
+        ./run_helper.sh ../SW/riscv/build/riscv_example llvm --vp.stats_file_path=../../../script/run.json
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example --vp.stats_file_path=../../../script/run.json
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example gcc --vp.stats_file_path=../../../script/run.json
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm --vp.stats_file_path=../../../script/run.json
+        ./run_helper.sh ../SW/riscv/build64/riscv_example --vp.stats_file_path=../../../script/run.json
+        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example --vp.stats_file_path=../../../script/run.json
 
   benchmark:
     strategy:
@@ -176,7 +176,7 @@ jobs:
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
       run: |
-        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=../../../script/results/run.json
+        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=../../../script/run.json
         mv ../../../script/results/run.json ../../../script/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
