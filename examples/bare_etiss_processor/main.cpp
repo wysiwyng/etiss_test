@@ -43,8 +43,6 @@
 #include "TracePrinter.h"
 #include "etiss/SimpleMemSystem.h"
 #include "etiss/ETISS.h"
-#include <boost/program_options.hpp>
-#include <exception>
 void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips );// Save the information in JSON format
 
 int main(int argc, const char *argv[])
@@ -149,24 +147,6 @@ int main(int argc, const char *argv[])
     float mips = (cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps / simulation_time / 1.0E6);
 
    //print out the simulation calculations via json file
-
-
-    namespace po = boost::program_options;
-    try {
-
-    po::options_description desc("Allowed options");
-    desc.add_options()
-        ("vp.stats_file_path", po::value<std::string>(), "Path where the output json file gets stored after bare processor is run.");
-
-    po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-    }
-    catch(std::exception& e) {
-        etiss::log(etiss::FATALERROR, std::string(e.what()) +
-                                               "\n\t Address not provided. \n");
-    }
-
 
     const char *path_var="vp.stats_file_path/run.json";
 
