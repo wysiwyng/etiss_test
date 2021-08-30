@@ -143,15 +143,14 @@ jobs:
       if: matrix.config.name == 'Linux'
       shell: bash
       run: |
-        ./run_helper.sh ../SW/riscv/build/riscv_example --vp.stats_file_path=../../../script/run.json
-        ./run_helper.sh ../SW/riscv/build/riscv_example gcc --vp.stats_file_path=../../../script/run.json
-        ./run_helper.sh ../SW/riscv/build/riscv_example llvm --vp.stats_file_path=../../../script/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example --vp.stats_file_path=../../../script/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example gcc --vp.stats_file_path=../../../script/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm --vp.stats_file_path=../../../script/run.json
-        ./run_helper.sh ../SW/riscv/build64/riscv_example --vp.stats_file_path=../../../script/run.json
-        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example --vp.stats_file_path=../../../script/run.json
-
+        ./run_helper.sh ../SW/riscv/build/riscv_example
+        ./run_helper.sh ../SW/riscv/build/riscv_example gcc
+        ./run_helper.sh ../SW/riscv/build/riscv_example llvm
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example gcc
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm
+        ./run_helper.sh ../SW/riscv/build64/riscv_example
+        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example
   benchmark:
     strategy:
       matrix:
@@ -176,14 +175,14 @@ jobs:
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
       run: |
-        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=../../../script/run.json
-        mv ../../../script/run.json ../../../script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/script/run.json
+        mv ${{runner.workspace}}/script/run.json ${{runner.workspace}}/script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
         name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
 
 
