@@ -43,6 +43,8 @@
 #include "TracePrinter.h"
 #include "etiss/SimpleMemSystem.h"
 #include "etiss/ETISS.h"
+#include <boost/program_options.hpp>
+#include <exception>
 void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips );// Save the information in JSON format
 
 int main(int argc, const char *argv[])
@@ -89,11 +91,11 @@ int main(int argc, const char *argv[])
         }
     }
 
+
     std::cout << "  Setting up CPUCore" << std::endl;
     // create a cpu core named core0 with the or1k architecture
     std::string CPUArchName = etiss::cfg().get<std::string>("arch.cpu", "");
-    bool output_json =   etiss::cfg().get<bool>("output_json_stat", false);
-    //output_json = etiss::cfg().isSet("results", false)
+    std::string valid_json_output_path = etiss::cfg().get<std::string>("vp.stats_file_path", "");
 	etiss::uint64 startAddress = dsys.get_startaddr();
 	std::cout << "ELF start address: 0x" << std::hex << startAddress << std::dec << std::endl;
     std::shared_ptr<etiss::CPUCore> cpu = etiss::CPUCore::create(CPUArchName, "core0");
@@ -147,12 +149,32 @@ int main(int argc, const char *argv[])
     float mips = (cpu_state->cpuTime_ps / (float)cpu_state->cpuCycleTime_ps / simulation_time / 1.0E6);
 
    //print out the simulation calculations via json file
+    const char *path_var="vp.stats_file_path/run.json";
 
-    if(output_json == true)
+    if(valid_json_output_path==vp.stats_file_path)
     {
         writeFileJson(cpu_time, simulation_time, cpu_cycle, mips );
     }
 
+
+    try {
+
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("vp.stats_file_path", po::value<std::string>(), "Path where the output json file gets stored after bare processor is run.")
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    catch(exception& e) {
+        cerr << "error: " << e.what() << "\n";
+        return 1;
+    }
+    catch(...) {
+        cerr << "Exception of unknown type!\n";
+    return 1;
+    }
 
 
     // print the exception code returned by the cpu core
@@ -200,12 +222,14 @@ int main(int argc, const char *argv[])
         break;
     }
 }
-void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips )// Save the information in JSON format
+void writeFileJson(float cpu_time, float simulation_time, float cpu_cycle, float mips, const char *path_var )// Save the information in JSON format
 {
-     std::ofstream json_output("run.json");
+
+     std::ofstream json_output(path_var);
      json_output << "{\"mips\": " << mips << ", \"Simulation_Time\": " << simulation_time << ", \"CPU_Time\": " << cpu_time << ", \"CPU_cycle\": " << cpu_cycle << "}" << std::endl;
      json_output.close();
 
 }
 
-//hello, testing for pull request in github
+
+

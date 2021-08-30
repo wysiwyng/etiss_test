@@ -143,14 +143,14 @@ jobs:
       if: matrix.config.name == 'Linux'
       shell: bash
       run: |
-        ./run_helper.sh ../SW/riscv/build/riscv_example
-        ./run_helper.sh ../SW/riscv/build/riscv_example gcc
-        ./run_helper.sh ../SW/riscv/build/riscv_example llvm
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example gcc
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm
-        ./run_helper.sh ../SW/riscv/build64/riscv_example
-        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example
+        ./run_helper.sh ../SW/riscv/build/riscv_example --vp.stats_file_path= ../../script/results
+        ./run_helper.sh ../SW/riscv/build/riscv_example gcc --vp.stats_file_path= ../../script/results
+        ./run_helper.sh ../SW/riscv/build/riscv_example llvm --vp.stats_file_path= ../../script/results
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example --vp.stats_file_path= ../../script/results
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example gcc --vp.stats_file_path= ../../script/results
+        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm --vp.stats_file_path= ../../script/results
+        ./run_helper.sh ../SW/riscv/build64/riscv_example --vp.stats_file_path= ../../script/results
+        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example --vp.stats_file_path= ../../script/results
 
 
   benchmark:

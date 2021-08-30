@@ -14,7 +14,7 @@ from itertools import chain, islice
 
 
 
-#template to be published under an issue as a comment
+### Template to be published under an issue as a comment ###
 ISSUE_TEMPLATE = r'''
 **Performance Statistics**
 
@@ -33,7 +33,7 @@ ${jit_engine_name} jit engine's performance message: ${message}\
 
 <sub>This comment was created automatically, please do not change!</sub>
 '''
-#template to be published in Github wiki
+### Template to be published in Github wiki ###
 WIKI_TEMPLATE = r'''
 % for jit_engine_name, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff in zip_form:
 **Status for the ${jit_engine_name} Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
@@ -60,9 +60,9 @@ TOLERANCE = 0.2
 
 def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, graph_file, current_hash, repo_url):
 
-    current_hash = current_hash[:8] #truncating hash value to first 8 characters
+    current_hash = current_hash[:8] # truncating hash value to first 8 characters
 
-    ### Averaging out the MIPS and Simulation Time for the given number of runs:###
+    ### Averaging out the MIPS for the given number of runs:###
 
     runs = defaultdict(list)
     # get engine name and run no from filename of input
@@ -81,7 +81,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
     ### Comparing the MIPS value of the current run with previous best MIPS: ###
 
-    #instantiating dictionaries and lists
+    # instantiating dictionaries and lists
 
     messages = dict() # to store messages of the performance metric of the corresponding engine
     stats = defaultdict(dict) # store output results in a dict of dicts.
@@ -105,7 +105,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
            stats = json.load(f)
 
 
-        for engine, value in runs_avg.items(): #comes within else
+        for engine, value in runs_avg.items():
 
             if engine not in stats: # adding a new engine
                 stats[engine] = {
@@ -118,7 +118,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
             else:
                 stats[engine][KEY_TO_COMPARE].append((value,current_hash)) # adding the MIPS from current run
-                stats[engine][KEY_TO_COMPARE]= stats[engine][KEY_TO_COMPARE][-MAX_HISTORY:] # for first time run. No need to add current run value; already done earlier
+                stats[engine][KEY_TO_COMPARE]= stats[engine][KEY_TO_COMPARE][-MAX_HISTORY:]
 
                 best = stats[engine]["best_" + KEY_TO_COMPARE]
 
@@ -185,6 +185,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
         plt.plot(commit_history, mips_value, label=f'{KEY_TO_COMPARE}_{engine}')
 
     plt.xticks(fontsize=15,rotation =45)
+    plt.yticks(fontsize=20)
     plt.title(f'MIPS values for the last  {len(commit_history)} commit(s)', size=50)
     plt.xlabel("Commit History", size=30)
     plt.ylabel("MIPS", size=30)
@@ -208,7 +209,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                     current_hash = current_hash,
                     current_hash_wiki = current_hash_wiki,
                     zip_form = zip_list,
-                    commit_history = commit_history
+                    commit_history = len(commit_history)
                 )
                 )
 
