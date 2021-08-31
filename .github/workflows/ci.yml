@@ -172,17 +172,21 @@ jobs:
       working-directory: ${{runner.workspace}}
       run: tar -xf etiss.tar
 
+    - name: create directory to store results
+      working-directory: ${{runner.workspace}}
+      run: mkdir ${{runner.workspace}}/results
+
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor
       run: |
-        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/script/run.json
-        mv ${{runner.workspace}}/script/run.json ${{runner.workspace}}/script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run.json
+        mv ${{runner.workspace}}/results/run.json ${{runner.workspace}}/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
         name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: ${{runner.workspace}}/script/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
 
 
