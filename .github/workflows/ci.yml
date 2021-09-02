@@ -52,6 +52,7 @@ jobs:
         wget https://static.dev.sifive.com/dev-tools/$TC_NAME${{ matrix.config.tc-ext }}
         ${{ matrix.config.unpack }} $TC_NAME${{ matrix.config.tc-ext }}
         mv $TC_NAME riscv-tc
+
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
 
@@ -113,8 +114,6 @@ jobs:
         name: etiss-${{matrix.config.name}}.tar
         path: ${{runner.workspace}}/etiss.tar
 
-
-
   test:
     strategy:
       matrix:
@@ -151,6 +150,7 @@ jobs:
         ./run_helper.sh ../SW/riscv_cpp/build/riscv_example llvm
         ./run_helper.sh ../SW/riscv/build64/riscv_example
         ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example
+
   benchmark:
     strategy:
       matrix:
@@ -161,7 +161,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
     - name: Fetch Compiled System
       uses: actions/download-artifact@v2
       with:
@@ -188,15 +187,11 @@ jobs:
         name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
         path: ${{runner.workspace}}/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
-
-
-
   compare_mips:
     needs: benchmark
     runs-on: ubuntu-latest
 
     steps:
-
       - uses: actions/checkout@v2
 
       - name: Fetch results
@@ -243,7 +238,6 @@ jobs:
           publish_branch: benchmark_results
           enable_jekyll: true
 
-
       - name: uploading benchmark_results
         uses: actions/upload-artifact@v2
         with:
@@ -257,8 +251,6 @@ jobs:
           name: performance_metrics.svg
           path: results_/performance_metrics.svg
 
-
-
       - name: Upload comment text
         uses: actions/upload-artifact@v2
         with:
@@ -266,25 +258,11 @@ jobs:
 
           path: results_/issue.md
 
-
       - name: Upload wiki text
         uses: actions/upload-artifact@v2
         with:
           name: wiki.md
           path: results_/wiki.md
-
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-            stats_file.json
-
-
-
-
-
-
-
 
   display-push:
     needs: compare_mips
@@ -371,19 +349,6 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-            wiki.md
-            issue.md
-            performance_metrics.svg
-
-
-
-
-
-
   display-wiki:
     needs: compare_mips
     runs-on: ubuntu-latest
@@ -416,12 +381,9 @@ jobs:
           git commit -m "update perf"
           git push
 
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
+      - name: delete all artifacts
+      - uses: kolpav/purge-artifacts-action@v1
         with:
-          name: |
-            wiki.md
-            issue.md
-            performance_metrics.svg
-
+          token: ${{ secrets.GITHUB_TOKEN }}
+          expire-in: 0
 

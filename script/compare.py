@@ -1,5 +1,4 @@
 from itertools import chain, islice
-import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import json
@@ -8,7 +7,6 @@ from mako.template import Template
 from collections import defaultdict
 import statistics
 import matplotlib
-import re
 matplotlib.use('Agg')
 
 
@@ -64,11 +62,12 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
         filepath = Path(input_files[index])
         try:
             placeholder, engine, run_no = filepath.stem.split(
-            "_")
+                "_")
             run_no = int(run_no)
             placeholder == "run"
         except:
-            print("Filename format not valid. Please follow the format: run_<engine name>_<run no>.json !")
+            print(
+                "Filename format not valid. Please follow the format: run_<engine name>_<run no>.json !")
         with open(filepath, 'r') as f:
             in_dict = json.load(f)
         runs[engine].append(in_dict[KEY_TO_COMPARE])
@@ -150,7 +149,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     output_files = [issue_md, wiki_md]
     best_hash = []
     best_hash_link = []
-    best_value_for_KEY_TO_COMPARE = [] #key to compare
+    best_value_for_KEY_TO_COMPARE = []
     new_value_for_KEY_TO_COMPARE = []
     jit_engines = []
     message = messages.values()
@@ -159,9 +158,10 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
     for engine, nested_dict in stats.items():
         jit_engines.append(engine)
-        best_value_for_KEY_TO_COMPARE.append(nested_dict["best_"+KEY_TO_COMPARE])
+        best_value_for_KEY_TO_COMPARE.append(
+            nested_dict["best_"+KEY_TO_COMPARE])
         new_value_for_KEY_TO_COMPARE.append(list(chain.from_iterable(islice(item, 0, 1)
-                        for item in nested_dict[KEY_TO_COMPARE]))[-1])
+                                                                     for item in nested_dict[KEY_TO_COMPARE]))[-1])
         best_hash.append(nested_dict["best_hash"])
         best_hash_ = nested_dict["best_hash"]
         best_hash_link.append(
@@ -172,7 +172,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     zip_list = list(zip_form)
 
     # Graphical Analysis of Performance Metrics:
-    fig = plt.figure(figsize=(20, 20)) #height 2/3 of width
+    fig = plt.figure(figsize=(13.5, 20))
 
     for engine in stats:
         commit_history = list(chain.from_iterable(islice(item, 1, 2)
@@ -188,7 +188,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
         f'MIPS values for the last  {len(commit_history)} commit(s)', size=50)
     plt.xlabel("Commit History", size=30)
     plt.ylabel("MIPS", size=30)
-    plt.legend(loc="best", prop={'size': 30}) #outside of graph
+    plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), prop={'size': 30})
 
     # Save figure
     fig.savefig(graph_file, bbox_inches='tight', pad_inches=0.5)
