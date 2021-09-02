@@ -94,7 +94,7 @@ int main(int argc, const char *argv[])
     // create a cpu core named core0 with the or1k architecture
     std::string CPUArchName = etiss::cfg().get<std::string>("arch.cpu", "");
     std::string valid_json_output_path = etiss::cfg().get<std::string>("vp.stats_file_path", "");
-    bool output_json =   etiss::cfg().get<bool>("output_json_stat", false);
+    bool output_json =   etiss::cfg().isSet("vp.stats_file_path");
 	etiss::uint64 startAddress = dsys.get_startaddr();
 	std::cout << "ELF start address: 0x" << std::hex << startAddress << std::dec << std::endl;
     std::shared_ptr<etiss::CPUCore> cpu = etiss::CPUCore::create(CPUArchName, "core0");

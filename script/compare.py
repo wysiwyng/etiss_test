@@ -8,6 +8,7 @@ from mako.template import Template
 from collections import defaultdict
 import statistics
 import matplotlib
+import re
 matplotlib.use('Agg')
 
 
@@ -18,9 +19,7 @@ ISSUE_TEMPLATE = r'''
 % for jit_engine_name, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff in zip_form:
 
 **Status for the ${jit_engine_name} Just-In-Time Engine** (for commit ${current_hash})**:** ${message}
-
 **Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}
-
 **Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff:.2%}'}
 
 % endfor
@@ -63,9 +62,13 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     # input files should have the format "run_<engine name>_<run no>.json"
     for index, fname in enumerate(input_files):
         filepath = Path(input_files[index])
-        placeholder, engine, run_no = filepath.stem.split(
-            "_")  # fails if format isn't correct
-        run_no = int(run_no)
+        try:
+            placeholder, engine, run_no = filepath.stem.split(
+            "_")
+            run_no = int(run_no)
+            placeholder == "run"
+        except:
+            print("Filename format not valid. Please follow the format: run_<engine name>_<run no>.json !")
         with open(filepath, 'r') as f:
             in_dict = json.load(f)
         runs[engine].append(in_dict[KEY_TO_COMPARE])
@@ -117,27 +120,26 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                 diff = value / best - 1
                 diffs[engine] = diff
 
-            # Comparison logic:
+                # Comparison logic:
+                if value > best:
+                    stats[engine][f"best_" + KEY_TO_COMPARE] = value
+                    stats[engine][f"best_hash"] = current_hash[:8]
+                    messages[engine] = f'🥇 New best performance!'
 
-            if value > best:
-                stats[engine][f"best_" + KEY_TO_COMPARE] = value
-                stats[engine][f"best_hash"] = current_hash[:8]
-                messages[engine] = f'🥇 New best performance!'
+                elif diff < -TOLERANCE:
+                    if stats[engine]["regressed_hash"] is None:
+                        stats[engine]["regressed_hash"] = current_hash[:8]
+                        messages[engine] = "Regression introduced"
+                    else:
+                        messages[engine] = "Regressed since commit " + \
+                            stats[engine]['regressed_hash']
 
-            elif diff < -TOLERANCE:
-                if stats[engine]["regressed_hash"] is None:
-                    stats[engine]["regressed_hash"] = current_hash[:8]
-                    messages[engine] = "Regression introduced"
                 else:
-                    messages[engine] = "Regressed since commit " + \
-                        stats[engine]['regressed_hash']
-
-            else:
-                if stats[engine]["regressed_hash"] is not None:
-                    stats[engine]["regressed_hash"] = None
-                    messages[engine] = "Regression cleared"
-                else:
-                    messages[engine] = "No significant performance change"
+                    if stats[engine]["regressed_hash"] is not None:
+                        stats[engine]["regressed_hash"] = None
+                        messages[engine] = "Regression cleared"
+                    else:
+                        messages[engine] = "No significant performance change"
 
     # Template rendering for issue and Github Wiki:
     issue_template = Template(text=ISSUE_TEMPLATE)
@@ -148,17 +150,17 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     output_files = [issue_md, wiki_md]
     best_hash = []
     best_hash_link = []
-    best_mips = []
-    new_mips = []
+    best_value_for_KEY_TO_COMPARE = [] #key to compare
+    new_value_for_KEY_TO_COMPARE = []
     jit_engines = []
     message = messages.values()
-    best_diff = diffs.values()
+    best_difference = diffs.values()
     current_hash_wiki = f"[{current_hash}](https://github.com/{repo_url}/commit/{current_hash})"
 
     for engine, nested_dict in stats.items():
         jit_engines.append(engine)
-        best_mips.append(nested_dict["best_mips"])
-        new_mips.append(list(chain.from_iterable(islice(item, 0, 1)
+        best_value_for_KEY_TO_COMPARE.append(nested_dict["best_"+KEY_TO_COMPARE])
+        new_value_for_KEY_TO_COMPARE.append(list(chain.from_iterable(islice(item, 0, 1)
                         for item in nested_dict[KEY_TO_COMPARE]))[-1])
         best_hash.append(nested_dict["best_hash"])
         best_hash_ = nested_dict["best_hash"]
@@ -166,11 +168,11 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
             f"[{best_hash_}](https://github.com/{repo_url}/commit/{best_hash_})")
 
     zip_form = zip(jit_engines, best_hash, best_hash_link,
-                   new_mips, message, best_mips, best_diff)
+                   new_value_for_KEY_TO_COMPARE, message, best_value_for_KEY_TO_COMPARE, best_difference)
     zip_list = list(zip_form)
 
     # Graphical Analysis of Performance Metrics:
-    fig = plt.figure(figsize=(20, 20))
+    fig = plt.figure(figsize=(20, 20)) #height 2/3 of width
 
     for engine in stats:
         commit_history = list(chain.from_iterable(islice(item, 1, 2)
@@ -186,7 +188,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
         f'MIPS values for the last  {len(commit_history)} commit(s)', size=50)
     plt.xlabel("Commit History", size=30)
     plt.ylabel("MIPS", size=30)
-    plt.legend(loc="best", prop={'size': 30})
+    plt.legend(loc="best", prop={'size': 30}) #outside of graph
 
     # Save figure
     fig.savefig(graph_file, bbox_inches='tight', pad_inches=0.5)
@@ -201,7 +203,6 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
         for index, fname in enumerate(output_files):
             with open(fname, 'w') as fw:
                 fw.write(templates[index].render(
-
                     current_hash=current_hash,
                     current_hash_wiki=current_hash_wiki,
                     zip_form=zip_list,
