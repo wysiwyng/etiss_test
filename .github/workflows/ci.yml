@@ -382,7 +382,7 @@ jobs:
           git push
 
       - name: delete all artifacts
-      - uses: kolpav/purge-artifacts-action@v1
+        uses: kolpav/purge-artifacts-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           expire-in: 0
