@@ -2,6 +2,7 @@ from itertools import chain, islice
 import matplotlib.pyplot as plt
 import argparse
 import json
+import re
 from pathlib import Path
 from mako.template import Template
 from collections import defaultdict
@@ -60,14 +61,16 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     # input files should have the format "run_<engine name>_<run no>.json"
     for index, fname in enumerate(input_files):
         filepath = Path(input_files[index])
-        try:
-            placeholder, engine, run_no = filepath.stem.split(
+        placeholder, engine, run_no = filepath.stem.split(
                 "_")
-            run_no = int(run_no)
+        match = re.search("^\d+$", run_no)
+        try:
+            run_no = match.group(0)
             placeholder == "run"
         except:
             print(
                 "Filename format not valid. Please follow the format: run_<engine name>_<run no>.json !")
+        run_no = int(run_no)
         with open(filepath, 'r') as f:
             in_dict = json.load(f)
         runs[engine].append(in_dict[KEY_TO_COMPARE])

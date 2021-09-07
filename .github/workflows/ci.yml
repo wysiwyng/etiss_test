@@ -361,13 +361,11 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
-      # - name: delete unnecessary artifacts
-      #   uses: geekyeggo/delete-artifact@v1
-      #   with:
-      #     name: |
-      #       wiki.md
-      #       issue.md
-      #       performance_metrics.svg
+      - name: Delete Artifacts
+        uses: jimschubert/delete-artifacts-action@v1
+        with:
+          min_bytes: '0'
+
 
   display-wiki:
     needs: compare_mips
@@ -399,6 +397,8 @@ jobs:
           git commit -m "update perf"
           git push
 
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
+      - name: Delete Artifacts
+        uses: jimschubert/delete-artifacts-action@v1
+        with:
+          min_bytes: '0'
 
