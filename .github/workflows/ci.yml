@@ -269,11 +269,11 @@ jobs:
           name: wiki.md
           path: results_/wiki.md
 
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-            stats_file.json
+      # - name: delete unnecessary artifacts
+      #   uses: geekyeggo/delete-artifact@v1
+      #   with:
+      #     name: |
+      #       stats_file.json
 
 
   display-push:
@@ -361,13 +361,13 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-            wiki.md
-            issue.md
-            performance_metrics.svg
+      # - name: delete unnecessary artifacts
+      #   uses: geekyeggo/delete-artifact@v1
+      #   with:
+      #     name: |
+      #       wiki.md
+      #       issue.md
+      #       performance_metrics.svg
 
   display-wiki:
     needs: compare_mips
@@ -401,10 +401,4 @@ jobs:
 
       - name: delete unnecessary artifacts
         uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-            wiki.md
-            issue.md
-            performance_metrics.svg
-
 
