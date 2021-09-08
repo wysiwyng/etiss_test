@@ -397,7 +397,22 @@ jobs:
           git commit -m "update perf"
           git push
 
-      - name: Delete Artifacts
-        uses: actions/delete-artifact@v2
+      # - name: Delete Artifacts
+      #   uses: actions/delete-artifact@v2
+
+    # Demonstrate how to delete by name
+  delete-artifact:
+    needs: display-wiki
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Delete Artifact
+        uses: jimschubert/delete-artifacts-action@v1
+        with:
+          min_bytes: '0'
 
 
