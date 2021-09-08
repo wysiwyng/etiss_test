@@ -398,7 +398,6 @@ jobs:
           git push
 
       - name: Delete Artifacts
-        uses: jimschubert/delete-artifacts-action@v1
-        with:
-          min_bytes: '0'
+        uses: actions/delete-artifacts-action@v2
+
 
