@@ -41,8 +41,6 @@ IF(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     MESSAGE(FATAL_ERROR "In-source builds are not allowed because they pollute the source tree with temporary files that might have to be deleted later. Please create a separate folder in which you run CMake.")
 ENDIF()
 
-set(ETISS_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "ETISS build location")
-
 # Declare ETISS version
 set(ETISS_VERSION_MAJOR 0)
 set(ETISS_VERSION_MINOR 8)
@@ -242,6 +240,9 @@ set(ETISS_DOX_LOCATIONS ${ETISS_DOX_LOCATIONS} ${PROJECT_BINARY_DIR}/include_c)
 set(ETISS_DOX_LOCATIONS ${ETISS_DOX_LOCATIONS} ${PROJECT_SOURCE_DIR}/include)
 set(ETISS_DOX_LOCATIONS ${ETISS_DOX_LOCATIONS} ${PROJECT_SOURCE_DIR}/include_c)
 set(ETISS_DOX_LOCATIONS ${ETISS_DOX_LOCATIONS} ${PROJECT_SOURCE_DIR}/src)
+set(ETISS_DOX_LOCATIONS ${ETISS_DOX_LOCATIONS} ${PROJECT_SOURCE_DIR}/ArchImpl)
+set(ETISS_DOX_LOCATIONS ${ETISS_DOX_LOCATIONS} ${PROJECT_SOURCE_DIR}/JITImpl)
+set(ETISS_DOX_LOCATIONS ${ETISS_DOX_LOCATIONS} ${PROJECT_SOURCE_DIR}/PluginImpl)
  #if doxygen is available generate documentation
 if(DOXYGEN_FOUND)
     string(REPLACE ";" " " P_ETISS_DOX_LOCATIONS "${ETISS_DOX_LOCATIONS}")
@@ -289,16 +290,6 @@ FILES_MATCHING
 
 # copy cmake files
 set(INSTALL_CMAKE_DIR lib/CMake/ETISS CACHE PATH "Installation directory for CMake files")
-
-# to allow linking with ETISS lib in build-tree
-# copying headers
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${ETISS_BINARY_DIR}/include/)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/include_c/ DESTINATION ${ETISS_BINARY_DIR}/include/)
-file(GLOB JIT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/jitlibs/**/*.h)
-file(COPY ${JIT_HEADERS} DESTINATION ${ETISS_BINARY_DIR}/include/jit/etiss/jit/)
-# plugins/list.txt file
-file(WRITE ${ETISS_BINARY_DIR}/lib/plugins/list.txt)
-
 
 
 ############# TARGETS ##############

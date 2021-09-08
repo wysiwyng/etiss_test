@@ -402,11 +402,8 @@ void etiss_loadIni(std::string fileName)
 
     SI_Error rc = po_simpleIni->LoadFile(fileName.c_str());
     if (rc < 0)
-    {
         std::cout << "Initializer::loadIni(): Failed to load Ini: " << fileName << std::endl;
-        return;
-    }
-        else
+    else
         std::cout << "Initializer::loadIni(): Ini sucessfully loaded " << fileName << std::endl;
 }
 
@@ -422,13 +419,9 @@ void etiss::Initializer::loadIni(std::list<std::string> *files)
     // load file
     for (auto it_files : *files)
     {
- // the check above is sufficient no need for this / checked for previous cases false and last true gives true not the case based on files structure
+        // the check above is sufficient no need for this / checked for previous cases false and last true gives true not the case based on files structure
         etiss_loadIni(it_files);
-
     }
-
-
-
 }
 
 void etiss_loadIniConfigs()
@@ -515,13 +508,17 @@ void etiss_loadIniConfigs()
                     }
                     else if (std::string(iter_section.pItem) == "BoolConfigurations")
                     {
-                        etiss::cfg().set<bool>(iter_key.pItem,
-                                            po_simpleIni->GetBoolValue(iter_section.pItem, iter_key.pItem));
+                        std::string itemval = iter_value.pItem;
+                        bool val;
+                        std::istringstream(itemval) >> std::boolalpha >> val;
+                        etiss::cfg().set<bool>(iter_key.pItem, val);
                     }
                     else if (std::string(iter_section.pItem) == "IntConfigurations") // already load!
                     {
-                        etiss::cfg().set<long long>(iter_key.pItem,
-                                                    po_simpleIni->GetDoubleValue(iter_section.pItem, iter_key.pItem));
+                        std::string itemval = iter_value.pItem;
+                        std::size_t sz = 0;
+                        double val = std::stod(itemval, &sz);
+                        etiss::cfg().set<long long>(iter_key.pItem, val);
                         // we use double, as long could have only 32 Bit (e.g. on Windows)
                         // and long long is not offered by the ini library
                     }
@@ -543,14 +540,7 @@ void etiss_loadIniConfigs()
                 if (values.size() > 1)
                 {
                     warning = true;
-                    if (std::string{ iter_section.pItem } == "StringConfigurations")
-                    {
                         message << "   Multi values. Take only LAST one!";
-                    }
-                    else
-                    {
-                        message << "   Multi values. Take only FIRST one!";
-                    }
                 }
             }
             // add message to etiss log.
@@ -648,7 +638,10 @@ void etiss::Initializer::loadIniPlugins(std::shared_ptr<etiss::CPUCore> cpu)
             po_simpleIni->GetAllValues(iter_section.pItem, iter_key.pItem, values);
             if (!etiss::cfg().isSet(iter_key.pItem))
             {
-                std::cout << iter_key.pItem << " not set on the command line. Checking in .ini file.\n";
+                std::stringstream ss;
+                ss << iter_key.pItem << " not set on the command line. Checking in .ini file.";
+                etiss::log(etiss::INFO, ss.str());
+
                 for (auto iter_value : values)
                 {
                     options[iter_key.pItem] = iter_value.pItem;
@@ -657,7 +650,7 @@ void etiss::Initializer::loadIniPlugins(std::shared_ptr<etiss::CPUCore> cpu)
                 }
                 // check if more than one value is set in the ini file
                 if (values.size() > 1)
-                    etiss::log(etiss::WARNING, "Multi values for option. Took only last one!");
+                    etiss::log(etiss::WARNING, "Multiple values for option. Took only last one!");
             }
         }
         cpu->addPlugin(etiss::getPlugin(pluginName, options));

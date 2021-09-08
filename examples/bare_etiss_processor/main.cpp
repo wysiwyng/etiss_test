@@ -55,7 +55,7 @@ int main(int argc, const char *argv[])
     // ./main [-o<option> <value>] [-f[no]<flag>] [-i<additionalinifile>]
     // All arguments with this format will be evaluated by the Initializer.
     std::cout << "=== Setting up configurations ===" << std::endl;
-    std::list<std::string> iniFiles;
+    //std::list<std::string> iniFiles;
     // iniFiles.push_back("../ETISS.ini"); // will be loaded within the run.sh
     // iniFiles.push_back("additional.ini");
     etiss::Initializer initializer(argc, argv); //add &iniFiles as the first argument if .ini files are loaded explicitly here
@@ -64,9 +64,12 @@ int main(int argc, const char *argv[])
     std::cout << "=== Setting up test system ===" << std::endl;
     std::cout << "  Setting up Memory" << std::endl;
 
-    etiss::SimpleMemSystem dsys(0x0, 0x80000, 0x80000, 0x80000);
-    if (dsys.load_elf(etiss::cfg().get<std::string>("vp.elf_file", "").c_str() ) < 0 ){
-      etiss::log(etiss::FATALERROR, "ELF file not loaded properly\n");
+    etiss::SimpleMemSystem dsys;
+    dsys.init_memory();
+
+    if (!etiss::cfg().isSet("arch.cpu")) {
+        std::cout << "  CPU architecture was not set anywhere! Please set it manually using the arch.cpu configuration option!";
+        return 3;
     }
 
     if (false)
@@ -95,21 +98,18 @@ int main(int argc, const char *argv[])
     std::string CPUArchName = etiss::cfg().get<std::string>("arch.cpu", "");
     std::string valid_json_output_path = etiss::cfg().get<std::string>("vp.stats_file_path", "");
     bool output_json =   etiss::cfg().isSet("vp.stats_file_path");
-	etiss::uint64 startAddress = dsys.get_startaddr();
-	std::cout << "ELF start address: 0x" << std::hex << startAddress << std::dec << std::endl;
+    etiss::uint64 sa = etiss::cfg().get<uint64_t>("vp.entry_point", dsys.get_startaddr());
+	std::cout << "  CPU start address: 0x" << std::hex << sa << std::dec << std::endl;
     std::shared_ptr<etiss::CPUCore> cpu = etiss::CPUCore::create(CPUArchName, "core0");
     if (!cpu)
     {
-        etiss::log(etiss::ERROR, "failed to create cpu core");
-        return -1;
+        etiss::log(etiss::FATALERROR, "  Failed to create CPU core!");
     }
 
     // disable timer plugin
     cpu->setTimer(false);
 
     // reset CPU with a manual start address
-    etiss::uint64 sa = startAddress; // Where should PC pointer at beginning is
-                                     // dependent layout of boot code
     cpu->reset(&sa);
 
     // add the virtual structure of the cpu to the VirtualStruct root. This allows
@@ -126,7 +126,11 @@ int main(int argc, const char *argv[])
     initializer.loadIniPlugins(cpu);
     initializer.loadIniJIT(cpu);
     // here own developped plug-ins can be added with:
-    // cpu->addPlugin(std::shared_ptr<etiss::Plugin>(new TracePrinter(0x88888)));
+    if (etiss::cfg().get<bool>("etiss.log_pc", false)) {
+      etiss::cfg().set<int>("etiss.max_block_size", 1);
+      cpu->addPlugin(std::shared_ptr<etiss::Plugin>(new TracePrinter(0x88888)));
+    }
+
     std::cout << "=== Setting up plug-ins ===" << std::endl << std::endl;
 
     // Simulation start
