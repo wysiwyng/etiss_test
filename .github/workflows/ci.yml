@@ -361,10 +361,10 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
-      - name: Delete Artifacts
-        uses: jimschubert/delete-artifacts-action@v1
-        with:
-          min_bytes: '0'
+      # - name: Delete Artifacts
+      #   uses: jimschubert/delete-artifacts-action@v1
+      #   with:
+      #     min_bytes: '0'
 
 
   display-wiki:
