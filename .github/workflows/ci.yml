@@ -398,6 +398,6 @@ jobs:
           git push
 
       - name: Delete Artifacts
-        uses: actions/delete-artifactsn@v2
+        uses: actions/delete-artifact@v2
 
 
