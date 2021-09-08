@@ -402,7 +402,8 @@ jobs:
 
     # Demonstrate how to delete by name
   delete-artifact:
-    needs: display-wiki
+    if: always()
+    needs: [display-wiki, display-push, display-pr]
     runs-on: ubuntu-latest
     continue-on-error: true
 

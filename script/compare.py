@@ -175,7 +175,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     zip_list = list(zip_form)
 
     # Graphical Analysis of Performance Metrics:
-    fig = plt.figure(figsize=(20, 13.5))
+    fig = plt.figure(figsize=(20, 10))
 
     for engine in stats:
         commit_history = list(chain.from_iterable(islice(item, 1, 2)
