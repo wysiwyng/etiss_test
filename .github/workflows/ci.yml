@@ -292,11 +292,6 @@ jobs:
           name: wiki.md
           path: results_/wiki.md
 
-      # - name: delete unnecessary artifacts
-      #   uses: geekyeggo/delete-artifact@v1
-      #   with:
-      #     name: |
-      #       stats_file.json
 
 
   display-push:
@@ -384,10 +379,6 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
-      # - name: Delete Artifacts
-      #   uses: jimschubert/delete-artifacts-action@v1
-      #   with:
-      #     min_bytes: '0'
 
 
   display-wiki:
@@ -428,11 +419,11 @@ jobs:
     continue-on-error: true
 
     steps:
-      - name: delete unnecessary artifacts
-        uses: geekyeggo/delete-artifact@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Delete Artifact
+        uses: jimschubert/delete-artifacts-action@v1
         with:
-          name: |
-            wiki.md
-            issue.md
-            performance_metrics.svg
+          min_bytes: '0'
 
