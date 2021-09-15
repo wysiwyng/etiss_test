@@ -420,10 +420,7 @@ jobs:
           git commit -m "update perf"
           git push
 
-      # - name: Delete Artifacts
-      #   uses: actions/delete-artifact@v2
 
-    # Demonstrate how to delete by name
   delete-artifact:
     if: always()
     needs: [display-wiki, display-push, display-pr]
@@ -431,12 +428,8 @@ jobs:
     continue-on-error: true
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Delete Artifact
-        uses: jimschubert/delete-artifacts-action@v1
+      - uses: kolpav/purge-artifacts-action@v1
         with:
-          min_bytes: '0'
-
+          token: $
+          expire-in: 0days # Set this to 0 to delete all artifacts
 
