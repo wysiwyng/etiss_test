@@ -428,8 +428,11 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: kolpav/purge-artifacts-action@v1
+      - name: delete unnecessary artifacts
+        uses: geekyeggo/delete-artifact@v1
         with:
-          token: $
-          expire-in: 0days # Set this to 0 to delete all artifacts
+          name: |
+            wiki.md
+            issue.md
+            performance_metrics.svg
 
