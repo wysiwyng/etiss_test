@@ -412,22 +412,6 @@ jobs:
           git push
 
 
-  # delete-artifact:
-  #   if: always()
-  #   needs: [display-wiki, display-push, display-pr]
-  #   runs-on: ubuntu-latest
-  #   continue-on-error: true
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Delete Artifact
-  #       uses: jimschubert/delete-artifacts-action@v1
-  #       with:
-  #         min_bytes: '0'
-
-
   delete-artifact:
     if: always()
     needs: [display-wiki, display-push, display-pr]
@@ -435,6 +419,22 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: geekyeggo/delete-artifact@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Delete Artifact
+        uses: jimschubert/delete-artifacts-action@v1
         with:
-          name: performance_metrics.svg
+          min_bytes: '0'
+
+
+  # delete-artifact:
+  #   if: always()
+  #   needs: [display-wiki, display-push, display-pr]
+  #   runs-on: ubuntu-latest
+  #   continue-on-error: true
+
+  #   steps:
+  #     - uses: geekyeggo/delete-artifact@v1
+  #       with:
+  #         name: performance_metrics.svg
