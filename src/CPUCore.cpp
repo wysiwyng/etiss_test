@@ -850,7 +850,7 @@ loopexit:
     double cpu_time = cpu_->cpuTime_ps / 1.0E12;
     double simulation_time = endTime - startTime;
     double cpu_cycle = cpu_->cpuTime_ps / (float)cpu_->cpuCycleTime_ps;
-    double mips = cpu_->cpuTime_ps / (float)cpu_->cpuCycleTime_ps / simulation_time / 1.0E6
+    double mips = cpu_->cpuTime_ps / (float)cpu_->cpuCycleTime_ps / simulation_time / 1.0E6;
 
     // print some statistics
     std::cout << "CPU Time: " << (cpu_time) << "s    Simulation Time: " << (simulation_time) << "s"
