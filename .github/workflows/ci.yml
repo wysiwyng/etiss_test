@@ -423,6 +423,6 @@ jobs:
       - name: Delete Artifact
         uses: geekyeggo/delete-artifact@1-glob-support
         with:
-          name: '*'
+          name: "*"
           useGlob: true
 
