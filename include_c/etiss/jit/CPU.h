@@ -100,11 +100,12 @@ extern "C"
 
         etiss_uint64 cpuCycleTime_ps; ///< frequency of the cpu. use to allign e.g. memory delays
 
-        etiss_uint32 mode; ///< instruction set mode of the processor
-
         const char *resources[ETISS_MAX_RESOURCES]; ///<names of resources
 
         void *_etiss_private_handle_; ///< private helper handle for plugins
+
+        etiss_uint32 mode; ///< instruction set mode of the processor
+
 
     };
 #pragma pack(pop)
