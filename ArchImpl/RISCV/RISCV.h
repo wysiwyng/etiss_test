@@ -74,11 +74,11 @@ struct RISCV {
 	etiss_uint32 T6;
 	etiss_uint32 *X[32];
 	etiss_uint32 ins_X[32];
-	etiss_uint64 F[32];
 	etiss_uint32 FCSR;
 	etiss_uint32 CSR[4096];
 	etiss_uint32 FENCE[4];
 	etiss_uint32 RES;
+	etiss_uint64 F[32];
 };
 
 #pragma pack(pop) // undo changes
