@@ -62,6 +62,7 @@
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
+#include <boost/lexical_cast.hpp>
 
 #if ETISS_USE_DLSYM
 #include <dlfcn.h>
