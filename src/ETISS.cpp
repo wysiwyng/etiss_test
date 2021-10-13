@@ -517,7 +517,7 @@ void etiss_loadIniConfigs()
                     {
                         std::string itemval = iter_value.pItem;
                         std::size_t sz = 0;
-                        double val = std::stoll(itemval, &sz);
+                        long long val = std::stoll(itemval, &sz, 0);
                         etiss::cfg().set<long long>(iter_key.pItem, val);
                         // we use double, as long could have only 32 Bit (e.g. on Windows)
                         // and long long is not offered by the ini library
