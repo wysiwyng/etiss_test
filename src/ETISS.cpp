@@ -510,6 +510,15 @@ void etiss_loadIniConfigs()
                     {
                         std::string itemval = iter_value.pItem;
                         bool val;
+
+                        try {
+                             val = boost::lexical_cast<bool>(itemval);
+                             std::cout << std::boolalpha << val << std::endl;
+                        }
+                        catch (boost::bad_lexical_cast const &e){
+                               etiss::log(etiss::FATALERROR, "error");
+                        }
+
                         std::istringstream(itemval) >> std::boolalpha >> val;
                         etiss::cfg().set<bool>(iter_key.pItem, val);
                     }
