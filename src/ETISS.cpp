@@ -62,7 +62,7 @@
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
-#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 
 #if ETISS_USE_DLSYM
 #include <dlfcn.h>
@@ -510,26 +510,13 @@ void etiss_loadIniConfigs()
                     else if (std::string(iter_section.pItem) == "BoolConfigurations")
                     {
                         std::string itemval = iter_value.pItem;
+                        boost::algorithm::to_lower(itemval); // converts itemval to lower case string
                         bool val;
-                        std::string bool_equivalent;
 
-                        if (itemval == "true" | itemval == "yes" | itemval == "1" | itemval == "T")bool_equivalent = "1";
-                        else if (itemval == "false" | itemval == "no" | itemval == "0" | itemval == "F")bool_equivalent = "0";
-                        else bool_equivalent = itemval;
+                        if ((itemval == "true") | (itemval == "yes") | (itemval == "1") | (itemval == "T"))val = true;
+                        else if ((itemval == "false") | (itemval == "no") | (itemval == "0") | (itemval == "F"))val = false;
+                        else etiss::log(etiss::FATALERROR, "Configuration value name could not be parsed as a boolean");
 
-                        try {
-                             val = boost::lexical_cast<bool>(bool_equivalent);
-                             std::cout << std::boolalpha << val << std::endl;
-                        }
-                        catch (boost::bad_lexical_cast const &e){
-                               etiss::log(etiss::FATALERROR, "error");
-                        }
-
-                        // if (itemval == "true")val = true;
-                        // else if (itemval == "false")val = false;
-                        // else etiss::log(etiss::FATALERROR, "error");
-
-                        std::istringstream(itemval) >> std::boolalpha >> val;
                         etiss::cfg().set<bool>(iter_key.pItem, val);
                     }
                     else if (std::string(iter_section.pItem) == "IntConfigurations") // already load!
@@ -537,6 +524,15 @@ void etiss_loadIniConfigs()
                         std::string itemval = iter_value.pItem;
                         std::size_t sz = 0;
                         long long val = std::stoll(itemval, &sz, 0);
+
+                        try{
+                            std::cout << std::stoll(itemval) << "\n";
+                        }
+                        // catch invalid_argument exception.
+                        catch(const std::invalid_argument){
+                            etiss::log(etiss::FATALERROR, "Configuration value name could not be parsed as a integer");
+                        }
+
                         etiss::cfg().set<long long>(iter_key.pItem, val);
                         // we use double, as long could have only 32 Bit (e.g. on Windows)
                         // and long long is not offered by the ini library
