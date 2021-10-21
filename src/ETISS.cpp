@@ -523,8 +523,6 @@ void etiss_loadIniConfigs()
                     {
                         std::string itemval = iter_value.pItem;
                         std::size_t sz = 0;
-                        long long val = std::stoll(itemval, &sz, 0);
-
                         try{
                             std::cout << std::stoll(itemval) << "\n";
                         }
@@ -532,7 +530,7 @@ void etiss_loadIniConfigs()
                         catch(const std::invalid_argument){
                             etiss::log(etiss::FATALERROR, "Configuration value name could not be parsed as a integer");
                         }
-
+                        long long val = std::stoll(itemval, &sz, 0);
                         etiss::cfg().set<long long>(iter_key.pItem, val);
                         // we use double, as long could have only 32 Bit (e.g. on Windows)
                         // and long long is not offered by the ini library
