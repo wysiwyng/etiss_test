@@ -11,7 +11,7 @@ jobs:
       matrix:
         config:
           - {name: "Linux", os: ubuntu-latest, cmakegen: "", llvm: "linux-gnu-ubuntu-20.04", llvm-ext: ".tar.xz", tc: "linux-ubuntu14", tc-ext: ".tar.gz", unpack: "tar xf"}
-          - {name: "Windows", os: windows-latest, cmakegen: "-G \"Unix Makefiles\" -DCMAKE_MAKE_PROGRAM=make", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
+         # - {name: "Windows", os: windows-latest, cmakegen: "-G \"Unix Makefiles\" -DCMAKE_MAKE_PROGRAM=make", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
           - {name: "Mac", os: macos-10.15, cmakegen: "", llvm: "apple-darwin", llvm-ext: ".tar.xz", tc: "apple-darwin", tc-ext: ".tar.gz", unpack: "tar xf"}
 
     runs-on: ${{ matrix.config.os }}
@@ -25,14 +25,14 @@ jobs:
       run: |
         sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-program-options-dev
 
-    - name: Requirements (Windows)
-      if: matrix.config.name == 'Windows'
-      shell: bash
-      run: |
-        choco install boost-msvc-14.2
-        choco install wget unzip
-        choco install llvm --version=11.0.0 --allow-downgrade
-        choco install make
+    # - name: Requirements (Windows)
+    #   if: matrix.config.name == 'Windows'
+    #   shell: bash
+    #   run: |
+    #     choco install boost-msvc-14.2
+    #     choco install wget unzip
+    #     choco install llvm --version=11.0.0 --allow-downgrade
+    #     choco install make
 
     - name: Requirements (Mac)
       if: matrix.config.name == 'Mac'
@@ -125,7 +125,7 @@ jobs:
       matrix:
         config:
           - {name: "Linux", os: ubuntu-20.04, cmakegen: "", llvm: "linux-gnu-ubuntu-20.04", llvm-ext: ".tar.xz", tc: "linux-ubuntu14", tc-ext: ".tar.gz", unpack: "tar xf"}
-          - {name: "Windows", os: windows-latest, cmakegen: "-G \"MinGW Makefiles\"", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
+         # - {name: "Windows", os: windows-latest, cmakegen: "-G \"MinGW Makefiles\"", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
           - {name: "Mac", os: macos-10.15, cmakegen: "", llvm: "apple-darwin", llvm-ext: ".tar.xz", tc: "apple-darwin", tc-ext: ".tar.gz", unpack: "tar xf"}
 
     needs: build
@@ -157,19 +157,19 @@ jobs:
         ./run_helper.sh ../SW/riscv/build64/riscv_example.elf
         ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example.elf
 
-    - name: Test (Windows)
-      working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor/build
-      if: matrix.config.name == 'Windows'
-      shell: bash
-      run: |
-        PATH=$PATH:/d/a/etiss_new/install/lib/
-        cd $BUILD_TYPE
-        ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
+    # - name: Test (Windows)
+    #   working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor/build
+    #   if: matrix.config.name == 'Windows'
+    #   shell: bash
+    #   run: |
+    #     PATH=$PATH:/d/a/etiss_new/install/lib/
+    #     cd $BUILD_TYPE
+    #     ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
 
 
   benchmark:
