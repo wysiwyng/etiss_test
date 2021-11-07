@@ -513,8 +513,8 @@ void etiss_loadIniConfigs()
                         boost::algorithm::to_lower(itemval); // converts itemval to lower case string
                         bool val;
 
-                        if (itemval == "true" | itemval == "yes" | itemval == "1" | itemval == "T")val = true;
-                        else if (itemval == "false" | itemval == "no" | itemval == "0" | itemval == "F")val = true;
+                        if ((itemval == "true") | (itemval == "yes") | (itemval == "1") | (itemval == "T"))val = true;
+                        else if ((itemval == "false") | (itemval == "no") | (itemval == "0") | (itemval == "F"))val = false;
                         else etiss::log(etiss::FATALERROR, "Configuration value name could not be parsed as a boolean");
 
                         etiss::cfg().set<bool>(iter_key.pItem, val);
@@ -523,6 +523,13 @@ void etiss_loadIniConfigs()
                     {
                         std::string itemval = iter_value.pItem;
                         std::size_t sz = 0;
+                        try{
+                            std::cout << std::stoll(itemval) << "\n";
+                        }
+                        // catch invalid_argument exception.
+                        catch(const std::invalid_argument){
+                            etiss::log(etiss::FATALERROR, "Configuration value name could not be parsed as a integer");
+                        }
                         long long val = std::stoll(itemval, &sz, 0);
                         try{
                             std::cout << std::stoll(itemval, &sz, 0) << "\n";

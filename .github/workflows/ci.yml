@@ -11,7 +11,7 @@ jobs:
       matrix:
         config:
           - {name: "Linux", os: ubuntu-latest, cmakegen: "", llvm: "linux-gnu-ubuntu-20.04", llvm-ext: ".tar.xz", tc: "linux-ubuntu14", tc-ext: ".tar.gz", unpack: "tar xf"}
-          #- {name: "Windows", os: windows-latest, cmakegen: "-G \"Unix Makefiles\" -DCMAKE_MAKE_PROGRAM=make", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
+         # - {name: "Windows", os: windows-latest, cmakegen: "-G \"Unix Makefiles\" -DCMAKE_MAKE_PROGRAM=make", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
           - {name: "Mac", os: macos-10.15, cmakegen: "", llvm: "apple-darwin", llvm-ext: ".tar.xz", tc: "apple-darwin", tc-ext: ".tar.gz", unpack: "tar xf"}
 
     runs-on: ${{ matrix.config.os }}
@@ -31,7 +31,7 @@ jobs:
     #   run: |
     #     choco install boost-msvc-14.2
     #     choco install wget unzip
-    #     choco install llvm --version=11.0.0
+    #     choco install llvm --version=11.0.0 --allow-downgrade
     #     choco install make
 
     - name: Requirements (Mac)
@@ -125,7 +125,7 @@ jobs:
       matrix:
         config:
           - {name: "Linux", os: ubuntu-20.04, cmakegen: "", llvm: "linux-gnu-ubuntu-20.04", llvm-ext: ".tar.xz", tc: "linux-ubuntu14", tc-ext: ".tar.gz", unpack: "tar xf"}
-          #- {name: "Windows", os: windows-latest, cmakegen: "-G \"MinGW Makefiles\"", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
+         # - {name: "Windows", os: windows-latest, cmakegen: "-G \"MinGW Makefiles\"", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
           - {name: "Mac", os: macos-10.15, cmakegen: "", llvm: "apple-darwin", llvm-ext: ".tar.xz", tc: "apple-darwin", tc-ext: ".tar.gz", unpack: "tar xf"}
 
     needs: build
@@ -162,7 +162,7 @@ jobs:
     #   if: matrix.config.name == 'Windows'
     #   shell: bash
     #   run: |
-    #     PATH=$PATH:/d/a/etiss/install/lib/
+    #     PATH=$PATH:/d/a/etiss_new/install/lib/
     #     cd $BUILD_TYPE
     #     ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
     #     ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
