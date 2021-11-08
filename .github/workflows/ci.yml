@@ -157,19 +157,19 @@ jobs:
         ./run_helper.sh ../SW/riscv/build64/riscv_example.elf
         ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example.elf
 
-    - name: Test (Windows)
-      working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor/build
-      if: matrix.config.name == 'Windows'
-      shell: bash
-      run: |
-        PATH=$PATH:/d/a/etiss_new/install/lib/
-        cd $BUILD_TYPE
-        ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
-        ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
+    # - name: Test (Windows)
+    #   working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor/build
+    #   if: matrix.config.name == 'Windows'
+    #   shell: bash
+    #   run: |
+    #     PATH=$PATH:/d/a/etiss_new/install/lib/
+    #     cd $BUILD_TYPE
+    #     ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build/riscv_example.elf --jit.type=LLVMJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
+    #     ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
 
 
   benchmark:
