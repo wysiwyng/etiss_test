@@ -33,47 +33,9 @@
 #	Version 0.1
 #
 
-project(bare_etiss_processor_example)
+project(bare_etiss_processor)
 
 
-configure_file(
-    CMakeLists.txt.in
-    "${PROJECT_BINARY_DIR}/tobeinstalled/CMakeLists.txt"
-    @ONLY
-)
-configure_file(
-    run.sh.in
-    "${PROJECT_BINARY_DIR}/tobeinstalled/run.sh"
-    @ONLY
-)
-configure_file(
-    run_helper.sh.in
-    "${PROJECT_BINARY_DIR}/tobeinstalled/run_helper.sh"
-    @ONLY
-)
-
-install(FILES
-    "${PROJECT_BINARY_DIR}/tobeinstalled/CMakeLists.txt"
-    "${PROJECT_BINARY_DIR}/tobeinstalled/run.sh"
-	"${PROJECT_BINARY_DIR}/tobeinstalled/run_helper.sh"
-	"get_metrics.py"
-    DESTINATION examples/bare_etiss_processor
-    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-)
-
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/
-    DESTINATION examples/bare_etiss_processor
-    FILES_MATCHING
-    PATTERN "*.h"
-    PATTERN "*.cpp"
-    PATTERN "*.c"
-    PATTERN "*.S"
-    PATTERN "*.s"
-    PATTERN "*.ini"
-    PATTERN "README*"
-    PATTERN "code_or1k.bin"
-    PATTERN "code_ARMv6M.elf"
-    PATTERN ".svn" EXCLUDE
-    PATTERN "*.in" EXCLUDE
-    PATTERN "CMakeLists.txt" EXCLUDE
-)
+add_executable(bare_etiss_processor main.cpp)
+target_link_libraries(bare_etiss_processor ETISS)
+install(TARGETS bare_etiss_processor DESTINATION bin)
