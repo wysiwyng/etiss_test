@@ -93,8 +93,6 @@ ELSE()
     # (but later on when installing)
     set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-
     # add the automatically determined parts of the RPATH
     # which point to directories outside the build tree to the install RPATH
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
@@ -310,8 +308,8 @@ set(INSTALL_CMAKE_DIR lib/CMake/ETISS CACHE PATH "Installation directory for CMa
 
 # to allow linking with ETISS lib in build-tree
 # copying headers
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${ETISS_BINARY_DIR}/include/)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/include_c/ DESTINATION ${ETISS_BINARY_DIR}/include/)
+#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${ETISS_BINARY_DIR}/include/)
+#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/include_c/ DESTINATION ${ETISS_BINARY_DIR}/include/)
 file(GLOB JIT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/jitlibs/**/*.h)
 file(COPY ${JIT_HEADERS} DESTINATION ${ETISS_BINARY_DIR}/include/jit/etiss/jit/)
 # plugins/list.txt file

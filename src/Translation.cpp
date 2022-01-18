@@ -320,7 +320,7 @@ BlockLink *Translation::getBlock(BlockLink *prev, const etiss::uint64 &instructi
     CodeBlock block(instructionindex);
     block.fileglobalCode().insert("#include \"etiss/jit/CPU.h\"\n"
                                   "#include \"etiss/jit/System.h\"\n"
-                                  "#include \"/home/ge75guy/Desktop/etiss_new/src/jitlibs/resources/libresources.h\"\n"
+                                  "#include \"etiss/jit/libresources.h\"\n"
                                   "#include \"etiss/jit/ReturnCode.h\"\n");
 
     for(auto &it: jitExtHeaders()){

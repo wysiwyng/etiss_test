@@ -362,7 +362,7 @@ void RISCVArch::initInstrSet(etiss::instr::ModedInstructionSet &mis) const
      /* Set default JIT Extensions. Read Parameters set from ETISS configuration and append with architecturally needed */
      std::string cfgPar = "";
      cfgPar = etiss::cfg().get<std::string>("jit.external_headers", ";");
-     etiss::cfg().set<std::string>("jit.external_headers", cfgPar + "/home/ge75guy/Desktop/etiss_new/src/jitlibs/softfloat/libsoftfloat.h");
+     etiss::cfg().set<std::string>("jit.external_headers", cfgPar + "etiss/jit/libsoftfloat.h");
 
      cfgPar = etiss::cfg().get<std::string>("jit.external_libs", ";");
      etiss::cfg().set<std::string>("jit.external_libs", cfgPar + "softfloat");
