@@ -146,7 +146,7 @@ jobs:
       run: tar -xf etiss.tar
 
     - name: Test (Linux/Mac)
-      working-directory: ${{runner.workspace}}/install/bin/bare_etiss_processor
+      working-directory: ${{runner.workspace}}/install/bin
       if: matrix.config.name == 'Linux'
       shell: bash
       run: |
@@ -198,7 +198,7 @@ jobs:
       run: mkdir ${{runner.workspace}}/results
 
     - name: Run Benchmarks
-      working-directory: ${{runner.workspace}}/install/bin/bare_etiss_processor
+      working-directory: ${{runner.workspace}}/install/bin
       run: |
         ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run.json
         mv ${{runner.workspace}}/results/run.json ${{runner.workspace}}/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
