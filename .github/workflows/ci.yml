@@ -80,6 +80,7 @@ jobs:
       shell: bash
       run: cmake --build . --config $BUILD_TYPE --target install
 
+
     - name: Create Test Build Environment
       run: |
         cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv/build
@@ -150,14 +151,14 @@ jobs:
       if: matrix.config.name == 'Linux'
       shell: bash
       run: |
-        ./run_helper.sh ../SW/riscv/build/riscv_example.elf
-        ./run_helper.sh ../SW/riscv/build/riscv_example.elf gcc
-        ./run_helper.sh ../SW/riscv/build/riscv_example.elf llvm
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example.elf
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example.elf gcc
-        ./run_helper.sh ../SW/riscv_cpp/build/riscv_example.elf llvm
-        ./run_helper.sh ../SW/riscv/build64/riscv_example.elf
-        ./run_helper.sh ../SW/riscv_cpp/build64/riscv_example.elf
+        ./run_helper.sh ../examples/SW/riscv/build/riscv_example.elf
+        ./run_helper.sh ../examples/SW/riscv/build/riscv_example.elf gcc
+        ./run_helper.sh ../examples/SW/riscv/build/riscv_example.elf llvm
+        ./run_helper.sh ../examples/SW/riscv_cpp/build/riscv_example.elf
+        ./run_helper.sh ../examples/SW/riscv_cpp/build/riscv_example.elf gcc
+        ./run_helper.sh ../examples/SW/riscv_cpp/build/riscv_example.elf llvm
+        ./run_helper.sh ../examples/SW/riscv/build64/riscv_example.elf
+        ./run_helper.sh ../examples/SW/riscv_cpp/build64/riscv_example.elf
 
     # - name: Test (Windows)
     #   working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor/build
@@ -200,7 +201,7 @@ jobs:
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/bin
       run: |
-        ./run_helper.sh ../SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run.json
+        ./run_helper.sh ../examples/SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run.json
         mv ${{runner.workspace}}/results/run.json ${{runner.workspace}}/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
