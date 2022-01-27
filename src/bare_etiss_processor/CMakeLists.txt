@@ -39,14 +39,14 @@ project(bare_etiss_processor)
 add_executable(bare_etiss_processor main.cpp)
 target_link_libraries(bare_etiss_processor ETISS)
 
-set(INSTALL_DIR TRUE)
+set(ETISS_DIR ${CMAKE_INSTALL_PREFIX} )
 configure_file(
     run_helper.sh.in
     "${PROJECT_BINARY_DIR}/tobeinstalled/run_helper.sh"
     @ONLY
 )
 
-set(INSTALL_DIR FALSE)
+set(ETISS_DIR ${CMAKE_BINARY_DIR})
 configure_file(
     run_helper.sh.in
     "${CMAKE_BINARY_DIR}/bin/run_helper.sh"

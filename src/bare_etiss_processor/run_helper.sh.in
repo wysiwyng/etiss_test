@@ -2,14 +2,15 @@
 set -e
 # Config
 
-if
-[@INSTALL_DIR@]
-then
-ETISS_DIR=@CMAKE_INSTALL_PREFIX@/ #variable in cmakelists.txt
-else
-ETISS_DIR=@CMAKE_BINARY_DIR@/
-fi
+# if
+# [@INSTALL_DIR@]
+# then
+# ETISS_DIR=@CMAKE_INSTALL_PREFIX@/ #variable in cmakelists.txt
+# else
+# ETISS_DIR=@CMAKE_BINARY_DIR@/
+# fi
 
+ETISS_DIR=@ETISS_DIR@/
 
 # Clear tmp file
 DYN_INI=$(mktemp /tmp/etiss_dynamic_XXXXXXXXXX.ini)
