@@ -67,7 +67,8 @@ void RISCVArch::resetCPU(ETISS_CPU * cpu,etiss::uint64 * startpointer)
     else cpu->instructionPointer = 0x0;   //  reference to manual
     cpu->mode = 1;
     cpu->cpuTime_ps = 0;
-    cpu->cpuCycleTime_ps = 31250;
+    cpu->cpuCycleTime_ps = etiss::cfg(getLastAssignedCoreName())
+                                 .get<uint32_t>("arch.cpu_cycle_time_ps", 31250); // original: 31250; // 32MHz
     #if RISCV_Pipeline1 || RISCV_Pipeline2
     //Initialize resources measurements
     cpu->resources[0] = "I_RAM";
@@ -168,7 +169,7 @@ void RISCVArch::resetCPU(ETISS_CPU * cpu,etiss::uint64 * startpointer)
 	riscvcpu->CSR[256] = 15;								
 	riscvcpu->CSR[768] = 15;								
 	riscvcpu->CSR[260] = 4294967295;								
-	riscvcpu->CSR[769] = 1315077;								
+	riscvcpu->CSR[769] = 0x4014112D;
 	riscvcpu->CSR[3088] = 3;								
 	for (int i = 0; i<4 ;i++){
 		riscvcpu->FENCE[i] = 0;
