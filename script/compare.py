@@ -57,7 +57,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
     runs = defaultdict(list)
 
-    if bool_var == true:
+    if bool_var == "true":
         KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[0]
     else:
         KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[1]
