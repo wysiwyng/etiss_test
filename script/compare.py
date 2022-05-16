@@ -43,7 +43,7 @@ ${message}
 [[performance_metrics.svg]]
 '''
 # Declaration of Global Variables:
-KEY_TO_COMPARE_LIST = ["mips", "Simulation_Time"] # the key from the input files to compare across engines
+KEY_TO_COMPARE_LIST = ["mips", "simulation_time"] # the key from the input files to compare across engines
 MAX_HISTORY = 50  # max amount of past data to keep
 TOLERANCE = 0.2
 
