@@ -15,11 +15,11 @@ matplotlib.use('Agg')
 ISSUE_TEMPLATE = r'''
 **Performance Statistics**
 
-% for jit_engine_name, old_best_hash, best_hash_link, new_data, message, best_data, best_diff in zip_form:
+% for jit_engine_name, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff in zip_form:
 
 **Status for the ${jit_engine_name} Just-In-Time Engine** (for commit ${current_hash})**:** ${message}
-**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_data}
-**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_data}, difference ${f'{best_diff:.2%}'}
+**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${old_best_hash})**:** ${best_mips}, difference ${f'{best_diff:.2%}'}
 
 % endfor
 
@@ -27,13 +27,13 @@ ISSUE_TEMPLATE = r'''
 '''
 ### Template to be published in Github wiki ###
 WIKI_TEMPLATE = r'''
-% for jit_engine_name, old_best_hash, best_hash_link, new_data, message, best_data, best_diff in zip_form:
+% for jit_engine_name, old_best_hash, best_hash_link, new_mips, message, best_mips, best_diff in zip_form:
 **Status for the ${jit_engine_name} Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message}
 <br/>
-**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_data}
+**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_mips}
 <br/>
-**Previous best for ${jit_engine_name} JIT** (recorded in commit ${best_hash_link})**:** ${best_data}, difference  ${f'{best_diff:.2%}'}
+**Previous best for ${jit_engine_name} JIT** (recorded in commit ${best_hash_link})**:** ${best_mips}, difference  ${f'{best_diff:.2%}'}
 <br/>
 <br/>
 % endfor
@@ -43,12 +43,12 @@ ${message}
 [[performance_metrics.svg]]
 '''
 # Declaration of Global Variables:
-KEY_TO_COMPARE_LIST = ["mips", "Simulation_Time"] # the key from the input files to compare across engines
+KEY_TO_COMPARE = "mips"  # the key from the input files to compare across engines
 MAX_HISTORY = 50  # max amount of past data to keep
 TOLERANCE = 0.2
 
 
-def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, graph_file, current_hash, repo_url, bool_var):
+def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, graph_file, current_hash, repo_url):
 
     # truncating hash value to first 8 characters
     current_hash = current_hash[:8]
@@ -56,11 +56,6 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     ### Averaging out the MIPS for the given number of runs:###
 
     runs = defaultdict(list)
-
-    if bool_var == true:
-        KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[0]
-    else:
-        KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[1]
 
     # get engine name and run no from filename of input
     # input files should have the format "run_<engine name>_<run no>.json"
@@ -118,7 +113,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                 messages[engine] = "first entry"
 
             else:
-                # adding the data from current run
+                # adding the MIPS from current run
                 stats[engine][KEY_TO_COMPARE].append((value, current_hash))
                 stats[engine][KEY_TO_COMPARE] = stats[engine][KEY_TO_COMPARE][-MAX_HISTORY:]
 
@@ -127,49 +122,26 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                 diff = value / best - 1
                 diffs[engine] = diff
 
-                # Comparison logic for MIPS:
-                if bool_var == true:
-                    if value > best:
-                        stats[engine][f"best_" + KEY_TO_COMPARE] = value
-                        stats[engine][f"best_hash"] = current_hash[:8]
-                        messages[engine] = f'🥇 New best performance!'
+                # Comparison logic:
+                if value > best:
+                    stats[engine][f"best_" + KEY_TO_COMPARE] = value
+                    stats[engine][f"best_hash"] = current_hash[:8]
+                    messages[engine] = f'🥇 New best performance!'
 
-                    elif diff < -TOLERANCE:
-                        if stats[engine]["regressed_hash"] is None:
-                            stats[engine]["regressed_hash"] = current_hash[:8]
-                            messages[engine] = "Regression introduced"
-                        else:
-                            messages[engine] = "Regressed since commit " + \
-                                stats[engine]['regressed_hash']
-
+                elif diff < -TOLERANCE:
+                    if stats[engine]["regressed_hash"] is None:
+                        stats[engine]["regressed_hash"] = current_hash[:8]
+                        messages[engine] = "Regression introduced"
                     else:
-                        if stats[engine]["regressed_hash"] is not None:
-                            stats[engine]["regressed_hash"] = None
-                            messages[engine] = "Regression cleared"
-                        else:
-                            messages[engine] = "No significant performance change"
+                        messages[engine] = "Regressed since commit " + \
+                            stats[engine]['regressed_hash']
 
-                # Comparison logic for Simulation Time:
                 else:
-                    if value < best:
-                        stats[engine][f"best_" + KEY_TO_COMPARE] = value
-                        stats[engine][f"best_hash"] = current_hash[:8]
-                        messages[engine] = f'🥇 New best performance!'
-
-                    elif diff > -TOLERANCE:
-                        if stats[engine]["regressed_hash"] is None:
-                            stats[engine]["regressed_hash"] = current_hash[:8]
-                            messages[engine] = "Regression introduced"
-                        else:
-                            messages[engine] = "Regressed since commit " + \
-                                stats[engine]['regressed_hash']
-
+                    if stats[engine]["regressed_hash"] is not None:
+                        stats[engine]["regressed_hash"] = None
+                        messages[engine] = "Regression cleared"
                     else:
-                        if stats[engine]["regressed_hash"] is not None:
-                            stats[engine]["regressed_hash"] = None
-                            messages[engine] = "Regression cleared"
-                        else:
-                            messages[engine] = "No significant performance change"
+                        messages[engine] = "No significant performance change"
 
     # Template rendering for issue and Github Wiki:
     issue_template = Template(text=ISSUE_TEMPLATE)
@@ -190,7 +162,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     for engine, nested_dict in stats.items():
         jit_engines.append(engine)
         best_value_for_KEY_TO_COMPARE.append(
-            nested_dict["best_data"+KEY_TO_COMPARE])
+            nested_dict["best_"+KEY_TO_COMPARE])
         best_value_for_KEY_TO_COMPARE = [round(num, 2) for num in best_value_for_KEY_TO_COMPARE]
         new_value_for_KEY_TO_COMPARE.append(list(chain.from_iterable(islice(item, 0, 1)
                                                                      for item in nested_dict[KEY_TO_COMPARE]))[-1])
@@ -210,17 +182,17 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     for engine in stats:
         commit_history = list(chain.from_iterable(islice(item, 1, 2)
                               for item in stats[engine][KEY_TO_COMPARE]))
-        key_to_compare_value = list(chain.from_iterable(islice(item, 0, 1)
+        mips_value = list(chain.from_iterable(islice(item, 0, 1)
                           for item in stats[engine][KEY_TO_COMPARE]))
-        plt.plot(commit_history, key_to_compare_value,
+        plt.plot(commit_history, mips_value,
                  label=f'{KEY_TO_COMPARE}_{engine}')
 
     plt.xticks(fontsize=15, rotation=45)
     plt.yticks(fontsize=20)
     plt.title(
-        f'{KEY_TO_COMPARE} values for the last  {len(commit_history)} commit(s)', size=50)
+        f'MIPS values for the last  {len(commit_history)} commit(s)', size=50)
     plt.xlabel("Commit History", size=30)
-    plt.ylabel(f'{MIPS}', size=30)
+    plt.ylabel("MIPS", size=30)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), prop={'size': 30})
 
     # Save figure
@@ -254,9 +226,8 @@ if __name__ == '__main__':
     parser.add_argument('-gr', '--graph_file')
     parser.add_argument('-g', '--current_hash')
     parser.add_argument('-r', '--repo_url')
-    parser.add_argument('-b', '--bool_var', type=bool)
     args = parser.parse_args()
 
 
 calculating_performance_metrics(args.input_files, args.stats_file, args.issue_md,
-                                args.wiki_md, args.graph_file, args.current_hash, args.repo_url, args.bool_var)
+                                args.wiki_md, args.graph_file, args.current_hash, args.repo_url)
