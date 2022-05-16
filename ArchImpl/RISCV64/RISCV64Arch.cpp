@@ -73,8 +73,7 @@ void RISCV64Arch::resetCPU(ETISS_CPU * cpu,etiss::uint64 * startpointer)
     else cpu->instructionPointer = 0x0;   //  reference to manual
     cpu->mode = 1;
     cpu->cpuTime_ps = 0;
-    cpu->cpuCycleTime_ps = etiss::cfg(getLastAssignedCoreName())
-                                 .get<uint32_t>("arch.cpu_cycle_time_ps", 31250); // original: 31250; // 32MHz
+    cpu->cpuCycleTime_ps = 31250;
     #if RISCV64_Pipeline1 || RISCV64_Pipeline2
     //Initialize resources measurements
     cpu->resources[0] = "I_RAM";
@@ -175,7 +174,7 @@ void RISCV64Arch::resetCPU(ETISS_CPU * cpu,etiss::uint64 * startpointer)
 	riscv64cpu->CSR[256] = 15;								
 	riscv64cpu->CSR[768] = 15;								
 	riscv64cpu->CSR[260] = 4294967295;								
-	riscv64cpu->CSR[769] = 0x800000000014112D;
+	riscv64cpu->CSR[769] = 1315077;								
 	riscv64cpu->CSR[3088] = 3;								
 	for (int i = 0; i<4 ;i++){
 		riscv64cpu->FENCE[i] = 0;

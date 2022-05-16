@@ -823,7 +823,7 @@ loopexit:
     // Defining the statistics of measurement and printing them
     double cpu_time = cpu_->cpuTime_ps / 1.0E12;
     double simulation_time = endTime - startTime;
-    uint64 cpu_cycle = cpu_->cpuTime_ps / cpu_->cpuCycleTime_ps;
+    double cpu_cycle = cpu_->cpuTime_ps / (float)cpu_->cpuCycleTime_ps;
     double mips = cpu_->cpuTime_ps / (float)cpu_->cpuCycleTime_ps / simulation_time / 1.0E6;
     std::cout << "CPU Time: " << (cpu_time) << "s    Simulation Time: " << (simulation_time) << "s"
               << std::endl;

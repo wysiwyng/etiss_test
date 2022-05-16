@@ -1,4 +1,4 @@
-# Dhrystone benchmark for evaluating the simulator's performance
+# Dhrystone benchmark for evaluating RISC-V compilers' performance
 
 Header and modules present:
 
@@ -11,3 +11,11 @@ See: https://github.com/Keith-S-Thompson/dhrystone/tree/master/v2.1
 # Compilers whose performances are to be analyzed:
 
 GCC, TCC and LLVM
+
+
+
+
+
+
+
+
