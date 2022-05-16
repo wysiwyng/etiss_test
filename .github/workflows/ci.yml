@@ -640,7 +640,7 @@ jobs:
 
   delete-artifact:
     if: always()
-    needs: [display-wiki, display-pr]
+    needs: [display-wiki, display-pr, display-wiki-translation]
     runs-on: ubuntu-latest
     continue-on-error: true
 
