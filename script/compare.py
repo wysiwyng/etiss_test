@@ -57,7 +57,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
     runs = defaultdict(list)
 
-    if bool_var == "true":
+    if bool_var == True:
         print("entering true loop")
         KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[0]
     else:
@@ -132,7 +132,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                 diffs[engine] = diff
 
                 # Comparison logic for MIPS:
-                if bool_var == "true":
+                if bool_var == True:
                     if value > best:
                         stats[engine][f"best_" + KEY_TO_COMPARE] = value
                         stats[engine][f"best_hash"] = current_hash[:8]
