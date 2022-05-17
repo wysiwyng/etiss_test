@@ -43,7 +43,7 @@ ${message}
 [[performance_metrics.svg]]
 '''
 # Declaration of Global Variables:
-KEY_TO_COMPARE_LIST = ["mips", "simulation_time"] # the key from the input files to compare across engines
+KEY_TO_COMPARE_LIST = ["mips", "Simulation_Time"] # the key from the input files to compare across engines
 MAX_HISTORY = 50  # max amount of past data to keep
 TOLERANCE = 0.2
 
@@ -58,8 +58,10 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     runs = defaultdict(list)
 
     if bool_var == "true":
+        print("entering true loop")
         KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[0]
     else:
+        print("entering false loop")
         KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[1]
 
     # get engine name and run no from filename of input
@@ -79,6 +81,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
         with open(filepath, 'r') as f:
             in_dict = json.load(f)
         print(in_dict)
+        print(KEY_TO_COMPARE)
         runs[engine].append(in_dict[KEY_TO_COMPARE])
 
     # Averaing out
