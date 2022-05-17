@@ -224,7 +224,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     plt.title(
         f'{KEY_TO_COMPARE} values for the last  {len(commit_history)} commit(s)', size=50)
     plt.xlabel("Commit History", size=30)
-    plt.ylabel(f'{MIPS}', size=30)
+    plt.ylabel(f'{KEY_TO_COMPARE}', size=30)
     plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), prop={'size': 30})
 
     # Save figure
