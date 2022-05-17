@@ -194,7 +194,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     for engine, nested_dict in stats.items():
         jit_engines.append(engine)
         best_value_for_KEY_TO_COMPARE.append(
-            nested_dict["best"+KEY_TO_COMPARE])
+            nested_dict["best_"+KEY_TO_COMPARE])
         best_value_for_KEY_TO_COMPARE = [round(num, 2) for num in best_value_for_KEY_TO_COMPARE]
         new_value_for_KEY_TO_COMPARE.append(list(chain.from_iterable(islice(item, 0, 1)
                                                                      for item in nested_dict[KEY_TO_COMPARE]))[-1])
