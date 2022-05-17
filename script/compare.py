@@ -48,7 +48,7 @@ MAX_HISTORY = 50  # max amount of past data to keep
 TOLERANCE = 0.2
 
 
-def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, graph_file, current_hash, repo_url, bool_var):
+def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, graph_file, current_hash, repo_url, benchmark_type):
 
     # truncating hash value to first 8 characters
     current_hash = current_hash[:8]
@@ -57,10 +57,10 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
     runs = defaultdict(list)
 
-    if bool_var == True:
+    if benchmark_type == "dhrystone":
         print("entering true loop")
         KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[0]
-    else:
+    if benchmark_type == "translation":
         print("entering false loop")
         KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[1]
 
@@ -132,7 +132,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                 diffs[engine] = diff
 
                 # Comparison logic for MIPS:
-                if bool_var == True:
+                if benchmark_type == "dhrystone": 
                     if value > best:
                         stats[engine][f"best_" + KEY_TO_COMPARE] = value
                         stats[engine][f"best_hash"] = current_hash[:8]
@@ -154,7 +154,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                             messages[engine] = "No significant performance change"
 
                 # Comparison logic for Simulation Time:
-                else:
+                if benchmark_type == "translation":
                     if value < best:
                         stats[engine][f"best_" + KEY_TO_COMPARE] = value
                         stats[engine][f"best_hash"] = current_hash[:8]
@@ -258,9 +258,9 @@ if __name__ == '__main__':
     parser.add_argument('-gr', '--graph_file')
     parser.add_argument('-g', '--current_hash')
     parser.add_argument('-r', '--repo_url')
-    parser.add_argument('-b', '--bool_var', type=bool)
+    parser.add_argument('-b', '--benchmark_type', choices=["dhrystone", "translation"])
     args = parser.parse_args()
 
 
 calculating_performance_metrics(args.input_files, args.stats_file, args.issue_md,
-                                args.wiki_md, args.graph_file, args.current_hash, args.repo_url, args.bool_var)
+                                args.wiki_md, args.graph_file, args.current_hash, args.repo_url, args.benchmark_type)

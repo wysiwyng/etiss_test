@@ -246,11 +246,11 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY -b True
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY -b True
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -478,7 +478,7 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b False
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
 
       # - name: Run comparison (PR)
       #   if: ${{github.event_name == 'pull_request'}}
