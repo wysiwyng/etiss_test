@@ -503,8 +503,8 @@ jobs:
       - name: uploading image
         uses: actions/upload-artifact@v2
         with:
-          name: translation_performance.svg
-          path: results_/translation_performance.svg
+          name: performance_metrics.svg
+          path: results_/performance_metrics.svg
 
       - name: Upload comment text
         uses: actions/upload-artifact@v2
@@ -618,10 +618,10 @@ jobs:
         with:
           name: wiki.md
 
-      - name: Get translation_performance.svg
+      - name: Get performance_metrics.svg
         uses: actions/download-artifact@v2
         with:
-          name: translation_performance.svg
+          name: performance_metrics.svg
 
       - name: Update wiki
         run: |
@@ -631,9 +631,9 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           rm -rf ./performance_metrics.svg
-          cp ../wiki.md ./Translation_Performance.md
-          cp ../translation_performance.svg ./translation_performance.svg
-          git add Translation_Performance.md translation_performance.svg
+          cp ../wiki.md ./Performance_Metrics.md
+          cp ../performance_metrics.svg ./performance_metrics.svg
+          git add Performance_Metrics.md performance_metrics.svg
           git commit -m "update trans perf"
           git push
 
