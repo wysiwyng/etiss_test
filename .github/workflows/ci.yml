@@ -208,7 +208,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: ${{runner.workspace}}/results/run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/results/run_dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
   compare_mips:
     needs: benchmark
@@ -440,7 +440,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: ${{runner.workspace}}/results/run_translation${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/results/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
   compare_mips_translation:
     needs: benchmark_translation
