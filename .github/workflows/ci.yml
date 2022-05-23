@@ -399,9 +399,9 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           rm -rf ./performance_metrics.svg
-          cp ../wiki.md ./Performance_Metrics.md
+          cp ../wiki.md ./Dhrystone_Performance.md
           cp ../performance_metrics.svg ./performance_metrics.svg
-          git add Performance_Metrics.md performance_metrics.svg
+          git add Dhrystone_Performance.md performance_metrics.svg
           git commit -m "update perf"
           git push
 
@@ -631,9 +631,9 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           rm -rf ./performance_metrics.svg
-          cp ../wiki.md ./Performance_Metrics.md
+          cp ../wiki.md ./Translation_Performance.md
           cp ../performance_metrics.svg ./performance_metrics.svg
-          git add Performance_Metrics.md performance_metrics.svg
+          git add Translation_performance.md performance_metrics.svg
           git commit -m "update trans perf"
           git push
 
