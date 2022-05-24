@@ -456,7 +456,7 @@ jobs:
 
       - name: Prepare files
         run: |
-          rm -rf benchmark_results_translation__new
+          rm -rf benchmark_results_translation_new
           mkdir benchmark_results_translation_new
           find artifacts -type f -name '*.json' -exec mv {} benchmark_results_translation_new \;
           find artifacts -type f -name '*.tar' -exec mv {} . \;
@@ -472,7 +472,7 @@ jobs:
 
       - name: creating a directory results_ for storing wiki text, issue text and the graph
         run: |
-            ls benchmark_results__translation_new
+            ls benchmark_results_translation_new
             rm -rf results_translation_
             mkdir results_translation_
 
