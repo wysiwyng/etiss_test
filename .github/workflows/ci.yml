@@ -428,19 +428,19 @@ jobs:
 
     - name: create directory to store results
       working-directory: ${{runner.workspace}}
-      run: mkdir ${{runner.workspace}}/results
+      run: mkdir ${{runner.workspace}}/results_translation
 
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/bin
       run: |
-        ./run_helper.sh ../examples/SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run_translation.json
-        mv ${{runner.workspace}}/results/run_translation.json ${{runner.workspace}}/results/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        ./run_helper.sh ../examples/SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results_translation/run_translation.json
+        mv ${{runner.workspace}}/results_translation/run_translation.json ${{runner.workspace}}/results_translation/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
-        name: run_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: ${{runner.workspace}}/results/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        name: run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/results_translation/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
   compare_mips_translation:
     needs: benchmark_translation
@@ -456,9 +456,9 @@ jobs:
 
       - name: Prepare files
         run: |
-          rm -rf benchmark_results_new
-          mkdir benchmark_results_new
-          find artifacts -type f -name '*.json' -exec mv {} benchmark_results_new \;
+          rm -rf benchmark_results_translation__new
+          mkdir benchmark_results_translation_new
+          find artifacts -type f -name '*.json' -exec mv {} benchmark_results_translation_new \;
           find artifacts -type f -name '*.tar' -exec mv {} . \;
 
       - name: install dependencies
@@ -467,18 +467,18 @@ jobs:
       - name: get old benchmark results
         uses: actions/checkout@v2
         with:
-          ref: benchmark_results
-          path: benchmark_results_old
+          ref: benchmark_results_translation
+          path: benchmark_results_translation_old
 
       - name: creating a directory results_ for storing wiki text, issue text and the graph
         run: |
-            ls benchmark_results_new
-            rm -rf results_
-            mkdir results_
+            ls benchmark_results__translation_new
+            rm -rf results_translation_
+            mkdir results_translation_
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file_translation.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
+        run: python3 script/compare.py benchmark_results_translation_new/run_*.json -o benchmark_results_translation_old/stats_file_translation.json -i results_translation_/issue.md -w results_translation_/wiki.md -gr results_translation_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
 
       # - name: Run comparison (PR)
       #   if: ${{github.event_name == 'pull_request'}}
@@ -489,7 +489,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./benchmark_results_old
+          publish_dir: ./benchmark_results_translation_old
           publish_branch: benchmark_results_translation
           enable_jekyll: true
 
@@ -498,26 +498,26 @@ jobs:
         with:
           name: stats_file_translation.json
 
-          path: benchmark_results_old/stats_file_translation.json
+          path: benchmark_results_translation_old/stats_file_translation.json
 
       - name: uploading image
         uses: actions/upload-artifact@v2
         with:
-          name: performance_metrics.svg
-          path: results_/performance_metrics.svg
+          name: performance_metrics_translation.svg
+          path: results_translation_/performance_metrics.svg
 
       - name: Upload comment text
         uses: actions/upload-artifact@v2
         with:
-          name: issue.md
+          name: issue_translation.md
 
-          path: results_/issue.md
+          path: results_translation_/issue.md
 
       - name: Upload wiki text
         uses: actions/upload-artifact@v2
         with:
-          name: wiki.md
-          path: results_/wiki.md
+          name: wiki_translation.md
+          path: results_translation_/wiki.md
 
 #  display-push:
 #    needs: compare_mips
@@ -616,12 +616,12 @@ jobs:
       - name: Get comment text
         uses: actions/download-artifact@v2
         with:
-          name: wiki.md
+          name: wiki_translation.md
 
       - name: Get performance_metrics.svg
         uses: actions/download-artifact@v2
         with:
-          name: performance_metrics.svg
+          name: performance_metrics_translation.svg
 
       - name: Update wiki
         run: |
@@ -630,10 +630,10 @@ jobs:
           cd wiki
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          rm -rf ./performance_metrics.svg
-          cp ../wiki.md ./Translation_Performance_.md
-          cp ../performance_metrics.svg ./performance_metrics.svg
-          git add Translation_Performance_.md performance_metrics.svg
+          rm -rf ./performance_metrics_translation.svg
+          cp ../wiki_translation.md ./_Translation_Performance_.md
+          cp ../performance_metrics_translation.svg ./performance_metrics_translation.svg
+          git add _Translation_Performance_.md performance_metrics_translation.svg
           git commit -m "update trans perf"
           git push
 
