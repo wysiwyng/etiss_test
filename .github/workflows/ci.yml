@@ -478,7 +478,7 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_translation_new/run_*.json -o benchmark_results_translation_old/stats_file_translation.json -i results_translation_/issue.md -w results_translation_/wiki.md -gr results_translation_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
+        run: python3 script/compare.py benchmark_results_translation_new/run_*.json -o benchmark_results_translation_old/stats_file_translation.json -i results_translation_/issue.md -w results_translation_/wiki_translation.md -gr results_translation_/performance_metrics_translation.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
 
       # - name: Run comparison (PR)
       #   if: ${{github.event_name == 'pull_request'}}
