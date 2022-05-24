@@ -246,11 +246,11 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics_dhrystone.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics_dhrystone.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -631,9 +631,9 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           rm -rf ./performance_metrics_translation.svg
-          cp ../wiki_translation.md ./_Translation_Performance_.md
+          cp ../wiki_translation.md ./Translation_Performance.md
           cp ../performance_metrics_translation.svg ./performance_metrics_translation.svg
-          git add _Translation_Performance_.md performance_metrics_translation.svg
+          git add Translation_Performance.md performance_metrics_translation.svg
           git commit -m "update trans perf"
           git push
 
