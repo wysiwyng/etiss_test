@@ -399,9 +399,9 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           rm -rf ./performance_metrics.svg
-          cp ../wiki.md ./Dhrystone_Performance.md
+          cp ../wiki.md ./Dhrystone_Performance_.md
           cp ../performance_metrics.svg ./performance_metrics.svg
-          git add Dhrystone_Performance.md performance_metrics.svg
+          git add Dhrystone_Performance_.md performance_metrics.svg
           git commit -m "update perf"
           git push
 
@@ -478,7 +478,7 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
+        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file_translation.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
 
       # - name: Run comparison (PR)
       #   if: ${{github.event_name == 'pull_request'}}
@@ -631,9 +631,9 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           rm -rf ./performance_metrics.svg
-          cp ../wiki.md ./Translation_Performance.md
+          cp ../wiki.md ./Translation_Performance_.md
           cp ../performance_metrics.svg ./performance_metrics.svg
-          git add Translation_performance.md performance_metrics.svg
+          git add Translation_performance_.md performance_metrics.svg
           git commit -m "update trans perf"
           git push
 
