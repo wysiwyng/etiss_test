@@ -442,7 +442,7 @@ jobs:
         name: run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
         path: ${{runner.workspace}}/results_translation/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
-  compare_mips_translation:
+  compare_Simulation_Time_translation:
     needs: benchmark_translation
     runs-on: ubuntu-latest
 
@@ -608,7 +608,7 @@ jobs:
 
 
   display-wiki-translation:
-    needs: compare_mips_translation
+    needs: compare_Simulation_Time_translation
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
 

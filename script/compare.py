@@ -31,7 +31,7 @@ WIKI_TEMPLATE = r'''
 **Status for the ${jit_engine_name} Just-In-Time Engine** (for commit ${current_hash_wiki})**:**
 ${message}
 <br/>
-**Current dhrystone MIPS for ${jit_engine_name} JIT** **:** ${new_data}
+**Current ${benchmark_type} ${key_to_compare} for ${jit_engine_name} JIT** **:** ${new_data}
 <br/>
 **Previous best for ${jit_engine_name} JIT** (recorded in commit ${best_hash_link})**:** ${best_data}, difference  ${f'{best_diff:.2%}'}
 <br/>
@@ -40,7 +40,7 @@ ${message}
 **Graphical Analysis for the last ${commit_history} commits:**
 <br/>
 <br/>
-[[performance_metrics.svg]]
+[[performance_metrics_${benchmark_type}.svg]]
 '''
 # Declaration of Global Variables:
 KEY_TO_COMPARE_LIST = ["mips", "Simulation_Time"] # the key from the input files to compare across engines
@@ -246,6 +246,8 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                     current_hash_wiki=current_hash_wiki,
                     zip_form=zip_list,
                     commit_history=len(commit_history)
+                    key_to_compare = KEY_TO_COMPARE
+                    benchmark_type = benchmark_type
                 )
                 )
 
