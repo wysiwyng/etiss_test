@@ -245,8 +245,8 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                     current_hash=current_hash,
                     current_hash_wiki=current_hash_wiki,
                     zip_form=zip_list,
-                    commit_history=len(commit_history)
-                    key_to_compare = KEY_TO_COMPARE
+                    commit_history=len(commit_history),
+                    key_to_compare = KEY_TO_COMPARE,
                     benchmark_type = benchmark_type
                 )
                 )
