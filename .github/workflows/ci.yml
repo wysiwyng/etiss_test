@@ -633,7 +633,7 @@ jobs:
           rm -rf ./performance_metrics.svg
           cp ../wiki.md ./Translation_Performance_.md
           cp ../performance_metrics.svg ./performance_metrics.svg
-          git add Translation_performance_.md performance_metrics.svg
+          git add Translation_Performance_.md performance_metrics.svg
           git commit -m "update trans perf"
           git push
 
