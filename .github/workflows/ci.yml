@@ -504,20 +504,20 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: performance_metrics_translation.svg
-          path: results_translation_/performance_metrics.svg
+          path: results_translation_/performance_metrics_translation.svg
 
       - name: Upload comment text
         uses: actions/upload-artifact@v2
         with:
           name: issue_translation.md
 
-          path: results_translation_/issue.md
+          path: results_translation_/issue_translation.md
 
       - name: Upload wiki text
         uses: actions/upload-artifact@v2
         with:
           name: wiki_translation.md
-          path: results_translation_/wiki.md
+          path: results_translation_/wiki_translation.md
 
 #  display-push:
 #    needs: compare_mips
