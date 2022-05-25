@@ -399,10 +399,10 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           rm -rf ./performance_metrics_dhrystone.svg
-          cp ../wiki.md ./Dhrystone_Performance_.md
+          cp ../wiki.md ./Dhrystone_Performance.md
           cp ../performance_metrics_dhrystone.svg ./performance_metrics_dhrystone.svg
-          git add Dhrystone_Performance_.md performance_metrics.svg
-          git commit -m "update perf"
+          git add Dhrystone_Performance.md performance_metrics_dhrystone.svg
+          git commit -m "update perf dhrystone"
           git push
 
 
