@@ -271,8 +271,8 @@ jobs:
       - name: uploading image
         uses: actions/upload-artifact@v2
         with:
-          name: performance_metrics.svg
-          path: results_/performance_metrics.svg
+          name: performance_metrics_dhrystone.svg
+          path: results_/performance_metrics_dhrystone.svg
 
       - name: Upload comment text
         uses: actions/upload-artifact@v2
@@ -389,7 +389,7 @@ jobs:
       - name: Get performance_metrics.svg
         uses: actions/download-artifact@v2
         with:
-          name: performance_metrics.svg
+          name: performance_metrics_dhrystone.svg
 
       - name: Update wiki
         run: |
@@ -398,9 +398,9 @@ jobs:
           cd wiki
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          rm -rf ./performance_metrics.svg
+          rm -rf ./performance_metrics_dhrystone.svg
           cp ../wiki.md ./Dhrystone_Performance_.md
-          cp ../performance_metrics.svg ./performance_metrics.svg
+          cp ../performance_metrics_dhrystone.svg ./performance_metrics_dhrystone.svg
           git add Dhrystone_Performance_.md performance_metrics.svg
           git commit -m "update perf"
           git push
