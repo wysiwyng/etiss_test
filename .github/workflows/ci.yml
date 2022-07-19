@@ -643,18 +643,18 @@ jobs:
           git push
 
 
-  delete-artifact:
-    if: always()
-    needs: [display-wiki, display-pr, display-wiki-translation]
-    runs-on: ubuntu-latest
-    continue-on-error: true
+  # delete-artifact:
+  #   if: always()
+  #   needs: [display-wiki, display-pr, display-wiki-translation]
+  #   runs-on: ubuntu-latest
+  #   continue-on-error: true
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Delete Artifact
-        uses: geekyeggo/delete-artifact@1-glob-support
-        with:
-          name: "*"
-          useGlob: true
+  #     - name: Delete Artifact
+  #       uses: geekyeggo/delete-artifact@1-glob-support
+  #       with:
+  #         name: "*"
+  #         useGlob: true
