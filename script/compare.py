@@ -211,10 +211,13 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
     fig = plt.figure(figsize=(20, 10))
 
     for engine in stats:
+        print(engine)
         commit_history = list(chain.from_iterable(islice(item, 1, 2)
                               for item in stats[engine][KEY_TO_COMPARE]))
+        print(commit_history)
         key_to_compare_value = list(chain.from_iterable(islice(item, 0, 1)
                           for item in stats[engine][KEY_TO_COMPARE]))
+        print(key_to_compare_value)
         plt.plot(commit_history, key_to_compare_value,
                  label=f'{KEY_TO_COMPARE}_{engine}')
 
