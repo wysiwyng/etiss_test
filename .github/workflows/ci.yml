@@ -12,7 +12,7 @@ jobs:
         config:
           - {name: "Linux", os: ubuntu-latest, cmakegen: "", llvm: "linux-gnu-ubuntu-20.04", llvm-ext: ".tar.xz", tc: "linux-ubuntu14", tc-ext: ".tar.gz", unpack: "tar xf"}
           #- {name: "Windows", os: windows-latest, cmakegen: "-G \"Unix Makefiles\" -DCMAKE_MAKE_PROGRAM=make", llvm: "", llvm-ext: "", tc: "w64-mingw32", tc-ext: ".zip", unpack: "unzip"}
-          - {name: "Mac", os: macos-10.15, cmakegen: "", llvm: "apple-darwin", llvm-ext: ".tar.xz", tc: "apple-darwin", tc-ext: ".tar.gz", unpack: "tar xf"}
+          #- {name: "Mac", os: macos-10.15, cmakegen: "", llvm: "apple-darwin", llvm-ext: ".tar.xz", tc: "apple-darwin", tc-ext: ".tar.gz", unpack: "tar xf"}
 
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.name }}_build
@@ -206,13 +206,13 @@ jobs:
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/bin
       run: |
-        ./run_helper.sh ../examples/SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run-dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        ./run_helper.sh ../examples/SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run_dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
-        name: run-dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: ${{runner.workspace}}/results/run-dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        name: run_dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/results/run_dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
   compare_mips:
     needs: benchmark
@@ -230,7 +230,7 @@ jobs:
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-          find artifacts -type f -name 'run-dhrystone_*.json' -exec mv {} benchmark_results_new \;
+          find artifacts -type f -name 'run_dhrystone_*.json' -exec mv {} benchmark_results_new \;
           find artifacts -type f -name '*.tar' -exec mv {} . \;
 
       - name: install dependencies
@@ -250,11 +250,11 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run-dhrystone_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics_dhrystone.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
+        run: python3 script/compare.py benchmark_results_new/run_dhrystone_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics_dhrystone.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
 
       - name: Run comparison (PR)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare.py benchmark_results_new/run-dhrystone_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics_dhrystone.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
+        run: python3 script/compare.py benchmark_results_new/run_dhrystone_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics_dhrystone.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -436,13 +436,13 @@ jobs:
     - name: Run Benchmarks
       working-directory: ${{runner.workspace}}/install/bin
       run: |
-        ./run_helper.sh ../examples/SW/riscv_nop/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run-translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        ./run_helper.sh ../examples/SW/riscv_nop/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
     - name: Save Benchmark Results
       uses: actions/upload-artifact@v2
       with:
-        name: run-translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-        path: ${{runner.workspace}}/results/run-translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        name: run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
+        path: ${{runner.workspace}}/results/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
   compare_Simulation_Time_translation:
     needs: benchmark_translation
@@ -460,7 +460,7 @@ jobs:
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-          find artifacts -type f -name 'run-translation*.json' -exec mv {} benchmark_results_translation_new \;
+          find artifacts -type f -name 'run_translation*.json' -exec mv {} benchmark_results_translation_new \;
           find artifacts -type f -name '*.tar' -exec mv {} . \;
 
       - name: install dependencies
@@ -480,7 +480,7 @@ jobs:
 
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
-        run: python3 script/compare.py benchmark_results_new/run-translation_*.json -o benchmark_results_old/stats_file_translation.json -i results_/issue.md -w results_/wiki_translation.md -gr results_/performance_metrics_translation.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
+        run: python3 script/compare.py benchmark_results_new/run_translation_*.json -o benchmark_results_old/stats_file_translation.json -i results_/issue.md -w results_/wiki_translation.md -gr results_/performance_metrics_translation.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
 
       # - name: Run comparison (PR)
       #   if: ${{github.event_name == 'pull_request'}}
