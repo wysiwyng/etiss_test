@@ -43,13 +43,16 @@ ${message}
 [[performance_metrics_${benchmark_type}.svg]]
 '''
 # Declaration of Global Variables:
-KEY_TO_COMPARE_LIST = ["mips", "Simulation_Time"] # the key from the input files to compare across engines
+KEY_TO_COMPARE_LIST = {
+    "dhrystone": ("mips", lambda a, b: a > b),
+    "translation": ("Simulation_Time", lambda a, b: a < b)
+}
+
 MAX_HISTORY = 50  # max amount of past data to keep
 TOLERANCE = 0.2
 
 
 def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, graph_file, current_hash, repo_url, benchmark_type):
-
     # truncating hash value to first 8 characters
     current_hash = current_hash[:8]
 
@@ -57,12 +60,7 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
 
     runs = defaultdict(list)
 
-    if benchmark_type == "dhrystone":
-        print("entering true loop")
-        KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[0]
-    if benchmark_type == "translation":
-        print("entering false loop")
-        KEY_TO_COMPARE = KEY_TO_COMPARE_LIST[1]
+    KEY_TO_COMPARE, COMPARISON_FN = KEY_TO_COMPARE_LIST[benchmark_type]
 
     # get engine name and run no from filename of input
     # input files should have the format "run_<engine name>_<run no>.json"
@@ -131,48 +129,26 @@ def calculating_performance_metrics(input_files, stats_file, issue_md, wiki_md, 
                 diffs[engine] = diff
 
                 # Comparison logic for MIPS:
-                if benchmark_type == "dhrystone":
-                    if value > best:
-                        stats[engine][f"best_" + KEY_TO_COMPARE] = value
-                        stats[engine][f"best_hash"] = current_hash[:8]
-                        messages[engine] = f'🥇 New best performance!'
+                if COMPARISON_FN(value, best):
+                    stats[engine][f"best_" + KEY_TO_COMPARE] = value
+                    stats[engine][f"best_hash"] = current_hash[:8]
+                    messages[engine] = f'🥇 New best performance!'
 
-                    elif diff < -TOLERANCE:
-                        if stats[engine]["regressed_hash"] is None:
-                            stats[engine]["regressed_hash"] = current_hash[:8]
-                            messages[engine] = "Regression introduced"
-                        else:
-                            messages[engine] = "Regressed since commit " + \
-                                stats[engine]['regressed_hash']
-
+                elif diff < -TOLERANCE:
+                    if stats[engine]["regressed_hash"] is None:
+                        stats[engine]["regressed_hash"] = current_hash[:8]
+                        messages[engine] = "Regression introduced"
                     else:
-                        if stats[engine]["regressed_hash"] is not None:
-                            stats[engine]["regressed_hash"] = None
-                            messages[engine] = "Regression cleared"
-                        else:
-                            messages[engine] = "No significant performance change"
+                        messages[engine] = "Regressed since commit " + \
+                            stats[engine]['regressed_hash']
 
-                # Comparison logic for Simulation Time:
-                if benchmark_type == "translation":
-                    if value < best:
-                        stats[engine][f"best_" + KEY_TO_COMPARE] = value
-                        stats[engine][f"best_hash"] = current_hash[:8]
-                        messages[engine] = f'🥇 New best performance!'
-
-                    elif diff > -TOLERANCE:
-                        if stats[engine]["regressed_hash"] is None:
-                            stats[engine]["regressed_hash"] = current_hash[:8]
-                            messages[engine] = "Regression introduced"
-                        else:
-                            messages[engine] = "Regressed since commit " + \
-                                stats[engine]['regressed_hash']
-
+                else:
+                    if stats[engine]["regressed_hash"] is not None:
+                        stats[engine]["regressed_hash"] = None
+                        messages[engine] = "Regression cleared"
                     else:
-                        if stats[engine]["regressed_hash"] is not None:
-                            stats[engine]["regressed_hash"] = None
-                            messages[engine] = "Regression cleared"
-                        else:
-                            messages[engine] = "No significant performance change"
+                        messages[engine] = "No significant performance change"
+
 
     # Template rendering for issue and Github Wiki:
     issue_template = Template(text=ISSUE_TEMPLATE)
