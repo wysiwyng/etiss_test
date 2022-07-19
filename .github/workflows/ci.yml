@@ -460,7 +460,7 @@ jobs:
         run: |
           rm -rf benchmark_results_new
           mkdir benchmark_results_new
-          find artifacts -type f -name 'run_translation*.json' -exec mv {} benchmark_results_translation_new \;
+          find artifacts -type f -name 'run_translation*.json' -exec mv {} benchmark_results_new \;
           find artifacts -type f -name '*.tar' -exec mv {} . \;
 
       - name: install dependencies
