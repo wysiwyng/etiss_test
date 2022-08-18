@@ -24,6 +24,7 @@ jobs:
       if: matrix.config.name == 'Linux'
       run: |
         sudo apt-get install libboost-system-dev libboost-filesystem-dev libboost-program-options-dev
+
     - name: Requirements (Windows)
       if: matrix.config.name == 'Windows'
       working-directory: ${{runner.workspace}}
@@ -39,7 +40,8 @@ jobs:
       if: matrix.config.name == 'Mac'
       run: |
         brew install boost coreutils
-    - name: Requirements (Linux/Mac)
+
+    - name: LLVM (Linux/Mac)
       if: matrix.config.name == 'Linux' || matrix.config.name == 'Mac'
       working-directory: ${{runner.workspace}}
       shell: bash
@@ -48,7 +50,8 @@ jobs:
         wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/$LLVM_NAME${{ matrix.config.llvm-ext }}
         ${{ matrix.config.unpack }} $LLVM_NAME${{ matrix.config.llvm-ext }}
         mv $LLVM_NAME llvm-lib
-    - name: Requirements
+
+    - name: Install RISCV toolchain
       shell: bash
       working-directory: ${{runner.workspace}}
       run: |
@@ -56,6 +59,7 @@ jobs:
         wget https://static.dev.sifive.com/dev-tools/$TC_NAME${{ matrix.config.tc-ext }}
         ${{ matrix.config.unpack }} $TC_NAME${{ matrix.config.tc-ext }}
         mv $TC_NAME riscv-tc
+
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build
 
@@ -65,16 +69,16 @@ jobs:
       run: |
         export LLVM_DIR=${{runner.workspace}}/llvm-lib
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX=../install
-    - name: Build
+
+    - name: Build ETISS
       working-directory: ${{runner.workspace}}/build
       shell: bash
       run: cmake --build . --config $BUILD_TYPE
 
-    - name: Install
+    - name: Install ETISS
       working-directory: ${{runner.workspace}}/build
       shell: bash
       run: cmake --build . --config $BUILD_TYPE --target install
-
 
     - name: Create Test Build Environment
       run: |
@@ -84,7 +88,8 @@ jobs:
         cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_cpp/build64
         cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_dhry/build
         cmake -E make_directory ${{runner.workspace}}/install/examples/SW/riscv_nop/build
-    - name: Setup tests
+
+    - name: Build tests
       working-directory: ${{runner.workspace}}/install/examples
       shell: bash
       run: |
@@ -111,6 +116,7 @@ jobs:
         cd SW/riscv_nop/build
         cmake .. -DRISCV_ELF_GCC_PREFIX=../../../../../riscv-tc -DRISCV_ELF_GCC_BASENAME=riscv64-unknown-elf ${{matrix.config.cmakegen}}
         cmake --build . --config $BUILD_TYPE
+
     - name: Compress Compiled System
       run: tar -C ${{runner.workspace}} -cvf ${{runner.workspace}}/etiss.tar install
 
@@ -143,7 +149,7 @@ jobs:
       working-directory: ${{runner.workspace}}
       run: tar -xf etiss.tar
 
-    - name: Test (Linux/Mac)
+    - name: Test
       working-directory: ${{runner.workspace}}/install/bin
       if: matrix.config.name == 'Linux'
       shell: bash
@@ -156,7 +162,6 @@ jobs:
         ./run_helper.sh ../examples/SW/riscv_cpp/build/riscv_example.elf llvm
         ./run_helper.sh ../examples/SW/riscv/build64/riscv_example.elf
         ./run_helper.sh ../examples/SW/riscv_cpp/build64/riscv_example.elf
-
 
     # - name: Test (Windows)
     #   working-directory: ${{runner.workspace}}/install/examples/bare_etiss_processor/build
@@ -172,12 +177,12 @@ jobs:
     #     ./main.exe --vp.elf_file=../../../SW/riscv/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv/memsegs.ini -pLogger
     #     ./main.exe --vp.elf_file=../../../SW/riscv_cpp/build64/riscv_example.elf --jit.type=TCCJIT --etiss.loglevel=4 -i../../../SW/riscv_cpp/memsegs.ini -pLogger
 
-  benchmark:
+  benchmark_cpu:
     strategy:
       matrix:
         run-no: [1, 2, 3, 4, 5]
         jit-engine: ["tcc", "gcc", "llvm"]
-    
+
     if: (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'pull_request'
     needs: build
     runs-on: ubuntu-latest
@@ -193,28 +198,28 @@ jobs:
       working-directory: ${{runner.workspace}}
       run: tar -xf etiss.tar
 
-    - name: create directory to store results
+    - name: Create directory to store results
       working-directory: ${{runner.workspace}}
       run: mkdir ${{runner.workspace}}/results
 
-    - name: Run Benchmarks
+    - name: Run dhrystone benchmark
       working-directory: ${{runner.workspace}}/install/bin
       run: |
         ./run_helper.sh ../examples/SW/riscv_dhry/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run_dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-    - name: Save Benchmark Results
+
+    - name: Save benchmark results
       uses: actions/upload-artifact@v2
       with:
         name: run_dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
         path: ${{runner.workspace}}/results/run_dhrystone_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
   compare_mips:
-    needs: benchmark
+    needs: benchmark_cpu
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Fetch results
+      - name: Fetch dhrystone results
         uses: actions/download-artifact@v2
         with:
           path: artifacts
@@ -225,23 +230,21 @@ jobs:
           mkdir benchmark_results_new
           find artifacts -type f -name 'run_dhrystone_*.json' -exec mv {} benchmark_results_new \;
           find artifacts -type f -name '*.tar' -exec mv {} . \;
-      - name: install dependencies
+          ls benchmark_results_new
+          rm -rf results_
+          mkdir results_
+
+      - name: Install dependencies
         run: pip install -r script/requirements.txt
 
-      - name: get old benchmark results
+      - name: Fetch old benchmark results
         uses: actions/checkout@v2
         with:
           ref: benchmark_results
           path: benchmark_results_old
 
-      - name: creating a directory results_ for storing wiki text, issue text and the graph
-        run: |
-            ls benchmark_results_new
-            rm -rf results_
-            mkdir results_
-
       - name: Run comparison (Push)
-        if: github.event_name == 'push' 
+        if: github.event_name == 'push'
         run: python3 script/compare.py benchmark_results_new/run_dhrystone_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics_dhrystone.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY -b "dhrystone"
 
       - name: Run comparison (Pull request)
@@ -257,14 +260,14 @@ jobs:
           publish_branch: benchmark_results
           enable_jekyll: true
 
-      - name: uploading benchmark_results
+      - name: Upload benchmark_results
         uses: actions/upload-artifact@v2
         with:
           name: stats_file.json
           path: benchmark_results_old/stats_file.json
 
-      - name: uploading image
-        if: github.event_name == 'push' 
+      - name: Upload wiki image
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
           name: performance_metrics_dhrystone.svg
@@ -274,11 +277,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: issue.md
-
           path: results_/issue.md
 
       - name: Upload wiki text
-        if: github.event_name == 'push' 
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
           name: wiki.md
@@ -346,6 +348,7 @@ jobs:
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"
           echo ::set-output name=body::$body
+
       - name: Find Comment
         uses: peter-evans/find-comment@v1
         id: fc
@@ -369,20 +372,18 @@ jobs:
           edit-mode: replace
           body: ${{ steps.get-comment-body.outputs.body }}
 
-
-
   display-wiki:
     needs: compare_mips
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
 
     steps:
-      - name: Get comment text
+      - name: Get wiki text
         uses: actions/download-artifact@v2
         with:
           name: wiki.md
 
-      - name: Get performance_metrics.svg
+      - name: Get wiki image
         uses: actions/download-artifact@v2
         with:
           name: performance_metrics_dhrystone.svg
@@ -400,7 +401,6 @@ jobs:
           git add Dhrystone_Performance.md performance_metrics_dhrystone.svg
           git commit -m "update perf dhrystone"
           git push
-
 
   benchmark_translation:
     strategy:
@@ -423,28 +423,28 @@ jobs:
       working-directory: ${{runner.workspace}}
       run: tar -xf etiss.tar
 
-    - name: create directory to store results
+    - name: Create directory to store results
       working-directory: ${{runner.workspace}}
       run: mkdir ${{runner.workspace}}/results
 
-    - name: Run Benchmarks
+    - name: Run translation benchmark
       working-directory: ${{runner.workspace}}/install/bin
       run: |
         ./run_helper.sh ../examples/SW/riscv_nop/build/riscv_example ${{matrix.jit-engine}} --vp.stats_file_path=${{runner.workspace}}/results/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
-    - name: Save Benchmark Results
+
+    - name: Save benchmark results
       uses: actions/upload-artifact@v2
       with:
         name: run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
         path: ${{runner.workspace}}/results/run_translation_${{matrix.jit-engine}}_${{matrix.run-no}}.json
 
-  compare_Simulation_Time_translation:
+  compare_translation:
     needs: benchmark_translation
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Fetch results
+      - name: Fetch translation results
         uses: actions/download-artifact@v2
         with:
           path: artifacts
@@ -455,30 +455,26 @@ jobs:
           mkdir benchmark_results_new
           find artifacts -type f -name 'run_translation*.json' -exec mv {} benchmark_results_new \;
           find artifacts -type f -name '*.tar' -exec mv {} . \;
-      - name: install dependencies
+          ls benchmark_results_new
+          rm -rf results_
+          mkdir results_
+
+      - name: Install dependencies
         run: pip install -r script/requirements.txt
 
-      - name: get old benchmark results
+      - name: Fetch old benchmark results
         uses: actions/checkout@v2
         with:
           ref: benchmark_results
           path: benchmark_results_old
 
-      - name: creating a directory results_ for storing wiki text, issue text and the graph
-        run: |
-            ls benchmark_results_new
-            rm -rf results_
-            mkdir results_
-
-
       - name: Run comparison (Push)
         if: ${{github.event_name == 'push'}}
         run: python3 script/compare.py benchmark_results_new/run_translation_*.json -o benchmark_results_old/stats_file_translation.json -i results_/issue.md -w results_/wiki_translation.md -gr results_/performance_metrics_translation.svg -g ${{ github.sha }} -r $GITHUB_REPOSITORY  -b "translation"
-    
+
       - name: Run comparison (Pull request)
         if: ${{github.event_name == 'pull_request'}}
-        run: python3 script/compare.py benchmark_results_new/run_*.json -o benchmark_results_old/stats_file.json -i results_/issue.md -w results_/wiki.md -gr results_/performance_metrics.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY
-
+        run: python3 script/compare.py benchmark_results_new/run_translation_*.json -o benchmark_results_old/stats_file_translation.json -i results_/issue.md -w results_/wiki_translation.md -gr results_/performance_metrics_translation.svg -g ${{ github.event.pull_request.head.sha }} -r $GITHUB_REPOSITORY -b "translation"
 
       - name: Deploy results to git
         if: ${{github.event_name == 'push'}}
@@ -489,13 +485,13 @@ jobs:
           publish_branch: benchmark_results
           enable_jekyll: true
 
-      - name: uploading benchmark_results
+      - name: Upload benchmark_results
         uses: actions/upload-artifact@v2
         with:
           name: stats_file_translation.json
           path: benchmark_results_old/stats_file_translation.json
 
-      - name: uploading image
+      - name: Upload wiki image
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
@@ -515,106 +511,17 @@ jobs:
           name: wiki_translation.md
           path: results_/wiki_translation.md
 
-#  display-push:
-#    needs: compare_mips
-#    runs-on: ubuntu-latest
-#    if: ${{github.event_name == 'push'}}
-#
-#    steps:
-#      - name: Get comment text
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: issue.md
-#
-#      - name: Load comment body
-#        id: get-comment-body
-#        run: |
-#          body=$(cat issue.md)
-#          body="${body//'%'/'%25'}"
-#          body="${body//$'\n'/'%0A'}"
-#          body="${body//$'\r'/'%0D'}"
-#          echo ::set-output name=body::$body
-#      - name: Find Comment
-#        uses: peter-evans/find-comment@v1
-#        id: fc
-#        with:
-#          issue-number: 19
-#
-#          body-includes: This comment was created automatically, please do not change!
-#
-#      - name: Create comment
-#        if: ${{ steps.fc.outputs.comment-id == 0 }}
-#        uses: peter-evans/create-or-update-comment@v1
-#        with:
-#          issue-number: 19
-#          edit-mode: replace
-#          body: ${{ steps.get-comment-body.outputs.body }}
-#
-#      - name: Update comment
-#        if: ${{ steps.fc.outputs.comment-id != 0 }}
-#        uses: peter-evans/create-or-update-comment@v1
-#        with:
-#          comment-id: ${{ steps.fc.outputs.comment-id }}
-#          edit-mode: replace
-#          body: ${{ steps.get-comment-body.outputs.body }}
-
-  # display-pr:
-  #   needs: compare_mips
-  #   runs-on: ubuntu-latest
-  #   if: ${{github.event_name == 'pull_request'}}
-
-  #   steps:
-  #     - name: Get comment text
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: issue.md
-
-  #     - name: Load comment body
-  #       id: get-comment-body
-  #       run: |
-  #         body=$(cat issue.md)
-  #         body="${body//'%'/'%25'}"
-  #         body="${body//$'\n'/'%0A'}"
-  #         body="${body//$'\r'/'%0D'}"
-  #         echo ::set-output name=body::$body
-
-  #     - name: Find Comment
-  #       uses: peter-evans/find-comment@v1
-  #       id: fc
-  #       with:
-  #         issue-number: ${{github.event.number}}
-  #         body-includes: This comment was created automatically, please do not change!
-
-  #     - name: Create comment
-  #       if: ${{ steps.fc.outputs.comment-id == 0 }}
-  #       uses: peter-evans/create-or-update-comment@v1
-  #       with:
-  #         issue-number: ${{github.event.number}}
-  #         edit-mode: replace
-  #         body: ${{ steps.get-comment-body.outputs.body }}
-
-  #     - name: Update comment
-  #       if: ${{ steps.fc.outputs.comment-id != 0 }}
-  #       uses: peter-evans/create-or-update-comment@v1
-  #       with:
-  #         comment-id: ${{ steps.fc.outputs.comment-id }}
-  #         edit-mode: replace
-  #         body: ${{ steps.get-comment-body.outputs.body }}
-
-
-
   display-wiki-translation:
-    needs: compare_Simulation_Time_translation
+    needs: compare_translation
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push'}}
-
     steps:
-      - name: Get comment text
+      - name: Get wiki text
         uses: actions/download-artifact@v2
         with:
           name: wiki_translation.md
 
-      - name: Get performance_metrics.svg
+      - name: Get wiki image
         uses: actions/download-artifact@v2
         with:
           name: performance_metrics_translation.svg
@@ -640,9 +547,6 @@ jobs:
     continue-on-error: true
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Delete Artifact
         uses: geekyeggo/delete-artifact@1-glob-support
         with:
