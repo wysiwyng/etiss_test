@@ -1,0 +1,12 @@
+<map id="sign" name="sign">
+<area shape="rect" id="node1" title="Returns 1.0 if x &gt; 0, &#45;0.0 if x = &#45;0.0, +0.0 if x = +0.0, or &#45;1.0 if x &lt; 0." alt="" coords="263,81,312,108"/>
+<area shape="rect" id="node2" href="$etiss__test_2ArchImpl_2RV32IMACFD_2RV32IMACFDFuncs_8h.html#af13a7ffabe32bb821076b297fb28cc2f" title=" " alt="" coords="140,5,215,32"/>
+<area shape="rect" id="node3" href="$etiss__test_2ArchImpl_2RV32IMACFD_2RV32IMACFDFuncs_8h.html#a4ee4d9a957c93c20812ec8107cd21ccd" title=" " alt="" coords="140,56,215,83"/>
+<area shape="rect" id="node4" href="$____clang__hip__math_8h.html#aaa627f1e2f28fb7e989148346ab6c67c" title=" " alt="" coords="154,107,201,133"/>
+<area shape="rect" id="node10" href="$____clang__hip__math_8h.html#aefce829bdc9661d4dc6b2a3623ff6628" title=" " alt="" coords="152,157,203,184"/>
+<area shape="rect" id="node5" href="$etiss__test_2ArchImpl_2RV32IMACFD_2RV32IMACFDFuncs_8h.html#ad7cf2472afebb0088a5e7a72fc3f9770" title=" " alt="" coords="15,5,82,32"/>
+<area shape="rect" id="node6" href="$etiss__test_2ArchImpl_2RV32IMACFD_2RV32IMACFDFuncs_8h.html#a5cee580bd8ec5ef9df837d175b520e13" title=" " alt="" coords="13,56,84,83"/>
+<area shape="rect" id="node7" href="$etiss__test_2ArchImpl_2RV32IMACFD_2RV32IMACFDFuncs_8h.html#a695a6d9b55e85f2f3b59a2f16e5f72f0" title=" " alt="" coords="14,107,83,133"/>
+<area shape="rect" id="node8" href="$etiss__test_2ArchImpl_2RV32IMACFD_2RV32IMACFDFuncs_8h.html#a1a9c802bfb8df8277dd2bc539d264a75" title=" " alt="" coords="5,157,92,184"/>
+<area shape="rect" id="node9" href="$etiss__test_2ArchImpl_2RV32IMACFD_2RV32IMACFDFuncs_8h.html#aa0a060ea7b95221e082b71c5d896cefa" title=" " alt="" coords="5,208,92,235"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="etiss::instr::ModedInstructionSet::getMode" name="etiss::instr::ModedInstructionSet::getMode">
+<area shape="rect" id="node1" title=" " alt="" coords="528,39,739,80"/>
+<area shape="rect" id="node2" href="$classetiss_1_1DataSheetAccurateTiming.html#a380719b9dd4b78acd21197f80592d6fe" title="performs lookups for instructions that are in the modded instruction set to add timing code (e...." alt="" coords="281,5,468,47"/>
+<area shape="rect" id="node3" href="$classetiss_1_1instr_1_1ModedInstructionSet.html#a0200e359d9942543629bbe27ebe25717" title=" " alt="" coords="269,71,480,112"/>
+<area shape="rect" id="node4" href="$classRV32IMACFDArch.html#a4ac47cabe9345afb4379d68d764c3329" title="This function is called during CPUArch initialization." alt="" coords="5,78,221,105"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="TracePrinter" name="TracePrinter">
+<area shape="rect" id="node1" title="A simple logger dedicated to print PC trace." alt="" coords="38,229,137,256"/>
+<area shape="rect" id="node2" href="$classetiss_1_1CoroutinePlugin.html" title="this plugin will be called before a block is executed." alt="" coords="5,155,169,181"/>
+<area shape="rect" id="node3" href="$classetiss_1_1Plugin.html" title="base plugin class that provides access to different plugin functions if present" alt="" coords="37,80,138,107"/>
+<area shape="rect" id="node4" href="$classetiss_1_1ToString.html" title="Marker interface for toString() support." alt="" coords="31,5,144,32"/>
+</map>

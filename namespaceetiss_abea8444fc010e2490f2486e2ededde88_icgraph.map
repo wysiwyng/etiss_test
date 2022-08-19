@@ -1,0 +1,52 @@
+<map id="etiss::cfg" name="etiss::cfg">
+<area shape="rect" id="node1" title="Get reference of the global ETISS configuration object." alt="" coords="1360,899,1441,925"/>
+<area shape="rect" id="node2" href="$namespaceetiss.html#ade2a1ddebb154a19d2b5c62117ea9bbe" title=" " alt="" coords="1145,56,1226,83"/>
+<area shape="rect" id="node7" href="$classetiss_1_1ConfigAnnouncer.html#a319aeb50f43e0499b840385b576e5f1e" title=" " alt="" coords="1100,107,1271,149"/>
+<area shape="rect" id="node8" href="$namespaceetiss.html#a4ebdaace293d099ccfbca335859a2777" title=" " alt="" coords="1097,173,1274,200"/>
+<area shape="rect" id="node9" href="$ETISS_8cpp.html#af4642ca3a304b515f095fc31cb5b7826" title=" " alt="" coords="595,1375,711,1401"/>
+<area shape="rect" id="node13" href="$main_8cpp.html#ac0f2228420376f4db7e1274f2b41667c" title=" " alt="" coords="5,1089,60,1116"/>
+<area shape="rect" id="node16" href="$ETISS_8cpp.html#aa8d45a48a87050a037b3173119b82351" title=" " alt="" coords="827,1320,979,1347"/>
+<area shape="rect" id="node17" href="$classetiss_1_1CPUCore.html#a3abad91e823939228f7db1596e040c19" title="Start the simulation of the CPU core for the system model." alt="" coords="333,797,511,824"/>
+<area shape="rect" id="node19" href="$classetiss_1_1Translation.html#ad60fccfe679e82069b2255aac748ed52" title=" " alt="" coords="837,445,969,486"/>
+<area shape="rect" id="node21" href="$classetiss_1_1CPUArch.html#a34011e70c796236fb850a63b0b8bfd32" title="returns a path that will be used to look up header files" alt="" coords="1075,376,1296,403"/>
+<area shape="rect" id="node22" href="$classRV32IMACFDArch.html#ad619f7f7ed553fda427776dedb729e80" title="This function will be called automatically in order to handling architecure dependent exceptions such..." alt="" coords="1059,528,1312,555"/>
+<area shape="rect" id="node23" href="$classRISCVArch.html#a8189cc902106c49b67d0baa18d38e1a9" title="This function will be called automatically in order to handling architecure dependent exceptions such..." alt="" coords="1083,579,1288,605"/>
+<area shape="rect" id="node24" href="$classRISCV64Arch.html#addd64e3aeab3d11ffc8cbd7893d03553" title="This function will be called automatically in order to handling architecure dependent exceptions such..." alt="" coords="1074,629,1297,656"/>
+<area shape="rect" id="node25" href="$classRV32IMACFDArch.html#a4ac47cabe9345afb4379d68d764c3329" title="This function is called during CPUArch initialization." alt="" coords="795,977,1011,1004"/>
+<area shape="rect" id="node26" href="$classRISCVArch.html#ac984aa0e1c086f4460b30644b69bda42" title="This function is called during CPUArch initialization." alt="" coords="819,1045,987,1072"/>
+<area shape="rect" id="node27" href="$classRISCV64Arch.html#a4b479437ae53be96d92b30aa50c28155" title="This function is called during CPUArch initialization." alt="" coords="810,1168,995,1195"/>
+<area shape="rect" id="node28" href="$namespaceetiss.html#ab8e0f0ff8578d7619d6a8ef5398dc955" title="Get ETISS JIT external path." alt="" coords="1097,427,1274,453"/>
+<area shape="rect" id="node29" href="$namespaceetiss.html#aaf6986e6fa3226eff42586b92bc3c117" title="Get ETISS JIT external headers." alt="" coords="1111,477,1260,504"/>
+<area shape="rect" id="node30" href="$namespaceetiss.html#a3720262f57fbf198ddfc8ee9088ad80c" title="Get ETISS JIT external path." alt="" coords="1111,275,1260,301"/>
+<area shape="rect" id="node32" href="$namespaceetiss.html#aa52f343c1daf399f5598c1c549ca0316" title="Get ETISS JIT external libraries." alt="" coords="1110,680,1261,707"/>
+<area shape="rect" id="node33" href="$classetiss_1_1Configuration.html#a0ff397d035325c73a4511e69f8a18e54" title="get a copy of the configuration as a map" alt="" coords="1105,1051,1265,1093"/>
+<area shape="rect" id="node34" href="$classetiss_1_1SimpleMemSystem.html#a291417b0c79753369b12833f6e01ec0a" title=" " alt="" coords="809,1102,997,1143"/>
+<area shape="rect" id="node36" href="$classetiss_1_1SimpleMemSystem.html#aefc686bc2032a649710e983be10a1889" title=" " alt="" coords="809,903,997,945"/>
+<area shape="rect" id="node37" href="$classetiss_1_1Initializer.html#acdf27d4056057a91dccd86abfa43a8b1" title="sets the JIT given with the previous loaded .ini files" alt="" coords="361,930,483,971"/>
+<area shape="rect" id="node38" href="$classetiss_1_1Initializer.html#a680f42f4c7effbc0b4b5bc2b4eaae21f" title="loads the plugins given with the previous loaded .ini files" alt="" coords="591,1571,714,1613"/>
+<area shape="rect" id="node39" href="$OR1KArch_8cpp.html#a4756439315f7774290fd8ccb333c394f" title=" " alt="" coords="1090,1344,1281,1371"/>
+<area shape="rect" id="node40" href="$group__ETISS__Frontend.html#ga7be87103c95c5f1afbb967055fc7d83e" title="Search and try to load libraries." alt="" coords="819,1496,986,1523"/>
+<area shape="rect" id="node41" href="$classRISCVArch.html#a39f9bbceb62307c077347a015742fc14" title="reset cpu (structure)" alt="" coords="1107,1547,1264,1573"/>
+<area shape="rect" id="node43" href="$classRISCV64Arch.html#a890ea98c585b3ed1241751e750e3c36a" title="reset cpu (structure)" alt="" coords="1098,1648,1273,1675"/>
+<area shape="rect" id="node45" href="$classOR1KArch.html#a16a93f236f127e4b7b9ad0cb3325c09e" title="reset cpu (structure)" alt="" coords="1108,1765,1263,1792"/>
+<area shape="rect" id="node47" href="$classetiss_1_1Configuration.html#a8ff4ddfe1936f2edbda7f85c60a78180" title="template function to set the value of a configuration key." alt="" coords="1097,1243,1273,1269"/>
+<area shape="rect" id="node48" href="$classetiss_1_1Configuration.html#a34eb8ef61dbab2a43d81ab58f0631b61" title=" " alt="" coords="823,1371,982,1413"/>
+<area shape="rect" id="node49" href="$classetiss_1_1SimpleMemSystem.html#add1e0273d6965c598ca91095334733ae" title=" " alt="" coords="1091,1699,1279,1741"/>
+<area shape="rect" id="node50" href="$classetiss_1_1Translation.html#abad861d5afddf612c910143718694c4c" title=" " alt="" coords="1119,731,1251,773"/>
+<area shape="rect" id="node3" href="$IntegratedLibrary_8cpp.html#a5d089581a12f6ba6b59ed469502b7fa3" title=" " alt="" coords="795,107,1010,133"/>
+<area shape="rect" id="node5" href="$GCCJITLIB_8cpp.html#a73820cf784ae48b666a3c1d0f632cf98" title=" " alt="" coords="837,5,968,32"/>
+<area shape="rect" id="node6" href="$OR1KArch_8h.html#ab4fc6199881d970908acc9bf5220220e" title=" " alt="" coords="833,56,972,83"/>
+<area shape="rect" id="node4" href="$classIntegratedLibrary.html#aa411fef851ba092b9a6c50d00218cbae" title=" " alt="" coords="582,99,723,141"/>
+<area shape="rect" id="node10" href="$group__ETISS__Internals.html#ga371c5786faafe2084636cbc2d02d451d" title="Force the initialization of ETISS." alt="" coords="335,1299,509,1325"/>
+<area shape="rect" id="node14" href="$group__ETISS__Frontend.html#gae0d82705849faff133052591c19f3039" title="Initialize and configure ETISS." alt="" coords="363,1400,481,1427"/>
+<area shape="rect" id="node11" href="$group__ETISS__Frontend.html#gac9dbcc30c0d390f4b6ffe05257b32807" title="Add a LibraryInterface to the ETISS environment." alt="" coords="131,1329,262,1356"/>
+<area shape="rect" id="node12" href="$classetiss_1_1CPUCore.html#a804f3252302d7ae49f7918da2871f6ba" title="Create a CPUCore instance." alt="" coords="113,1272,280,1299"/>
+<area shape="rect" id="node15" href="$classetiss_1_1Initializer.html#a343675aa8ed683e826e1f43dd6eaf949" title="Constructor that initializes ETISS." alt="" coords="135,1393,258,1434"/>
+<area shape="rect" id="node18" href="$classetiss_1_1CPUCore.html#a2ab7000206ed432b59457ce57b9182f6" title="Start the simulation of the CPU core for the system model." alt="" coords="108,797,285,824"/>
+<area shape="rect" id="node20" href="$classetiss_1_1Translation.html#a8a71d620ec906f57f2f2dfc4c6565bd8" title="CALL THIS function NOT getBlock(...) since getBlock will not check next/branch references." alt="" coords="587,601,719,642"/>
+<area shape="rect" id="node31" href="$classTCCJIT.html#ad84390bde583270f6c3eed6260b3f0ef" title="translate C code to executable code and return a handle/pointer that identifies the compilation resul..." alt="" coords="839,275,967,301"/>
+<area shape="rect" id="node35" href="$classetiss_1_1SimpleMemSystem.html#a78f538f9cc1ab26bc2e3bb09633af963" title=" " alt="" coords="559,1082,747,1123"/>
+<area shape="rect" id="node42" href="$classRISCVArch.html#a1646f763d086af4e999295e5c5552584" title="allocate new cpu structure" alt="" coords="827,1547,978,1573"/>
+<area shape="rect" id="node44" href="$classRISCV64Arch.html#a235a9817d56b05ee2dfd36b45ba0e19a" title="allocate new cpu structure" alt="" coords="819,1648,987,1675"/>
+<area shape="rect" id="node46" href="$classOR1KArch.html#a92748b5a6b09a99a0f317ae85ceaa76a" title="allocate new cpu structure" alt="" coords="828,1765,977,1792"/>
+</map>

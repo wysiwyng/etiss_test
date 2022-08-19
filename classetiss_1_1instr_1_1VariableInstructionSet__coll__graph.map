@@ -1,0 +1,29 @@
+<map id="etiss::instr::VariableInstructionSet" name="etiss::instr::VariableInstructionSet">
+<area shape="rect" id="node1" title="holds etiss::instr::InstructionSet instances with different bit widths." alt="" coords="2544,753,2785,780"/>
+<area shape="rect" id="node9" title=" " alt="" coords="2924,944,3097,1000"/>
+<area shape="rect" id="node10" title=" " alt="" coords="2899,739,3123,795"/>
+<area shape="rect" id="node2" title=" " alt="" coords="2132,803,2387,874"/>
+<area shape="rect" id="node3" href="$classetiss_1_1instr_1_1ModedInstructionSet.html" title="holds etiss::instr::VariableInstructionSet instances for different modes." alt="" coords="3251,912,3483,939"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1247,943,1410,985"/>
+<area shape="rect" id="node5" title=" " alt="" coords="27,836,102,863"/>
+<area shape="rect" id="node8" title=" " alt="" coords="1253,1063,1404,1105"/>
+<area shape="rect" id="node15" href="$classetiss_1_1instr_1_1BitArrayRange.html" title="Acts as a view/filter to a BitArray." alt="" coords="335,573,527,600"/>
+<area shape="rect" id="node22" title=" " alt="" coords="588,652,741,679"/>
+<area shape="rect" id="node6" title="STL class." alt="" coords="863,832,950,859"/>
+<area shape="rect" id="node12" href="$classetiss_1_1instr_1_1InstructionSet.html" title="holds etiss::instr::Instruction instances and handles automatic instruction tree creation." alt="" coords="1819,492,2007,519"/>
+<area shape="rect" id="node20" href="$classetiss_1_1instr_1_1Instruction.html" title="holds information and translation callbacks for an instruction." alt="" coords="1245,457,1412,484"/>
+<area shape="rect" id="node7" title="STL class." alt="" coords="361,825,500,866"/>
+<area shape="rect" id="node11" title=" " alt="" coords="2174,477,2345,533"/>
+<area shape="rect" id="node13" href="$classetiss_1_1ToString.html" title="Marker interface for toString() support." alt="" coords="850,216,963,243"/>
+<area shape="rect" id="node14" href="$classetiss_1_1instr_1_1Node.html" title="base class that is used to build the instruction translation tree within an InstructionSet object" alt="" coords="841,573,973,600"/>
+<area shape="rect" id="node16" title=" " alt="" coords="39,492,90,519"/>
+<area shape="rect" id="node26" href="$classetiss_1_1instr_1_1BitArray.html" title="stores a bit vector" alt="" coords="355,192,506,219"/>
+<area shape="rect" id="node17" title=" " alt="" coords="24,253,105,280"/>
+<area shape="rect" id="node18" title=" " alt="" coords="5,608,124,635"/>
+<area shape="rect" id="node19" title=" " alt="" coords="1525,365,1693,435"/>
+<area shape="rect" id="node21" title=" " alt="" coords="797,443,1016,499"/>
+<area shape="rect" id="node23" title=" " alt="" coords="765,318,1048,418"/>
+<area shape="rect" id="node24" title=" " alt="" coords="297,325,564,411"/>
+<area shape="rect" id="node25" href="$classetiss_1_1instr_1_1OPCode.html" title="defines the relevant bits and their value to identify an instruction." alt="" coords="1072,200,1221,227"/>
+<area shape="rect" id="node27" title=" " alt="" coords="45,5,84,32"/>
+</map>

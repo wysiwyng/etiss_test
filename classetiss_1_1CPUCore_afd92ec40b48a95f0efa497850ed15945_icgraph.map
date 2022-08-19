@@ -1,0 +1,4 @@
+<map id="etiss::CPUCore::reset" name="etiss::CPUCore::reset">
+<area shape="rect" id="node1" title="Reset the CPU state." alt="" coords="108,5,267,32"/>
+<area shape="rect" id="node2" href="$main_8cpp.html#ac0f2228420376f4db7e1274f2b41667c" title=" " alt="" coords="5,5,60,32"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classetiss_1_1plugin_1_1gdb_1_1GDBCore.html" title="provides to architecture dependent registers as defined by gdb" alt="" coords="5,74,139,115"/>
+<area shape="rect" id="node2" href="$classOR1KGDBCore.html" title=" " alt="" coords="211,5,329,32"/>
+<area shape="rect" id="node3" href="$classRISCV64GDBCore.html" title="This class is the brige between RISCV64 architecture and gdbserver." alt="" coords="202,56,338,83"/>
+<area shape="rect" id="node4" href="$classRISCVGDBCore.html" title="This class is the brige between RISCV architecture and gdbserver." alt="" coords="210,107,330,133"/>
+<area shape="rect" id="node5" href="$classRV32IMACFDGDBCore.html" title="Generated on Thu, 24 Feb 2022 17:15:20 +0100." alt="" coords="187,157,353,184"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="etiss::plugin::gdb::GDBCore" name="etiss::plugin::gdb::GDBCore">
+<area shape="rect" id="node1" title="provides to architecture dependent registers as defined by gdb" alt="" coords="224,5,357,47"/>
+<area shape="rect" id="node2" href="$classOR1KGDBCore.html" title=" " alt="" coords="5,95,123,121"/>
+<area shape="rect" id="node3" href="$classRISCV64GDBCore.html" title="This class is the brige between RISCV64 architecture and gdbserver." alt="" coords="147,95,283,121"/>
+<area shape="rect" id="node4" href="$classRISCVGDBCore.html" title="This class is the brige between RISCV architecture and gdbserver." alt="" coords="307,95,427,121"/>
+<area shape="rect" id="node5" href="$classRV32IMACFDGDBCore.html" title="Generated on Thu, 24 Feb 2022 17:15:20 +0100." alt="" coords="451,95,618,121"/>
+</map>

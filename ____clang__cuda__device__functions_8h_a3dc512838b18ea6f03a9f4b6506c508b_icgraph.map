@@ -1,0 +1,29 @@
+<map id="clock" name="clock">
+<area shape="rect" id="node1" title=" " alt="" coords="721,553,777,580"/>
+<area shape="rect" id="node2" href="$classetiss_1_1CPUCore.html#a3abad91e823939228f7db1596e040c19" title="Start the simulation of the CPU core for the system model." alt="" coords="492,31,669,57"/>
+<area shape="rect" id="node5" href="$structetiss_1_1Default__Clock.html#a54832c202ccdf92857a5030b07a2d8ea" title=" " alt="" coords="505,82,657,123"/>
+<area shape="rect" id="node6" href="$OR1KArch_8cpp.html#a6f0f22efab26bf5e3a1e719659d70985" title=" " alt="" coords="495,148,667,175"/>
+<area shape="rect" id="node7" href="$timesoftfloat_8c.html#a6f4a21d43eacd13ea779bf45071dd26e" title=" " alt="" coords="488,199,673,225"/>
+<area shape="rect" id="node11" href="$timesoftfloat_8c.html#aef652bd106810ba6166d99b9c0e875b4" title=" " alt="" coords="494,249,667,276"/>
+<area shape="rect" id="node12" href="$timesoftfloat_8c.html#a49044c11d32afa0cefddc8d27aa43728" title=" " alt="" coords="494,300,667,327"/>
+<area shape="rect" id="node13" href="$timesoftfloat_8c.html#a8da007ea581e20f340bd9806d04590c6" title=" " alt="" coords="488,351,673,377"/>
+<area shape="rect" id="node14" href="$timesoftfloat_8c.html#acec8d4857ff80ea8aa4b6095c406ec4a" title=" " alt="" coords="494,401,667,428"/>
+<area shape="rect" id="node15" href="$timesoftfloat_8c.html#afbf7bfd1695a20817b43577e04fc9121" title=" " alt="" coords="494,452,667,479"/>
+<area shape="rect" id="node16" href="$timesoftfloat_8c.html#a7bfbeb38c6cef2b9253013795771aedf" title=" " alt="" coords="494,503,667,529"/>
+<area shape="rect" id="node17" href="$timesoftfloat_8c.html#a94fa592260257178b062a8eb9e6010b2" title=" " alt="" coords="494,553,667,580"/>
+<area shape="rect" id="node18" href="$timesoftfloat_8c.html#ad1edeab78d49f19b79f0c3013a3f738d" title=" " alt="" coords="494,604,667,631"/>
+<area shape="rect" id="node19" href="$timesoftfloat_8c.html#a00a55da1f693f9667c948ee408b57ce9" title=" " alt="" coords="494,655,667,681"/>
+<area shape="rect" id="node20" href="$timesoftfloat_8c.html#ab093d017a65934c23f63a0e347c3bee0" title=" " alt="" coords="495,705,667,732"/>
+<area shape="rect" id="node21" href="$timesoftfloat_8c.html#af0477a1db76af2a67d6de389883ffd27" title=" " alt="" coords="495,756,667,783"/>
+<area shape="rect" id="node22" href="$timesoftfloat_8c.html#a73c2f6625f6da94562bb2ebc2224df03" title=" " alt="" coords="513,807,648,833"/>
+<area shape="rect" id="node23" href="$timesoftfloat_8c.html#aa66d6a8fd5415303829bb5e665e8061d" title=" " alt="" coords="513,857,648,884"/>
+<area shape="rect" id="node24" href="$timesoftfloat_8c.html#a89bb9431239fcfa9cb7553b52ce9d42e" title=" " alt="" coords="517,908,644,935"/>
+<area shape="rect" id="node25" href="$timesoftfloat_8c.html#a8d08d87c78a3fa77fafa2788364d9b4a" title=" " alt="" coords="503,959,659,985"/>
+<area shape="rect" id="node26" href="$timesoftfloat_8c.html#aa4649df9c73f022e9765ed57c561c079" title=" " alt="" coords="517,1009,644,1036"/>
+<area shape="rect" id="node27" href="$timesoftfloat_8c.html#a2b9f4e10d76b1b4be2430bbba0a09cf5" title=" " alt="" coords="503,1060,659,1087"/>
+<area shape="rect" id="node3" href="$classetiss_1_1CPUCore.html#a2ab7000206ed432b59457ce57b9182f6" title="Start the simulation of the CPU core for the system model." alt="" coords="263,5,440,32"/>
+<area shape="rect" id="node4" href="$main_8cpp.html#ac0f2228420376f4db7e1274f2b41667c" title=" " alt="" coords="324,56,379,83"/>
+<area shape="rect" id="node8" href="$timesoftfloat_8c.html#ad724a005a1472cbe8c112bf515680fb2" title=" " alt="" coords="275,629,428,656"/>
+<area shape="rect" id="node9" href="$timesoftfloat_8c.html#ab44bbfaf0c16ec012ced8c032ba64615" title=" " alt="" coords="108,629,215,656"/>
+<area shape="rect" id="node10" href="$timesoftfloat_8c.html#a5ea466849f21e6c2be4ef9b2eb8868d3" title=" " alt="" coords="5,629,60,656"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="etiss::getJIT" name="etiss::getJIT">
+<area shape="rect" id="node1" title="Get a present JIT plug&#45;in by name." alt="" coords="473,31,572,57"/>
+<area shape="rect" id="node2" href="$group__ETISS__Frontend.html#ga03edc9a6d65e4853824c46ba162e9f4c" title="Get the default JIT implementation." alt="" coords="279,5,425,32"/>
+<area shape="rect" id="node3" href="$classetiss_1_1Initializer.html#acdf27d4056057a91dccd86abfa43a8b1" title="sets the JIT given with the previous loaded .ini files" alt="" coords="108,23,231,65"/>
+<area shape="rect" id="node4" href="$main_8cpp.html#ac0f2228420376f4db7e1274f2b41667c" title=" " alt="" coords="5,31,60,57"/>
+</map>

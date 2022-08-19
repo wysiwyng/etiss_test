@@ -1,0 +1,5 @@
+<map id="etiss::getCPUArch" name="etiss::getCPUArch">
+<area shape="rect" id="node1" title="Get a present CPUArch plug&#45;in by name." alt="" coords="323,5,461,32"/>
+<area shape="rect" id="node2" href="$classetiss_1_1CPUCore.html#a804f3252302d7ae49f7918da2871f6ba" title="Create a CPUCore instance." alt="" coords="108,5,275,32"/>
+<area shape="rect" id="node3" href="$main_8cpp.html#ac0f2228420376f4db7e1274f2b41667c" title=" " alt="" coords="5,5,60,32"/>
+</map>
